@@ -97,7 +97,7 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
   }, [studio]);
 
   const viewReq = useMemo<PlanRequest>(() => ({ selection: { ...ALL, today, deleted: sel.deleted }, clean: NO_CLEAN, split, format: 'ics' }), [sel.deleted, split, today]);
-  const exportReq = useMemo<PlanRequest | null>(() => (loaded ? exportRequest(opts, sel, split, loaded) : null), [opts, sel, split, loaded]);
+  const exportReq = useMemo<PlanRequest | null>(() => (loaded ? exportRequest(opts, sel, split, loaded, hidden) : null), [opts, sel, split, loaded, hidden]);
 
   useEffect(() => {
     if (!loaded || !exportReq) return;
@@ -361,7 +361,8 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
       {drag && <div class="drop-overlay" aria-hidden="true"><Icon name="upload" size={28} /> {t('k.drop')}</div>}
 
       {studio && <>
-        <ExportDialog open={dialog === 'export'} onClose={() => setDialog(null)} loaded={loaded!} plan={plan} opts={opts} setOpts={setOpts} req={exportReq!} />
+        <ExportDialog open={dialog === 'export'} onClose={() => setDialog(null)} loaded={loaded!} plan={plan} opts={opts} setOpts={setOpts} req={exportReq!}
+          calCount={cals.length} hiddenCount={cals.filter((c) => hidden.includes(c.key)).length} onShowAll={() => setHidden([])} />
         <SplitDialog open={dialog === 'split'} onClose={() => setDialog(null)} loaded={loaded!} split={split} setSplit={(s) => { setSplit(s); setHidden([]); setActive(null); }} onDone={(k) => toast(t('k.splitDone', { n: k }))} />
         <InfoDialog open={dialog === 'info'} onClose={() => setDialog(null)} loaded={loaded!} table={table} sourceText={sourceTextOf(loaded!, table, t, n, b)}
           onOpen={open} onSample={(w) => void sample(w)} onTemplate={(w) => void template(w)} onTable={() => setDialog('table')} />

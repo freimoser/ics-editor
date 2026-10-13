@@ -3,31 +3,34 @@ import { useState } from 'preact/hooks';
 import type { Format, Loaded, PlanRequest, PlanResult } from '../../lib/engine';
 import type { Selection, SplitConfig } from '../../lib/plan';
 import { ALL, NO_CLEAN } from '../../lib/plan';
+import { parseIsoDay } from '../../lib/datetime';
 import { call, download } from './client';
 import { H, Icon, useT } from './ui';
 import { Modal } from './Dialogs';
 
-export interface ExportOpts { range: 'all' | 'last3' | 'future'; admin: boolean; cancelled: boolean; dupes: boolean; phones: boolean; desc: boolean; uids: boolean; format: Format }
-export const DEFAULT_EXPORT: ExportOpts = { range: 'all', admin: true, cancelled: false, dupes: false, phones: false, desc: false, uids: false, format: 'ics' };
+export interface ExportOpts { range: 'all' | 'last3' | 'future' | 'custom'; from: string; to: string; years: number[]; admin: boolean; cancelled: boolean; dupes: boolean; phones: boolean; desc: boolean; uids: boolean; format: Format }
+export const DEFAULT_EXPORT: ExportOpts = { range: 'all', from: '', to: '', years: [], admin: true, cancelled: false, dupes: false, phones: false, desc: false, uids: false, format: 'ics' };
 
 const statusWords = (loaded: Loaded) => (loaded.suggestions.find((s) => s.kind === 'status')?.values ?? []).filter((v) => v.value !== 'STATUS:CANCELLED');
 
 /** Baut aus den Export-Optionen die Anfrage an den Rechenkern. */
-export function exportRequest(o: ExportOpts, sel: Selection, split: SplitConfig, loaded: Loaded): PlanRequest {
+export function exportRequest(o: ExportOpts, sel: Selection, split: SplitConfig, loaded: Loaded, hidden: string[]): PlanRequest {
   const y = new Date().getFullYear();
   return {
     selection: {
       ...ALL, today: sel.today, deleted: sel.deleted,
-      years: o.range === 'last3' ? [y - 2, y - 1, y] : null, hidePast: o.range === 'future',
+      years: o.range === 'custom' && o.years.length ? [...o.years].sort() : null, hidePast: o.range === 'future',
+      from: o.range === 'last3' ? Date.UTC(y - 2, 0, 1) : o.range === 'custom' ? parseIsoDay(o.from) : null, to: o.range === 'custom' ? parseIsoDay(o.to) : null,
       dropCancelled: o.cancelled, dropWords: o.cancelled ? statusWords(loaded).map((v) => v.value) : [], dedupe: o.dupes
     },
     clean: { ...NO_CLEAN, dropAdmin: o.admin, maskPhones: o.phones, maskEmails: o.phones, dropDescription: o.desc, newUids: o.uids },
-    split, format: o.format
+    split, format: o.format, hidden
   };
 }
 
-export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req }: {
+export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, calCount, hiddenCount, onShowAll }: {
   open: boolean; onClose: () => void; loaded: Loaded; plan: PlanResult | null; opts: ExportOpts; setOpts: (o: ExportOpts) => void; req: PlanRequest;
+  calCount: number; hiddenCount: number; onShowAll: () => void;
 }) {
   const { t, n, b, d } = useT();
   const [busy, setBusy] = useState('');
@@ -45,6 +48,11 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req }
   const tone = !plan || !plan.events ? 'bad' : files.length > withEvents ? 'warn' : 'ok';
   const status = !plan ? '' : !plan.events ? t('k.ex.empty') : files.length > withEvents ? t('k.ex.split', { n: files.length }) : files.length === 1 ? t('k.ex.fits1') : t('k.ex.fitsN', { n: files.length });
   const bytes = plan ? (plan.format === 'csv' ? plan.csv.bytes : plan.ics.bytes) : 0;
+  const years = (() => {
+    const m = new Map<number, number>();
+    for (const c of cals) for (const x of c.perYear) m.set(x.year, (m.get(x.year) ?? 0) + x.count);
+    return [...m.entries()].filter(([, c]) => c > 0).sort((a, b) => b[0] - a[0]);
+  })();
   const set = (k: keyof ExportOpts, v: ExportOpts[keyof ExportOpts]) => setOpts({ ...opts, [k]: v });
 
   async function get(which: { cal: string; part: number } | 'zip', key: string) {
@@ -67,10 +75,39 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req }
         </button>
       </>
     }>
+      {calCount > 1 && (
+        <div class="xr">
+          <div class="xl">{t('k.ex.cals')}</div>
+          <div class="x-line">{hiddenCount > 0
+            ? <>{t('k.ex.calsSome', { n: calCount - hiddenCount, m: calCount })} · <button type="button" class="link" onClick={onShowAll}>{t('k.ex.calsInclude')}</button></>
+            : t('k.ex.calsAll', { m: calCount })}</div>
+        </div>
+      )}
       <div class="xr">
         <div class="xl" id="ex-range">{t('k.ex.range')}</div>
-        <div class="seg" role="group" aria-labelledby="ex-range">
-          {(['all', 'last3', 'future'] as const).map((r) => <button type="button" aria-pressed={opts.range === r} onClick={() => set('range', r)}>{t(r === 'all' ? 'k.ex.all' : r === 'last3' ? 'k.ex.last3' : 'k.ex.future')}</button>)}
+        <div class="stack-sm">
+          <div class="seg" role="group" aria-labelledby="ex-range">
+            {(['all', 'last3', 'future', 'custom'] as const).map((r) => <button type="button" aria-pressed={opts.range === r} onClick={() => set('range', r)}>{t(r === 'all' ? 'k.ex.all' : r === 'last3' ? 'k.ex.last3' : r === 'future' ? 'k.ex.future' : 'k.ex.custom', { y: new Date().getFullYear() - 2 })}</button>)}
+          </div>
+          <div class="muted small">{t(('k.ex.hint.' + opts.range) as 'k.ex.hint.all', { y: new Date().getFullYear() - 2, d: d(req.selection.today) })}</div>
+          {opts.range === 'custom' && (
+            <div class="custom">
+              <div class="dates">
+                <label>{t('k.ex.from')} <input type="date" value={opts.from} onChange={(e) => setOpts({ ...opts, from: (e.target as HTMLInputElement).value, years: [] })} /></label>
+                <label>{t('k.ex.to')} <input type="date" value={opts.to} onChange={(e) => setOpts({ ...opts, to: (e.target as HTMLInputElement).value, years: [] })} /></label>
+                {(opts.from || opts.to || opts.years.length > 0) && <button type="button" class="link small" onClick={() => setOpts({ ...opts, from: '', to: '', years: [] })}>{t('k.ex.reset')}</button>}
+              </div>
+              <div class="muted small">{t('k.ex.years')} · {t('k.ex.yearsHint')}</div>
+              <div class="ychips">
+                {years.map(([y, c]) => (
+                  <button type="button" aria-pressed={opts.years.includes(y)} title={n(c)}
+                    onClick={() => setOpts({ ...opts, from: '', to: '', years: opts.years.includes(y) ? opts.years.filter((x) => x !== y) : [...opts.years, y] })}>
+                    {y}<span>{n(c)}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

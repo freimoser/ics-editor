@@ -50,7 +50,12 @@ export function Sidebar(p: StudioProps & { links: Links; onSplit: () => void; on
   return (
     <>
       <section aria-labelledby="side-cals">
-        <h2 id="side-cals" class="label">{t('k.calendars')}</h2>
+        <div class="label-row">
+          <h2 id="side-cals" class="label">{t('k.calendars')}</h2>
+          {p.cals.length > 1 && (p.hidden.length > 0
+            ? <button type="button" class="link small" aria-label={t('k.allShowL')} onClick={() => p.setHidden([])}>{t('k.allShow')}</button>
+            : <button type="button" class="link small" aria-label={t('k.allHideL')} onClick={() => p.setHidden(p.cals.map((c) => c.key))}>{t('k.allHide')}</button>)}
+        </div>
         <ul class="cals">
           {p.cals.map((c) => (
             <li><label class="cal">
