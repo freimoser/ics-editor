@@ -324,6 +324,25 @@ test('Offline nach dem ersten Besuch', async ({ page, context }) => {
   await context.setOffline(false);
 });
 
+test('Erklär-Kasten: Hinweise, Info mit Ratgeber-Link, ausblenden bleibt gemerkt', async ({ page }) => {
+  await sample(page);
+  await expect(page.getByText('Welche Kalender stecken drin?')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Exportieren & konvertieren' })).toBeVisible();
+  await page.getByRole('button', { name: 'So funktioniert diese Ansicht' }).click();
+  const help = page.getByRole('dialog', { name: 'So funktioniert der ICS Editor' });
+  await expect(help).toBeVisible();
+  await expect(help.getByRole('link', { name: /Ratgeber/ })).toHaveAttribute('href', /ics-datei-google-kalender-importieren\/$/);
+  await page.getByRole('button', { name: 'Hinweise ausblenden' }).click();
+  await expect(page.getByText('Welche Kalender stecken drin?')).toHaveCount(0);
+  await page.reload();
+  await ready(page);
+  await page.getByRole('button', { name: /Praxis-Kalender/ }).click();
+  await loaded(page);
+  await expect(page.getByText('Welche Kalender stecken drin?')).toHaveCount(0);
+  await page.getByRole('button', { name: 'So funktioniert diese Ansicht' }).click();
+  await expect(page.getByRole('dialog', { name: 'So funktioniert der ICS Editor' })).toBeVisible();
+});
+
 test('Englische Startseite und Sprachwechsel', async ({ page }) => {
   await page.goto('en/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(/ICS Editor/);

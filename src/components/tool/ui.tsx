@@ -55,6 +55,7 @@ const ICONS: Record<string, ComponentChildren> = {
   left: <path d="M15 6l-6 6 6 6" />,
   right: <path d="M9 6l6 6-6 6" />,
   down: <path d="M7 10l5 5 5-5" />,
+  up: <path d="M12 19V5M6 11l6-6 6 6" />,
   x: <path d="M6 6l12 12M18 6L6 18" />,
   search: <><circle cx="11" cy="11" r="6.5" /><path d="M20 20l-4-4" /></>,
   upload: <path d="M12 16V4M7 9l5-5 5 5M5 20h14" />,
