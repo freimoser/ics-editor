@@ -1,9 +1,11 @@
 ---
-import '@fontsource/atkinson-hyperlegible/latin-400.css';
-import '@fontsource/atkinson-hyperlegible/latin-700.css';
-import '@fontsource/atkinson-hyperlegible/latin-ext-400.css';
-import '@fontsource/atkinson-hyperlegible/latin-ext-700.css';
+import '@fontsource/geist-sans/latin-400.css';
+import '@fontsource/geist-sans/latin-500.css';
+import '@fontsource/geist-sans/latin-600.css';
+import '@fontsource/geist-mono/latin-400.css';
 import '../styles/site.css';
+import font400 from '@fontsource/geist-sans/files/geist-sans-latin-400-normal.woff2?url';
+import font600 from '@fontsource/geist-sans/files/geist-sans-latin-600-normal.woff2?url';
 import { ROUTES, GUIDES, path, url, asset, type Lang, type PageKey } from '../i18n/routes';
 import { tr } from '../i18n/ui';
 import { GUIDES as CONTENT } from '../content/guides';
@@ -18,8 +20,10 @@ interface Props {
   /** false für Seiten ohne eigene Adresse (404) */
   canonical?: boolean;
   schema?: object[];
+  /** Startseite: der Editor bringt seine eigene Leiste mit, kein Seitenkopf */
+  bare?: boolean;
 }
-const { lang, page, title, description, noindex = false, canonical: withCanonical = true, schema = [] } = Astro.props;
+const { lang, page, title, description, noindex = false, canonical: withCanonical = true, schema = [], bare = false } = Astro.props;
 const other: Lang = lang === 'de' ? 'en' : 'de';
 const canonical = url(page, lang);
 const og = asset(`og/${page}-${lang}.png`);
@@ -40,6 +44,8 @@ const site = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={font600} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
     <meta name="google-site-verification" content="6pYvtFCnU7UFcQFajtMSkQ7tYMy3Z_Bt7teKiT5yKNg" />
     {noindex ? <meta name="robots" content="noindex, follow" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
@@ -47,8 +53,8 @@ const site = {
     {!noindex && <link rel="alternate" hreflang="de" href={url(page, 'de')} />}
     {!noindex && <link rel="alternate" hreflang="en" href={url(page, 'en')} />}
     {!noindex && <link rel="alternate" hreflang="x-default" href={url(page, 'en')} />}
-    <meta name="theme-color" content="#0e5a47" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#111513" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1011" media="(prefers-color-scheme: dark)" />
     <meta name="referrer" content="no-referrer" />
     <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
     <link rel="icon" href={asset('favicon-96.png')} sizes="96x96" type="image/png" />
@@ -70,11 +76,11 @@ const site = {
   </head>
   <body>
     <a class="skip" href="#inhalt">{lang === 'de' ? 'Zum Inhalt springen' : 'Skip to content'}</a>
-    <header class="site-header">
+    {!bare && <header class="site-header">
       <div class="wrap">
         <a class="logo" href={path('home', lang)}>
           <span class="logo-mark" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15l2.5 2.5L16 13"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
           </span>
           ICS Editor
         </a>
@@ -84,11 +90,9 @@ const site = {
           <a class="lang-switch" href={path(page, other)} hreflang={other} lang={other}>{other.toUpperCase()}<span class="sr-only"> – {other === 'de' ? 'Deutsch' : 'English'}</span></a>
         </nav>
       </div>
-    </header>
-    <main id="inhalt">
-      <div class="wrap">
-        <slot />
-      </div>
+    </header>}
+    <main id="inhalt" class={bare ? 'bare' : ''}>
+      {bare ? <slot /> : <div class="wrap"><slot /></div>}
     </main>
     <footer class="site-footer">
       <div class="wrap">

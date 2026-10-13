@@ -18,7 +18,7 @@ const OSS = [
   ['fflate', 'MIT', 'https://github.com/101arrowz/fflate'],
   ['Papa Parse', 'MIT', 'https://github.com/mholt/PapaParse'],
   ['SheetJS Community Edition', 'Apache-2.0', 'https://git.sheetjs.com/sheetjs/sheetjs'],
-  ['Atkinson Hyperlegible (Schrift / font)', 'SIL Open Font License 1.1', 'https://github.com/fontsource/font-files']
+  ['Geist Sans und Geist Mono (Schrift / font, Vercel)', 'SIL Open Font License 1.1', 'https://github.com/vercel/geist-font']
 ];
 const ossList = () => '<ul>' + OSS.map(([n, l, u]) => `<li><a href="${u}" rel="noopener">${n}</a> – ${l}</li>`).join('') + '</ul>';
 

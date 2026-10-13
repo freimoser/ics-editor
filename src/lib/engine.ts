@@ -64,7 +64,7 @@ export interface Loaded {
 
 export interface EventRow {
   id: number; cal: number; start: number | null; end: number | null; allDay: boolean; summary: string; location: string;
-  series: boolean; exception: boolean; line: number; row: number | null; targets: string[]; edited: boolean; deleted: boolean;
+  series: boolean; exception: boolean; line: number; row: number | null; targets: string[]; keys: string[]; edited: boolean; deleted: boolean;
 }
 
 export interface EventDetail {
@@ -73,7 +73,7 @@ export interface EventDetail {
   status: string; uid: string; lines: string[]; edited: boolean; attendees: number; alarms: number;
 }
 
-export interface MonthItem { id: number; start: number; allDay: boolean; summary: string; series: boolean; edited: boolean }
+export interface MonthItem { id: number; start: number; allDay: boolean; summary: string; series: boolean; edited: boolean; key: string; deleted: boolean }
 export interface MonthResult { year: number; month: number; days: { day: number; items: MonthItem[]; more: number }[]; total: number }
 
 export type Focus = { kind: 'cal'; cal: number } | { kind: 'rule'; rule: Rule; label: string } | { kind: 'target'; key: string; label: string } | null;
@@ -310,66 +310,90 @@ export function build(req: PlanRequest, which: { cal: string; part: number } | '
   return { name: `${base}_fuer-google.zip`, data: zip, type: 'application/zip' };
 }
 
-/** Termine für den Editor: Suche, Fokus auf Kalender/Regel/Ziel, mit Ziel-Kalendern je Termin. */
-export function listEvents(req: PlanRequest, query: string, focus: Focus, offset = 0, limit = 100, order: 'asc' | 'desc' = 'desc'): { rows: EventRow[]; total: number } {
+/** Ziel-Kalender je Termingruppe für die Ansicht (ohne Ausgabefilter). Zwischengespeichert, bis sich Termine oder Aufteilung ändern. */
+let viewMemo: { groups: Group[]; key: string; sel: Group[]; of: Map<string, string[]>; buckets: { key: string; name: string; events: number }[] } | null = null;
+function viewAssign(req: PlanRequest) {
+  const key = JSON.stringify([{ ...req.selection, deleted: [] }, req.split]);
+  if (viewMemo && viewMemo.groups === S.groups && viewMemo.key === key) return viewMemo;
+  const sel = select(S.groups, { ...req.selection, deleted: [] }).groups;
+  const { buckets } = assign(sel, req.split, S.cals);
+  const of = new Map<string, string[]>();
+  for (const b of buckets) for (const g of b.groups) { const l = of.get(g.key) ?? []; l.push(b.key); of.set(g.key, l); }
+  viewMemo = { groups: S.groups, key, sel, of, buckets: buckets.map((b) => ({ key: b.key, name: b.name, events: b.groups.reduce((a, g) => a + g.events.length, 0) })) };
+  return viewMemo;
+}
+
+/** Kalender in der Ansicht mit Terminanzahl (nach Aufteilen: die Ziel-Kalender). */
+export function viewCalendars(req: PlanRequest): { key: string; name: string; events: number }[] {
+  return viewAssign(req).buckets;
+}
+
+const matchesQuery = (e: IcsEvent, q: string) => !q || e.summary.toLowerCase().includes(q) || e.description.toLowerCase().includes(q) || e.location.toLowerCase().includes(q);
+
+/** Termine für die Liste: Suche, ausgeblendete Kalender, ab einem Datum (aufsteigend) oder neueste zuerst. */
+export function listEvents(req: PlanRequest, query: string, focus: Focus, offset = 0, limit = 100, order: 'asc' | 'desc' = 'desc', hidden: string[] = [], from: number | null = null): { rows: EventRow[]; total: number } {
   const deleted = new Set(req.selection.deleted);
-  const sel = select(S.groups, { ...req.selection, deleted: [] });
-  const { buckets } = assign(sel.groups, req.split, S.cals);
-  const targetsOf = new Map<string, string[]>();
-  if (req.split.mode !== 'none') for (const b of buckets) for (const g of b.groups) {
-    const list = targetsOf.get(g.key) ?? [];
-    list.push(b.name);
-    targetsOf.set(g.key, list);
-  }
+  const v = viewAssign(req);
+  const hide = new Set(hidden);
+  const names = new Map(v.buckets.map((b) => [b.key, b.name]));
   const inFocus = (g: Group): boolean => {
     if (!focus) return true;
     if (focus.kind === 'cal') return g.cal === focus.cal;
     if (focus.kind === 'rule') return ruleMatches(g.master, focus.rule);
-    const b = buckets.find((x) => x.key === focus.key);
-    return !!b && b.groups.includes(g);
+    return (v.of.get(g.key) ?? []).includes(focus.key);
   };
   const q = query.trim().toLowerCase();
-  const rows: EventRow[] = [];
-  let total = 0;
-  // Neueste zuerst: Gruppen nach ihrem letzten Einzeltermin bzw. Serienbeginn sortieren
-  const groups = order === 'asc' ? sel.groups : [...sel.groups].sort((a, b) => (b.series ? b.first : b.last) - (a.series ? a.first : a.last));
-  for (const g of groups) {
+  // Ab einem Datum: Serien erscheinen mit ihrem nächsten Termin
+  const hits: { e: IcsEvent; keys: string[]; at: number | null }[] = [];
+  for (const g of v.sel) {
+    const keys = v.of.get(g.key) ?? [];
+    if (hide.size && keys.every((k) => hide.has(k))) continue;
     if (!inFocus(g)) continue;
-    for (const e of order === 'asc' ? g.events : [...g.events].reverse()) {
-      if (q && !e.summary.toLowerCase().includes(q) && !e.description.toLowerCase().includes(q) && !e.location.toLowerCase().includes(q)) continue;
-      total++;
-      if (total > offset && rows.length < limit) rows.push({
-        id: e.id, cal: e.cal, start: e.start?.wall ?? null, end: e.end?.wall ?? null, allDay: !!e.start?.allDay,
-        summary: e.summary.slice(0, 160), location: e.location.slice(0, 60), series: !!e.rrule, exception: !!e.recurrenceId,
-        line: e.sourceLine, row: S.kind === 'table' ? S.rowOf[e.id] ?? null : null, targets: targetsOf.get(g.key) ?? [],
-        edited: S.edits.has(editKey(e)), deleted: deleted.has(e.id)
-      });
+    for (const e of g.events) {
+      let at = e.start?.wall ?? null;
+      if (from !== null) {
+        if (e.rrule && !e.recurrenceId && at !== null && at < from) at = occurrences(e, from, from + 800 * 86_400_000, 1)[0] ?? null;
+        if (at === null || at < from) continue;
+      }
+      if (matchesQuery(e, q)) hits.push({ e, keys, at });
     }
   }
-  return { rows, total };
+  const at = (x: { at: number | null }) => x.at ?? 0;
+  hits.sort(order === 'asc' ? (a, b) => at(a) - at(b) : (a, b) => at(b) - at(a));
+  const rows: EventRow[] = hits.slice(offset, offset + limit).map(({ e, keys, at: start }) => ({
+    id: e.id, cal: e.cal, start, end: e.end && e.start && start !== null ? start + (e.end.wall - e.start.wall) : e.end?.wall ?? null, allDay: !!e.start?.allDay,
+    summary: e.summary.slice(0, 160), location: e.location.slice(0, 60), series: !!e.rrule, exception: !!e.recurrenceId,
+    line: e.sourceLine, row: S.kind === 'table' ? S.rowOf[e.id] ?? null : null,
+    targets: req.split.mode !== 'none' ? keys.map((k) => names.get(k) ?? k) : [], keys,
+    edited: S.edits.has(editKey(e)), deleted: deleted.has(e.id)
+  }));
+  return { rows, total: hits.length };
 }
 
-/** Termine eines Monats für die Kalenderansicht – Serien werden dafür ausgerollt. */
-export function monthEvents(req: PlanRequest, query: string, focus: Focus, year: number, month: number, perDay = 4): MonthResult {
+/** Termine eines Monats für die Kalenderansicht – Serien werden dafür ausgerollt. Gelöschte bleiben sichtbar (durchgestrichen). */
+export function monthEvents(req: PlanRequest, query: string, focus: Focus, year: number, month: number, perDay = 4, hidden: string[] = []): MonthResult {
   const from = Date.UTC(year, month, 1), to = Date.UTC(year, month + 1, 1) - 1;
-  const sel = select(S.groups, req.selection);
-  const { buckets } = focus && focus.kind === 'target' ? assign(sel.groups, req.split, S.cals) : { buckets: [] as { key: string; groups: Group[] }[] };
-  const target = focus && focus.kind === 'target' ? new Set(buckets.find((b) => b.key === focus.key)?.groups ?? []) : null;
+  const v = viewAssign(req);
+  const deleted = new Set(req.selection.deleted);
+  const hide = new Set(hidden);
   const q = query.trim().toLowerCase();
   const byDay = new Map<number, MonthItem[]>();
   let total = 0;
-  const add = (e: IcsEvent, w: number) => {
+  const add = (e: IcsEvent, w: number, key: string) => {
     const d = new Date(w).getUTCDate();
     const list = byDay.get(d) ?? [];
-    list.push({ id: e.id, start: w, allDay: !!e.start?.allDay, summary: e.summary.slice(0, 80), series: !!e.rrule, edited: S.edits.has(editKey(e)) });
+    list.push({ id: e.id, start: w, allDay: !!e.start?.allDay, summary: e.summary.slice(0, 80), series: !!e.rrule, edited: S.edits.has(editKey(e)), key, deleted: deleted.has(e.id) });
     byDay.set(d, list);
     total++;
   };
-  for (const g of sel.groups) {
+  for (const g of v.sel) {
+    const keys = v.of.get(g.key) ?? [];
+    if (hide.size && keys.every((k) => hide.has(k))) continue;
     if (focus?.kind === 'cal' && g.cal !== focus.cal) continue;
     if (focus?.kind === 'rule' && !ruleMatches(g.master, focus.rule)) continue;
-    if (target && !target.has(g)) continue;
+    if (focus?.kind === 'target' && !keys.includes(focus.key)) continue;
     if (g.last < from || g.first > to) continue;
+    const key = keys.find((k) => !hide.has(k)) ?? keys[0] ?? 'all';
     const overridden = new Set(g.events.filter((e) => e.recurrenceId).map((e) => e.recurrenceId!.slice(0, 8)));
     for (const e of g.events) {
       if (!e.start) continue;
@@ -377,10 +401,10 @@ export function monthEvents(req: PlanRequest, query: string, focus: Focus, year:
       if (e.rrule && !e.recurrenceId) {
         for (const w of occurrences(e, from, to)) {
           const dt = new Date(w);
-          const key = `${dt.getUTCFullYear()}${String(dt.getUTCMonth() + 1).padStart(2, '0')}${String(dt.getUTCDate()).padStart(2, '0')}`;
-          if (!overridden.has(key)) add(e, w);
+          const k = `${dt.getUTCFullYear()}${String(dt.getUTCMonth() + 1).padStart(2, '0')}${String(dt.getUTCDate()).padStart(2, '0')}`;
+          if (!overridden.has(k)) add(e, w, key);
         }
-      } else if (e.start.wall >= from && e.start.wall <= to) add(e, e.start.wall);
+      } else if (e.start.wall >= from && e.start.wall <= to) add(e, e.start.wall, key);
     }
   }
   const days = [...byDay.entries()].sort((a, b) => a[0] - b[0]).map(([day, items]) => {
@@ -406,9 +430,10 @@ export type Request =
   | { type: 'convert'; roles: Record<number, Column['role']>; options: ConvertOptions }
   | { type: 'plan'; req: PlanRequest }
   | { type: 'build'; req: PlanRequest; which: { cal: string; part: number } | 'zip'; salt: string }
-  | { type: 'list'; req: PlanRequest; query: string; focus: Focus; offset: number; limit: number; order?: 'asc' | 'desc' }
+  | { type: 'list'; req: PlanRequest; query: string; focus: Focus; offset: number; limit: number; order?: 'asc' | 'desc'; hidden?: string[]; from?: number | null }
+  | { type: 'calendars'; req: PlanRequest }
   | { type: 'get'; id: number }
-  | { type: 'month'; req: PlanRequest; query: string; focus: Focus; year: number; month: number }
+  | { type: 'month'; req: PlanRequest; query: string; focus: Focus; year: number; month: number; perDay?: number; hidden?: string[] }
   | { type: 'edit'; id: number; patch: Patch | null }
   | { type: 'template' }
   | { type: 'sample'; which: 'practice' | 'csv' | 'birthdays'; lang: 'de' | 'en' };
@@ -422,9 +447,10 @@ export function handle(msg: Request): unknown {
     case 'convert': return convertTable(msg.roles, msg.options);
     case 'plan': return plan(msg.req);
     case 'build': return build(msg.req, msg.which, msg.salt);
-    case 'list': return listEvents(msg.req, msg.query, msg.focus, msg.offset, msg.limit, msg.order);
+    case 'list': return listEvents(msg.req, msg.query, msg.focus, msg.offset, msg.limit, msg.order, msg.hidden, msg.from ?? null);
+    case 'calendars': return viewCalendars(msg.req);
     case 'get': return getEvent(msg.id);
-    case 'month': return monthEvents(msg.req, msg.query, msg.focus, msg.year, msg.month);
+    case 'month': return monthEvents(msg.req, msg.query, msg.focus, msg.year, msg.month, msg.perDay, msg.hidden);
     case 'edit': return editEvent(msg.id, msg.patch);
     case 'template': return template();
     case 'sample': {

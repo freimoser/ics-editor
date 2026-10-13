@@ -13,6 +13,11 @@ import IMG from '../content/images.json';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const c = HOME[lang];
+const other: Lang = lang === 'de' ? 'en' : 'de';
+const links = {
+  home: path('home', lang), guides: path('home', lang) + '#ratgeber', lang: path('home', other), langCode: other,
+  langLabel: other === 'de' ? 'Deutsch' : 'English', imprint: path('imprint', lang), privacy: path('privacy', lang), about: path('about', lang)
+};
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -37,14 +42,11 @@ const schema = [
   }
 ];
 ---
-<Base lang={lang} page="home" title={c.title} description={c.description} schema={schema}>
-  <section class="hero hero-app" aria-labelledby="h1">
-    <h1 id="h1">{c.h1}</h1>
-    <p class="lead">{c.lead}</p>
+<Base lang={lang} page="home" title={c.title} description={c.description} schema={schema} bare>
+  <section id="werkzeug" class="tool-shell" aria-label={lang === 'de' ? 'Werkzeug' : 'Tool'}>
+    <Tool client:load lang={lang} h1={c.h1} lead={c.lead} links={links} />
   </section>
-  <section id="werkzeug" aria-label={lang === 'de' ? 'Werkzeug' : 'Tool'}>
-    <Tool client:load lang={lang} />
-  </section>
+  <div class="wrap home-content">
 
   <section aria-labelledby="how" class="stack mt-xl home-extra">
     <h2 id="how">{c.howTitle}</h2>
@@ -72,4 +74,5 @@ const schema = [
       {KEYS.map((k) => <a href={path(k, lang)}><strong>{GUIDES[k][lang].h1}</strong><span>{GUIDES[k][lang].teaser}</span></a>)}
     </div>
   </section>
+  </div>
 </Base>
