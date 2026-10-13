@@ -179,6 +179,29 @@ test('Export: eigener Zeitraum mit Jahren und Datum', async ({ page }) => {
   await expect(big).not.toHaveText(oneYear!);
 });
 
+test('Export: Ab und Vor ein Jahr ergänzen sich zu allen Terminen', async ({ page }) => {
+  await sample(page);
+  await page.getByRole('button', { name: 'Exportieren' }).click();
+  const ex = page.getByRole('dialog', { name: 'Für Google exportieren' });
+  const big = ex.locator('.result .big');
+  const count = async () => Number((await big.textContent())!.match(/^([\d.]+) Termine/)![1].replace(/\./g, ''));
+  await expect(big).toContainText('Termine');
+  const all = await count();
+  const y = new Date().getFullYear() - 1;
+  await ex.getByRole('button', { name: `Ab ${y}` }).click();
+  await expect(ex.getByText(`Ab 1. Januar ${y}`)).toBeVisible();
+  await expect.poll(count).toBeLessThan(all);
+  const after = await count();
+  await ex.getByRole('button', { name: `Vor ${y}` }).click();
+  await expect(ex.getByText(`Nur Termine bis 31. Dezember ${y - 1}`)).toBeVisible();
+  await expect.poll(count).not.toBe(after);
+  const before = await count();
+  // Serien können in beide Zeiträume fallen, Einzeltermine nur in einen
+  expect(before + after).toBeGreaterThanOrEqual(all);
+  await expect(ex.getByRole('button', { name: `Ab ${y - 1}` })).toBeVisible();
+  await expect(ex.getByRole('button', { name: `Vor ${y - 1}` })).toBeVisible();
+});
+
 test('Mehrere ICS-Dateien auf einmal werden getrennte Kalender', async ({ page }) => {
   await page.goto('');
   await ready(page);
@@ -220,6 +243,23 @@ test('CSV: Semikolon, Windows-Zeichensatz, Datenschutz und zeilengenaue Fehler',
   await expect(status).not.toHaveText(before!, { timeout: 10_000 });
   await page.getByRole('button', { name: /beispiel|termine\.csv/ }).first().click();
   await expect(page.getByText(/Semikolon als Trennzeichen/)).toBeVisible();
+});
+
+test('Export: höchstens 999 Termine pro Datei', async ({ page }) => {
+  await sample(page);
+  await page.getByRole('button', { name: 'Exportieren' }).click();
+  const ex = page.getByRole('dialog', { name: 'Für Google exportieren' });
+  const zip = ex.locator('.df .btn.primary');
+  await expect(zip).toContainText(/\d+ Dateien/);
+  const before = Number((await zip.textContent())!.match(/(\d+) Dateien/)![1]);
+  await ex.getByText('Mehr Optionen').click();
+  await ex.getByRole('checkbox', { name: /Höchstens 999 Termine pro Datei/ }).check();
+  await expect(ex.getByText(/höchstens 1 MB und 999 Termine pro Datei/)).toBeVisible();
+  await expect.poll(async () => Number((await zip.textContent())!.match(/(\d+) Dateien/)![1])).toBeGreaterThan(before);
+  await ex.getByText(/Dateien anzeigen/).click();
+  for (const t of await ex.locator('.files .f-name .muted').allTextContents()) {
+    expect(Number(t.match(/^([\d.]+) Termine/)![1].replace(/\./g, ''))).toBeLessThanOrEqual(999);
+  }
 });
 
 test('Datei verlässt das Gerät nicht: keine Netzwerkanfragen beim Verarbeiten', async ({ page }) => {

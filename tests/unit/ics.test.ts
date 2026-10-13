@@ -89,6 +89,25 @@ describe('ICS lesen, analysieren, aufteilen', () => {
     expect(n).toBe(events.length);
   });
 
+  it('teilt auf Wunsch zusätzlich in höchstens 999 Termine pro Datei, verlustfrei', () => {
+    const groups = buildGroups(events);
+    const { buckets } = assign(select(groups, ALL).groups, NO_SPLIT, cals);
+    const sizes = cleanedSizes(events, NO_CLEAN);
+    const bySize = planCalendars(buckets, cals, sizes)[0];
+    const [out] = planCalendars(buckets, cals, sizes, PART_LIMIT, 999);
+    expect(out.parts.length).toBeGreaterThan(bySize.parts.length);
+    let n = 0;
+    for (const p of out.parts) {
+      const comp = validIcs(buildPart(p, out, NO_CLEAN, 's'));
+      const count = comp.getAllSubcomponents('vevent').length;
+      expect(count).toBe(p.events);
+      expect(count).toBeLessThanOrEqual(999);
+      expect(p.bytes).toBeLessThanOrEqual(PART_LIMIT);
+      n += count;
+    }
+    expect(n).toBe(events.length);
+  });
+
   it('behält Serien beim Jahresfilter, wenn sie im Zeitraum Termine haben', () => {
     const groups = buildGroups(events);
     const sel = select(groups, { ...ALL, years: [2024, 2025, 2026] });
