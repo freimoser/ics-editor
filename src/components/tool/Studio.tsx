@@ -14,7 +14,7 @@ import type { UiKey } from '../../i18n/ui';
 export type View = 'month' | 'list';
 export interface ViewCal { key: string; name: string; events: number }
 export interface Active { id: number; key: string }
-export interface Links { home: string; guides: string; lang: string; langLabel: string; langCode: string; imprint: string; privacy: string; about: string }
+export interface Links { home: string; guides: string; help: string; lang: string; langLabel: string; langCode: string; imprint: string; privacy: string; about: string }
 
 export interface StudioProps {
   loaded: Loaded; table: TableInfo | null; viewReq: PlanRequest; plan: PlanResult | null;

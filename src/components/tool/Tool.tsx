@@ -68,6 +68,8 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
   const [drawer, setDrawer] = useState(false);
   const [drag, setDrag] = useState(false);
   const [browsing, setBrowsing] = useState(false);
+  const [hints, setHints] = useState(true);
+  const [help, setHelp] = useState(false);
   const [note, setNote] = useState<{ msg: string; undo?: () => void; id: number } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -76,6 +78,16 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
   const convLatest = useMemo(() => latest<Loaded>(), []);
   const lastConvert = useRef('');
   const studio = screen === 'studio' && !!loaded;
+
+  useEffect(() => { try { if (localStorage.getItem('ics-editor-hints') === 'off') setHints(false); } catch { /* ohne Speicher: Hinweise zeigen */ } }, []);
+  useEffect(() => {
+    if (!help) return;
+    const close = (e: Event) => { if (e instanceof KeyboardEvent ? e.key === 'Escape' : !(e.target as HTMLElement).closest('.hint-iw')) setHelp(false); };
+    addEventListener('pointerdown', close);
+    addEventListener('keydown', close);
+    return () => { removeEventListener('pointerdown', close); removeEventListener('keydown', close); };
+  }, [help]);
+  const hideHints = () => { setHints(false); setHelp(false); try { localStorage.setItem('ics-editor-hints', 'off'); } catch { /* egal */ } };
 
   useEffect(() => {
     const idle = (window as unknown as { requestIdleCallback?: (f: () => void) => void }).requestIdleCallback;
@@ -294,7 +306,7 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
                 <button type="button" aria-pressed={view === 'list' || !!q.trim()} onClick={() => setView('list')}>{t('k.list')}</button>
               </div>
               <button type="button" class="btn primary" aria-label={t('k.export')} onClick={() => { setActive(null); setDialog('export'); }}>
-                <Icon name="download" size={16} /><span class="bl">{t('k.export')}</span>
+                <Icon name="download" size={16} /><span class="bl">{t('k.exportShort')}<span class="bl2">{t('k.exportMore')}</span></span>
               </button>
             </div>
           </>
@@ -313,6 +325,26 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
           </aside>
           {drawer && <div class="scrim" onClick={() => setDrawer(false)} />}
           <section class="view" aria-label={title}>
+            {hints && (
+              <div class="hints">
+                <p class="hint hint-l"><Icon name="up" size={14} /><H k="k.hint.cals" /></p>
+                <span class="hint-iw">
+                  <button type="button" class="ib hint-i" aria-label={t('k.hint.info')} title={t('k.hint.info')} aria-expanded={help} onClick={() => setHelp(!help)}><Icon name="info" size={16} /><span class="hint-il">{t('k.hint.info')}</span></button>
+                  {help && (
+                    <div class="help" role="dialog" aria-label={t('k.help.title')}>
+                      <strong>{t('k.help.title')}</strong>
+                      <ul>
+                        <H as="li" k="k.help.1" /><H as="li" k="k.help.2" /><H as="li" k="k.help.3" /><H as="li" k="k.help.4" />
+                      </ul>
+                      <a href={links.help}>{t('k.help.more')} →</a>
+                    </div>
+                  )}
+                </span>
+                <p class="hint hint-r"><H k="k.hint.export" /><Icon name="up" size={14} /></p>
+                <button type="button" class="ib hint-x" aria-label={t('k.hint.close')} title={t('k.hint.close')} onClick={hideHints}><Icon name="x" size={14} /></button>
+              </div>
+            )}
+            {!hints && <button type="button" class="ib hint-again" aria-label={t('k.hint.info')} title={t('k.hint.info')} onClick={() => { setHints(true); setHelp(true); }}><Icon name="info" size={16} /></button>}
             {issues > 0 && <div class="banner" role="status"><Icon name="warn" size={16} /> {t('k.tblBanner', { n: n(issues) })} <button type="button" class="link" onClick={() => setDialog('table')}>{t('k.tblFix')}</button></div>}
             <div class="view-in">
               {view === 'month' && !q.trim()

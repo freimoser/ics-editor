@@ -15,7 +15,7 @@ const { lang } = Astro.props;
 const c = HOME[lang];
 const other: Lang = lang === 'de' ? 'en' : 'de';
 const links = {
-  home: path('home', lang), guides: path('home', lang) + '#ratgeber', lang: path('home', other), langCode: other,
+  home: path('home', lang), guides: path('home', lang) + '#ratgeber', help: path('ics', lang), lang: path('home', other), langCode: other,
   langLabel: other === 'de' ? 'Deutsch' : 'English', imprint: path('imprint', lang), privacy: path('privacy', lang), about: path('about', lang)
 };
 const schema = [
