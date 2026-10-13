@@ -87,7 +87,7 @@ export function csvSizes(events: IcsEvent[], o: CleanOptions): Int32Array {
 export const CSV_HEADER_BYTES = utf8Len(HEADER_LINE);
 
 /** Teilt die Termine chronologisch in CSV-Teile unter der Größengrenze. */
-export function packCsv(groups: Group[], sizes: Int32Array, limit = PART_LIMIT): { parts: CsvPart[]; skippedSeries: number } {
+export function packCsv(groups: Group[], sizes: Int32Array, limit = PART_LIMIT, maxEvents = Infinity): { parts: CsvPart[]; skippedSeries: number } {
   const parts: CsvPart[] = [];
   let cur: CsvPart | null = null;
   let skippedSeries = 0;
@@ -96,7 +96,7 @@ export function packCsv(groups: Group[], sizes: Int32Array, limit = PART_LIMIT):
   evs.sort((a, b) => a.start!.wall - b.start!.wall);
   for (const e of evs) {
     const b = sizes[e.id];
-    if (!cur || cur.bytes + b > limit) {
+    if (!cur || cur.bytes + b > limit || cur.events.length >= maxEvents) {
       cur = { index: parts.length, events: [], bytes: CSV_HEADER_BYTES, from: e.start!.wall, to: e.start!.wall };
       parts.push(cur);
     }

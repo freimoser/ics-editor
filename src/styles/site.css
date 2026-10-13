@@ -294,7 +294,7 @@ html.studio-mode .tool-shell { position: fixed; inset: 0; z-index: 40; height: a
 
 /* Dialoge */
 dialog.dlg { border: 1px solid var(--line); border-radius: 14px; padding: 0; background: var(--bg); color: var(--text); box-shadow: var(--shadow); width: min(580px, calc(100vw - 32px)); max-height: calc(100vh - 48px); font-size: 14px; line-height: 1.45; }
-dialog.dlg.wide { width: min(780px, calc(100vw - 32px)); }
+dialog.dlg.wide { width: min(720px, calc(100vw - 32px)); }
 dialog.dlg[open] { display: flex; flex-direction: column; }
 dialog.dlg::backdrop { background: var(--scrim); }
 .dh { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 14px 4px 22px; }

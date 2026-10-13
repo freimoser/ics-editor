@@ -23,7 +23,7 @@ import { encodeWindows1252, sampleBirthdayRows, samplePracticeCsv, samplePractic
 export type Format = 'ics' | 'csv';
 
 /** hidden: Ziel-Kalender (Schlüssel), die links ausgeblendet sind – sie kommen nicht in den Export. */
-export interface PlanRequest { selection: Selection; clean: CleanOptions; split: SplitConfig; format: Format; hidden?: string[] }
+export interface PlanRequest { selection: Selection; clean: CleanOptions; split: SplitConfig; format: Format; hidden?: string[]; /** zusätzlich höchstens so viele Termine pro Datei */ maxEvents?: number }
 
 export interface PartInfo { index: number; events: number; bytes: number; from: number; to: number; file: string }
 export interface CalInfo { key: string; name: string; events: number; bytes: number; rest?: boolean; parts: PartInfo[] }
@@ -241,8 +241,9 @@ function computePlan(req: PlanRequest): Planned {
   const buckets = hide.size ? all.buckets.filter((x) => !hide.has(x.key)) : all.buckets;
   const multiMatched = all.multiMatched;
   const sz = sizes(req.clean);
-  const out = planCalendars(buckets, S.cals, sz.ics);
-  const csvOut = buckets.map((b) => { const p = packCsv(b.groups, sz.csv); return { name: b.name, key: b.key, parts: p.parts, skipped: p.skippedSeries }; });
+  const max = req.maxEvents && req.maxEvents > 0 ? req.maxEvents : Infinity;
+  const out = planCalendars(buckets, S.cals, sz.ics, PART_LIMIT, max);
+  const csvOut = buckets.map((b) => { const p = packCsv(b.groups, sz.csv, PART_LIMIT, max); return { name: b.name, key: b.key, parts: p.parts, skipped: p.skippedSeries }; });
   return { buckets, out, csvOut, removed: sel.removed, multiMatched };
 }
 

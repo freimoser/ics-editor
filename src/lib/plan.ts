@@ -413,14 +413,15 @@ function headerFor(cals: IcsCalendar[], groups: Group[], name: string) {
 }
 
 /** Packt Gruppen chronologisch in Teile, deren Dateigröße unter limit bleibt. Gruppen werden nie zerteilt. */
-export function packParts(groups: Group[], sizes: Int32Array, overhead: number, limit = PART_LIMIT): OutPart[] {
+/** Teilt nach Größe (limit) und optional nach Anzahl der Termine (maxEvents). Serien bleiben immer zusammen. */
+export function packParts(groups: Group[], sizes: Int32Array, overhead: number, limit = PART_LIMIT, maxEvents = Infinity): OutPart[] {
   const parts: OutPart[] = [];
   let cur: OutPart | null = null;
   let singles = 0;
   for (const g of groups) {
     let b = 0;
     for (const e of g.events) b += sizes[e.id];
-    if (!cur || (cur.bytes + b > limit && cur.groups.length > 0)) {
+    if (!cur || ((cur.bytes + b > limit || cur.events + g.events.length > maxEvents) && cur.groups.length > 0)) {
       cur = { index: parts.length, groups: [], events: 0, bytes: overhead, from: g.first, to: g.first };
       parts.push(cur);
       singles = 0;
@@ -441,13 +442,13 @@ export function packParts(groups: Group[], sizes: Int32Array, overhead: number, 
   return parts;
 }
 
-export function planCalendars(buckets: Bucket[], cals: IcsCalendar[], sizes: Int32Array, limit = PART_LIMIT): OutCalendar[] {
+export function planCalendars(buckets: Bucket[], cals: IcsCalendar[], sizes: Int32Array, limit = PART_LIMIT, maxEvents = Infinity): OutCalendar[] {
   const used = new Set<string>();
   return buckets.map((b) => {
     const head = headerFor(cals, b.groups, b.name);
     const tz = tzBlocksFor(cals, b.groups);
     const overhead = linesBytes(head) + tz.reduce((a, x) => a + linesBytes(x), 0) + FOOTER_BYTES;
-    const parts = packParts(b.groups, sizes, overhead, limit);
+    const parts = packParts(b.groups, sizes, overhead, limit, maxEvents);
     let slug = slugify(b.name || 'kalender');
     while (used.has(slug)) slug += '-2';
     used.add(slug);

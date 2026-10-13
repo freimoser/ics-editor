@@ -8,8 +8,13 @@ import { call, download } from './client';
 import { H, Icon, useT } from './ui';
 import { Modal } from './Dialogs';
 
-export interface ExportOpts { range: 'all' | 'last3' | 'future' | 'custom'; from: string; to: string; years: number[]; admin: boolean; cancelled: boolean; dupes: boolean; phones: boolean; desc: boolean; uids: boolean; format: Format }
-export const DEFAULT_EXPORT: ExportOpts = { range: 'all', from: '', to: '', years: [], admin: true, cancelled: false, dupes: false, phones: false, desc: false, uids: false, format: 'ics' };
+/** Zeitraum: fromN/beforeN beziehen sich auf das Jahr (aktuelles Jahr − N), z. B. 2026 − 2 = „Ab 2024“ / „Vor 2024“. */
+export type Range = 'all' | 'from2' | 'before2' | 'from1' | 'before1' | 'future' | 'custom';
+const RANGES: Range[] = ['all', 'from2', 'before2', 'from1', 'before1', 'future', 'custom'];
+const rangeYear = (r: Range) => new Date().getFullYear() - (r.endsWith('2') ? 2 : 1);
+
+export interface ExportOpts { range: Range; from: string; to: string; years: number[]; max999: boolean; admin: boolean; cancelled: boolean; dupes: boolean; phones: boolean; desc: boolean; uids: boolean; format: Format }
+export const DEFAULT_EXPORT: ExportOpts = { range: 'all', from: '', to: '', years: [], max999: false, admin: true, cancelled: false, dupes: false, phones: false, desc: false, uids: false, format: 'ics' };
 
 const statusWords = (loaded: Loaded) => (loaded.suggestions.find((s) => s.kind === 'status')?.values ?? []).filter((v) => v.value !== 'STATUS:CANCELLED');
 
@@ -20,11 +25,12 @@ export function exportRequest(o: ExportOpts, sel: Selection, split: SplitConfig,
     selection: {
       ...ALL, today: sel.today, deleted: sel.deleted,
       years: o.range === 'custom' && o.years.length ? [...o.years].sort() : null, hidePast: o.range === 'future',
-      from: o.range === 'last3' ? Date.UTC(y - 2, 0, 1) : o.range === 'custom' ? parseIsoDay(o.from) : null, to: o.range === 'custom' ? parseIsoDay(o.to) : null,
+      from: o.range.startsWith('from') ? Date.UTC(rangeYear(o.range), 0, 1) : o.range === 'custom' ? parseIsoDay(o.from) : null,
+      to: o.range.startsWith('before') ? Date.UTC(rangeYear(o.range) - 1, 11, 31) : o.range === 'custom' ? parseIsoDay(o.to) : null,
       dropCancelled: o.cancelled, dropWords: o.cancelled ? statusWords(loaded).map((v) => v.value) : [], dedupe: o.dupes
     },
     clean: { ...NO_CLEAN, dropAdmin: o.admin, maskPhones: o.phones, maskEmails: o.phones, dropDescription: o.desc, newUids: o.uids },
-    split, format: o.format, hidden
+    split, format: o.format, hidden, maxEvents: o.max999 ? 999 : undefined
   };
 }
 
@@ -46,7 +52,7 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
   const files = plan ? plan.calendars.flatMap((c) => c.parts.map((p) => ({ cal: c.key, name: c.name, ...p }))) : [];
   const withEvents = plan ? plan.calendars.filter((c) => c.events > 0).length : 0;
   const tone = !plan || !plan.events ? 'bad' : files.length > withEvents ? 'warn' : 'ok';
-  const status = !plan ? '' : !plan.events ? t('k.ex.empty') : files.length > withEvents ? t('k.ex.split', { n: files.length }) : files.length === 1 ? t('k.ex.fits1') : t('k.ex.fitsN', { n: files.length });
+  const status = !plan ? '' : !plan.events ? t('k.ex.empty') : files.length > withEvents ? t(opts.max999 ? 'k.ex.split999' : 'k.ex.split', { n: files.length }) : files.length === 1 ? t('k.ex.fits1') : t('k.ex.fitsN', { n: files.length });
   const bytes = plan ? (plan.format === 'csv' ? plan.csv.bytes : plan.ics.bytes) : 0;
   const years = (() => {
     const m = new Map<number, number>();
@@ -67,7 +73,7 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
     <label class="ck"><input type="checkbox" checked={opts[k]} onChange={(e) => set(k, (e.target as HTMLInputElement).checked)} /><span>{label}</span><span class="muted">{hint}</span></label>
   );
   return (
-    <Modal open={open} onClose={onClose} title={t('k.ex.title')} foot={
+    <Modal open={open} onClose={onClose} title={t('k.ex.title')} wide foot={
       <>
         <span class="grow" />
         <button type="button" class="btn primary" disabled={!main || !!busy} onClick={main}>
@@ -87,9 +93,9 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
         <div class="xl" id="ex-range">{t('k.ex.range')}</div>
         <div class="stack-sm">
           <div class="seg" role="group" aria-labelledby="ex-range">
-            {(['all', 'last3', 'future', 'custom'] as const).map((r) => <button type="button" aria-pressed={opts.range === r} onClick={() => set('range', r)}>{t(r === 'all' ? 'k.ex.all' : r === 'last3' ? 'k.ex.last3' : r === 'future' ? 'k.ex.future' : 'k.ex.custom', { y: new Date().getFullYear() - 2 })}</button>)}
+            {RANGES.map((r) => <button type="button" aria-pressed={opts.range === r} onClick={() => set('range', r)}>{t(r === 'all' ? 'k.ex.all' : r.startsWith('from') ? 'k.ex.fromY' : r.startsWith('before') ? 'k.ex.beforeY' : r === 'future' ? 'k.ex.future' : 'k.ex.custom', { y: rangeYear(r) })}</button>)}
           </div>
-          <div class="muted small">{t(('k.ex.hint.' + opts.range) as 'k.ex.hint.all', { y: new Date().getFullYear() - 2, d: d(req.selection.today) })}</div>
+          <div class="muted small">{t(('k.ex.hint.' + opts.range.replace(/\d$/, '')) as 'k.ex.hint.all', { y: rangeYear(opts.range), last: rangeYear(opts.range) - 1, d: d(req.selection.today) })}</div>
           {opts.range === 'custom' && (
             <div class="custom">
               <div class="dates">
@@ -158,6 +164,7 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
             <div class="muted small">{opts.format === 'ics' ? t('ex.icsHint') : t('ex.csvHint')}</div>
           </div>
         </div>
+        <label class="ck"><input type="checkbox" checked={opts.max999} onChange={(e) => set('max999', (e.target as HTMLInputElement).checked)} /><span>{t('k.ex.max999')}</span><span class="muted">{t('k.ex.max999Hint')}</span></label>
         <label class="ck"><input type="checkbox" checked={opts.uids} onChange={(e) => set('uids', (e.target as HTMLInputElement).checked)} /><span>{t('k.ex.uids')}</span></label>
         <p class="muted small m0">{t('c.uidsHint')}</p>
       </details>
