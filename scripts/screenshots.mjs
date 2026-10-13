@@ -39,7 +39,7 @@ for (const lang of ['de', 'en']) {
   await page.locator('.panel .ib').click();
   await page.locator('.suggest .btn').click();
   await page.waitForSelector('dialog[open] .kz');
-  await page.locator('dialog[open] .kz input[type=text]').first().fill(lang === 'de' ? 'Dr. Weber' : 'Dr Weber');
+  await page.locator('dialog[open] .kz input[type=text]').first().fill(lang === 'de' ? 'Dr. Muster' : 'Dr Example');
   await shot(page, 'split', lang);
   await page.locator('dialog[open] .df .btn.primary').click();
   await page.waitForTimeout(4600); // Hinweis unten ausblenden lassen

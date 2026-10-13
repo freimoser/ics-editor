@@ -198,10 +198,10 @@ describe('Excel mit Datumswerten und Geburtstagsmodus', () => {
     const sizes = cleanedSizes(r.calendar.events, NO_CLEAN);
     const [out] = planCalendars(assign(buildGroups(r.calendar.events), NO_SPLIT, [r.calendar]).buckets, [r.calendar], sizes);
     const ics = buildPart(out.parts[0], out, NO_CLEAN, 's');
-    expect(ics).toContain('SUMMARY:Geburtstag: Erika Huber (geb. 1948)');
+    expect(ics).toContain('SUMMARY:Geburtstag: Erika Mustermann (geb. 1948)');
     expect(ics).toContain('RRULE:FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=-1');
     const comp = new ICAL.Component(ICAL.parse(ics));
-    const hans = comp.getAllSubcomponents('vevent').map((v) => new ICAL.Event(v)).find((e) => e.summary.includes('Hans Vogt'))!;
+    const hans = comp.getAllSubcomponents('vevent').map((v) => new ICAL.Event(v)).find((e) => e.summary.includes('Max Mustermann'))!;
     const it2 = hans.iterator();
     const dates: string[] = [];
     for (let i = 0; i < 3; i++) dates.push(it2.next()!.toString());

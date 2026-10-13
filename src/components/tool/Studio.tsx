@@ -39,7 +39,7 @@ export const bestSuggestion = (loaded: Loaded) => {
   return null;
 };
 
-export function Sidebar(p: StudioProps & { links: Links; onSplit: () => void; onExport: () => void; onGuides: () => void }) {
+export function Sidebar(p: StudioProps & { links: Links; onSplit: () => void; onExport: () => void }) {
   const { t, n, b, lang } = useT();
   const sg = p.split.mode === 'rules' ? null : bestSuggestion(p.loaded);
   const parts = p.plan ? (p.plan.format === 'csv' ? p.plan.csv.parts : p.plan.ics.parts) : 0;
@@ -81,12 +81,9 @@ export function Sidebar(p: StudioProps & { links: Links; onSplit: () => void; on
             <H k={tooBig ? 'k.statusBig' : 'k.status'} v={{ size: b(bytes), files }} />
           </button>
         )}
-        <nav class="links" aria-label={t('nav.main')}>
-          <a href={p.links.guides} onClick={(e) => { e.preventDefault(); p.onGuides(); }}>{t('nav.guides')}</a>
-          <a href={p.links.about}>{lang === 'de' ? 'Über' : 'About'}</a>
+        <nav class="links" aria-label={lang === 'de' ? 'Rechtliches' : 'Legal'}>
           <a href={p.links.imprint}>{lang === 'de' ? 'Impressum' : 'Legal notice'}</a>
           <a href={p.links.privacy}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a>
-          <a href={p.links.lang} hreflang={p.links.langCode} lang={p.links.langCode}>{p.links.langLabel}</a>
         </nav>
       </div>
     </>

@@ -98,7 +98,20 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
   useEffect(() => {
     document.documentElement.classList.toggle('studio-mode', studio && !browsing);
     if (studio && !browsing) window.scrollTo(0, 0);
+    if (!studio) setBrowsing(false);
   }, [studio, browsing]);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest('a[data-guides]');
+      if (!a || !studio) return;
+      e.preventDefault();
+      setBrowsing(true);
+      requestAnimationFrame(() => document.getElementById('ratgeber')?.scrollIntoView({ behavior: 'smooth' }));
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, [studio]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -283,9 +296,8 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
         accept=".ics,.ical,.ifb,.zip,.csv,.txt,.tsv,.xlsx,.xlsm,.xls,.ods,text/calendar,text/csv"
         onChange={async (e) => { const input = e.target as HTMLInputElement; await openFiles(input.files); input.value = ''; }} />
 
-      <header class="top">
+      {studio && <header class="top">
         {studio && <button type="button" class="ib menu-btn" aria-label={t('k.menu')} aria-expanded={drawer} onClick={() => setDrawer(!drawer)}><Icon name="menu" size={18} /></button>}
-        <a class="brand" href={links.home}><span class="mark" aria-hidden="true"><Icon name="mark" size={16} /></span><span class="bt">ICS Editor</span></a>
         {studio ? (
           <>
             <button type="button" class="file" onClick={() => setDialog('info')} title={loaded!.fileName}>
@@ -310,41 +322,38 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
               </button>
             </div>
           </>
-        ) : (
-          <nav class="right top-links" aria-label={t('nav.main')}>
-            <a href={links.guides}>{t('nav.guides')}</a>
-            <a href={links.lang} hreflang={links.langCode} lang={links.langCode} class="lang">{links.langCode.toUpperCase()}<span class="sr-only"> – {links.langLabel}</span></a>
-          </nav>
-        )}
-      </header>
+        ) : null}
+      </header>}
 
+      {studio && <>
+        {hints && (
+          <div class="hints">
+            <p class="hint hint-l"><Icon name="up" size={14} /><H k="k.hint.cals" /></p>
+            <span class="hint-iw">
+              <button type="button" class="ib hint-i" aria-label={t('k.hint.info')} title={t('k.hint.info')} aria-expanded={help} onClick={() => setHelp(!help)}><Icon name="info" size={16} /><span class="hint-il">{t('k.hint.info')}</span></button>
+              {help && (
+                <div class="help" role="dialog" aria-label={t('k.help.title')}>
+                  <strong>{t('k.help.title')}</strong>
+                  <ul>
+                    <H as="li" k="k.help.1" /><H as="li" k="k.help.2" /><H as="li" k="k.help.3" /><H as="li" k="k.help.4" />
+                  </ul>
+                  <a href={links.help}>{t('k.help.more')} →</a>
+                </div>
+              )}
+            </span>
+            <p class="hint hint-r"><H k="k.hint.export" /><Icon name="up" size={14} /></p>
+            <button type="button" class="ib hint-x" aria-label={t('k.hint.close')} title={t('k.hint.close')} onClick={hideHints}><Icon name="x" size={14} /></button>
+          </div>
+        )}
+        {!hints && <button type="button" class="ib hint-again" aria-label={t('k.hint.info')} title={t('k.hint.info')} onClick={() => { setHints(true); setHelp(true); }}><Icon name="info" size={16} /></button>}
+      </>}
       {studio ? (
         <div class="body">
           <aside class="side" aria-label={t('k.calendars')}>
-            <Sidebar {...sp!} links={links} onSplit={() => { setDrawer(false); setDialog('split'); }} onExport={() => setDialog('export')} onGuides={() => { setDrawer(false); setBrowsing(true); requestAnimationFrame(() => document.getElementById('ratgeber')?.scrollIntoView({ behavior: 'smooth' })); }} />
+            <Sidebar {...sp!} links={links} onSplit={() => { setDrawer(false); setDialog('split'); }} onExport={() => setDialog('export')} />
           </aside>
           {drawer && <div class="scrim" onClick={() => setDrawer(false)} />}
           <section class="view" aria-label={title}>
-            {hints && (
-              <div class="hints">
-                <p class="hint hint-l"><Icon name="up" size={14} /><H k="k.hint.cals" /></p>
-                <span class="hint-iw">
-                  <button type="button" class="ib hint-i" aria-label={t('k.hint.info')} title={t('k.hint.info')} aria-expanded={help} onClick={() => setHelp(!help)}><Icon name="info" size={16} /><span class="hint-il">{t('k.hint.info')}</span></button>
-                  {help && (
-                    <div class="help" role="dialog" aria-label={t('k.help.title')}>
-                      <strong>{t('k.help.title')}</strong>
-                      <ul>
-                        <H as="li" k="k.help.1" /><H as="li" k="k.help.2" /><H as="li" k="k.help.3" /><H as="li" k="k.help.4" />
-                      </ul>
-                      <a href={links.help}>{t('k.help.more')} →</a>
-                    </div>
-                  )}
-                </span>
-                <p class="hint hint-r"><H k="k.hint.export" /><Icon name="up" size={14} /></p>
-                <button type="button" class="ib hint-x" aria-label={t('k.hint.close')} title={t('k.hint.close')} onClick={hideHints}><Icon name="x" size={14} /></button>
-              </div>
-            )}
-            {!hints && <button type="button" class="ib hint-again" aria-label={t('k.hint.info')} title={t('k.hint.info')} onClick={() => { setHints(true); setHelp(true); }}><Icon name="info" size={16} /></button>}
             {issues > 0 && <div class="banner" role="status"><Icon name="warn" size={16} /> {t('k.tblBanner', { n: n(issues) })} <button type="button" class="link" onClick={() => setDialog('table')}>{t('k.tblFix')}</button></div>}
             <div class="view-in">
               {view === 'month' && !q.trim()

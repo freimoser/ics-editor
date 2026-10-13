@@ -35,12 +35,8 @@ Lighthouse lokal: `npm run build:lh`, dann `npm run preview` und in einem zweite
 Echte Kalender- und Terminlisten gehören **nie** ins Repository. `.gitignore` und ein Pre-Commit-Hook
 (`.githooks/pre-commit`) sperren `.ics`, `.zip`, `.csv`, `.xlsx` usw. Die Tests erzeugen ihre Daten selbst.
 
-Mit einer echten Datei lässt sich lokal prüfen (Ausgabe nur Kennzahlen):
-
-```bash
-PRIVATE_SAMPLE=/pfad/zur/datei.zip npm run test:private
-PRIVATE_SAMPLE=/pfad/zur/datei.zip npx playwright test -c playwright.private.config.ts
-```
+Die Demo im Werkzeug („Praxis-Kalender“) ist ein erfundener Google-Export mit 15 Kalendern: nur Namen wie Mustermann,
+Telefonnummern wie 0176 123456789 und Adressen auf example.com (`src/lib/sample.ts`). Echte Exporte werden nirgends verwendet.
 
 ## Deployment
 

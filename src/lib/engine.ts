@@ -18,7 +18,7 @@ import { occurrences } from './recur';
 import { eventFromLines, timezoneId } from './ics';
 import { vtimezone, EXPORT_TIMEZONES } from './tz';
 import type { Rule } from './plan';
-import { encodeWindows1252, sampleBirthdayRows, samplePracticeCsv, samplePracticeIcs } from './sample';
+import { encodeWindows1252, sampleBirthdayRows, samplePracticeCsv, sampleGoogleExport } from './sample';
 
 export type Format = 'ics' | 'csv';
 
@@ -460,8 +460,9 @@ export function handle(msg: Request): unknown {
     case 'template': return template();
     case 'sample': {
       if (msg.which === 'practice') {
-        const name = msg.lang === 'de' ? 'beispiel-praxiskalender.ics' : 'example-practice-calendar.ics';
-        return { kind: 'ics', info: loadIcs(name, enc.encode(samplePracticeIcs({ perYear: 1100, name: msg.lang === 'de' ? 'Tierarztpraxis Beispiel' : 'Example Vet Practice' }))) };
+        const ex = sampleGoogleExport();
+        const zip = zipSync(Object.fromEntries(ex.files.map((f) => [f.name, enc.encode(f.text)])), { level: 1 });
+        return { kind: 'ics', info: loadIcs(ex.name, zip) };
       }
       if (msg.which === 'csv') return { kind: 'table', info: loadCsv(msg.lang === 'de' ? 'beispiel-terminliste.csv' : 'example-event-list.csv', encodeWindows1252(samplePracticeCsv({ rows: 3000, brokenRows: true }))) };
       const rows = sampleBirthdayRows().map((r) => r.map(String));

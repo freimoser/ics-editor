@@ -69,9 +69,9 @@ test('ICS: nach Kürzeln aufteilen, Teile unter 950 KB herunterladen', async ({ 
   await expect(page.getByText(/Kürzel gefunden/)).toBeVisible();
   await page.getByRole('button', { name: 'Aufteilen' }).click();
   const dlg = page.getByRole('dialog', { name: 'In mehrere Kalender aufteilen' });
-  await dlg.getByRole('textbox', { name: 'Name für DW' }).fill('Dr. Weber');
+  await dlg.getByRole('textbox', { name: 'Name für DW' }).fill('Dr. Muster');
   await dlg.getByRole('button', { name: /Kalender anlegen/ }).click();
-  await expect(sidebarCal(page, 'Dr. Weber')).toBeVisible();
+  await expect(sidebarCal(page, 'Dr. Muster')).toBeVisible();
   await expect(page.locator('.side .cal')).toHaveCount(7);
   await page.getByRole('button', { name: 'Exportieren' }).click();
   const ex = page.getByRole('dialog', { name: 'Für Google exportieren' });
@@ -272,8 +272,19 @@ test('Datei verlässt das Gerät nicht: keine Netzwerkanfragen beim Verarbeiten'
   page.on('request', (r) => requests.push(r));
   await upload(page, 'praxis.ics', samplePracticeIcs({ perYear: 300 }), 'text/calendar');
   await loaded(page);
+  // Aufteilen, Termin bearbeiten, löschen, suchen – alles ohne Anfrage nach außen
+  await page.getByRole('button', { name: 'Aufteilen' }).click();
+  await page.getByRole('button', { name: /Kalender anlegen/ }).click();
+  await page.getByRole('button', { name: 'Liste', exact: true }).click();
+  await page.locator('.list .rt').first().click();
+  await page.getByRole('textbox', { name: 'Titel' }).fill('Geändert');
+  await page.locator('.panel').getByRole('button', { name: 'Löschen' }).click();
+  await page.getByRole('button', { name: 'Fertig' }).click();
+  await page.getByRole('searchbox').fill('Kontrolle');
   await page.getByRole('button', { name: 'Exportieren' }).click();
   const ex = page.getByRole('dialog', { name: 'Für Google exportieren' });
+  await ex.getByText('Mehr Optionen').click();
+  await ex.getByRole('checkbox', { name: /Höchstens 999/ }).check();
   const [dl] = await Promise.all([page.waitForEvent('download'), ex.locator('.df .btn.primary').click()]);
   await dl.path();
   const external = requests.filter((r) => !r.url().startsWith('http://localhost:4321/') && !r.url().startsWith('blob:') && !r.url().startsWith('data:'));
