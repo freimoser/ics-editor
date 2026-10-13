@@ -22,7 +22,8 @@ import { encodeWindows1252, sampleBirthdayRows, samplePracticeCsv, samplePractic
 
 export type Format = 'ics' | 'csv';
 
-export interface PlanRequest { selection: Selection; clean: CleanOptions; split: SplitConfig; format: Format }
+/** hidden: Ziel-Kalender (Schlüssel), die links ausgeblendet sind – sie kommen nicht in den Export. */
+export interface PlanRequest { selection: Selection; clean: CleanOptions; split: SplitConfig; format: Format; hidden?: string[] }
 
 export interface PartInfo { index: number; events: number; bytes: number; from: number; to: number; file: string }
 export interface CalInfo { key: string; name: string; events: number; bytes: number; rest?: boolean; parts: PartInfo[] }
@@ -235,7 +236,10 @@ interface Planned { buckets: ReturnType<typeof assign>['buckets']; out: OutCalen
 
 function computePlan(req: PlanRequest): Planned {
   const sel = select(S.groups, req.selection);
-  const { buckets, multiMatched } = assign(sel.groups, req.split, S.cals);
+  const all = assign(sel.groups, req.split, S.cals);
+  const hide = new Set(req.hidden ?? []);
+  const buckets = hide.size ? all.buckets.filter((x) => !hide.has(x.key)) : all.buckets;
+  const multiMatched = all.multiMatched;
   const sz = sizes(req.clean);
   const out = planCalendars(buckets, S.cals, sz.ics);
   const csvOut = buckets.map((b) => { const p = packCsv(b.groups, sz.csv); return { name: b.name, key: b.key, parts: p.parts, skipped: p.skippedSeries }; });

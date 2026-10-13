@@ -140,9 +140,43 @@ test('Google-Export als ZIP mit zwei Kalendern', async ({ page }) => {
   await loaded(page);
   await expect(sidebarCal(page, 'Praxis')).toBeVisible();
   await expect(sidebarCal(page, 'Privat')).toBeVisible();
-  // Kalender ausblenden: Monatsansicht zeigt nur noch den anderen
+  // Ausgeblendete Kalender kommen nicht in den Export
   await sidebarCal(page, 'Privat').locator('input').uncheck();
   await expect(sidebarCal(page, 'Privat').locator('input')).not.toBeChecked();
+  await page.getByRole('button', { name: 'Exportieren' }).click();
+  const ex = page.getByRole('dialog', { name: 'Für Google exportieren' });
+  await expect(ex.getByText(/1 von 2/)).toBeVisible();
+  await ex.getByText(/Dateien? anzeigen|Dateiname/).click();
+  await expect(ex.locator('.files li')).toHaveCount(1);
+  await expect(ex.locator('.files')).not.toContainText(/privat/i);
+  await ex.getByRole('button', { name: 'Alle einbeziehen' }).click();
+  await expect(ex.getByText('Alle 2')).toBeVisible();
+  await page.keyboard.press('Escape');
+  // Alle auf einmal aus- und einblenden
+  await page.getByRole('button', { name: 'Alle Kalender ausblenden' }).click();
+  await expect(page.locator('.side .cal input:checked')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Alle Kalender einblenden' }).click();
+  await expect(page.locator('.side .cal input:checked')).toHaveCount(2);
+});
+
+test('Export: eigener Zeitraum mit Jahren und Datum', async ({ page }) => {
+  await sample(page);
+  await page.getByRole('button', { name: 'Exportieren' }).click();
+  const ex = page.getByRole('dialog', { name: 'Für Google exportieren' });
+  const big = ex.locator('.result .big');
+  await expect(big).toContainText('Termine');
+  const all = await big.textContent();
+  await ex.getByRole('button', { name: 'Eigener' }).click();
+  await ex.locator('.ychips button').first().click();
+  await expect(big).not.toHaveText(all!);
+  const oneYear = await big.textContent();
+  await ex.locator('.ychips button').nth(1).click();
+  await expect(big).not.toHaveText(oneYear!);
+  await ex.getByLabel('Von', { exact: true }).fill('2025-01-01');
+  await ex.getByLabel('Bis', { exact: true }).fill('2025-01-31');
+  await ex.getByLabel('Bis', { exact: true }).blur();
+  await expect(ex.locator('.ychips button[aria-pressed="true"]')).toHaveCount(0);
+  await expect(big).not.toHaveText(oneYear!);
 });
 
 test('Mehrere ICS-Dateien auf einmal werden getrennte Kalender', async ({ page }) => {

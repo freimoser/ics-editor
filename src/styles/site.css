@@ -175,6 +175,8 @@ html.studio-mode .tool-shell { position: fixed; inset: 0; z-index: 40; height: a
 /* Seitenleiste */
 .side { border-right: 1px solid var(--line); padding: 14px 12px 12px; display: flex; flex-direction: column; gap: 18px; overflow: auto; background: var(--bg); scrollbar-width: thin; }
 .label { font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); padding: 0 8px 6px; margin: 0; }
+.label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding-right: 8px; }
+.label-row .link { font-size: 12px; }
 .cals { list-style: none; margin: 0; padding: 0; }
 .cal { display: flex; align-items: center; gap: 10px; min-height: 32px; padding: 4px 8px; border-radius: 7px; cursor: pointer; }
 .cal:hover { background: var(--soft); }
@@ -301,6 +303,17 @@ dialog.dlg::backdrop { background: var(--scrim); }
 .df { display: flex; align-items: center; gap: 10px; padding: 14px 22px; border-top: 1px solid var(--line); flex-wrap: wrap; }
 .xr { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 12px; align-items: start; }
 .xl { color: var(--muted); padding-top: 6px; }
+.x-line { padding-top: 6px; }
+.custom { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.dates { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.dates label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.dates input { border: 1px solid var(--line); border-radius: 7px; background: var(--bg); height: 32px; padding: 0 8px; color: var(--text); }
+.ychips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ychips button { display: inline-flex; flex-direction: column; align-items: center; min-width: 58px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.ychips button span { font-size: 11px; font-weight: 400; color: var(--muted); }
+.ychips button:hover { background: var(--soft); }
+.ychips button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.ychips button[aria-pressed="true"] span { color: var(--bg); opacity: .75; }
 .checks { display: flex; flex-direction: column; gap: 0; }
 .ck { display: flex; align-items: center; gap: 10px; min-height: 32px; padding: 4px 8px; margin: 0 -8px; border-radius: 7px; cursor: pointer; }
 .ck:hover { background: var(--soft); }
