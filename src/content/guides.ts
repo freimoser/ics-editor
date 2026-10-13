@@ -40,7 +40,7 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Datei zu groß
   tooLarge: {
     type: 'howto',
-    figures: [{ name: 'export', de: 'Der ICS Editor teilt eine zu große Datei automatisch in Teile unter 1 MB – mit Zeitraum und Größe je Teil.', en: 'The ICS Editor automatically splits a file that is too large into parts under 1 MB – with date range and size for each part.' }, { name: 'clean', de: 'Verkleinern: Verwaltungsdaten, Beschreibungen oder abgesagte Termine weglassen – die Ersparnis steht direkt daneben.', en: 'Shrinking: leave out housekeeping data, descriptions or cancelled events – the saving is shown right next to each option.' }],
+    figures: [{ name: 'export', de: 'Der ICS Editor teilt eine zu große Datei automatisch in Teile unter 1 MB – mit Zeitraum und Größe je Teil.', en: 'The ICS Editor automatically splits a file that is too large into parts under 1 MB – with date range and size for each part.' }, { name: 'clean', de: 'Verkleinern: nur die letzten Jahre exportieren oder unter „Mehr Optionen“ Zusatzdaten, Beschreibungen und abgesagte Termine weglassen – Größe und Dateianzahl ändern sich sofort.', en: 'Shrinking: export only recent years or, under “More options”, leave out extras, descriptions and cancelled events – size and file count update instantly.' }],
     sources: ['problems', 'import'],
     related: ['limits', 'split', 'importFails', 'undo'],
     de: {
@@ -106,7 +106,7 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Grenzen
   limits: {
     type: 'article',
-    figures: [{ name: 'overview', de: 'Die Übersicht zeigt pro Kalender Termine, Zeitraum, Größe und wie viele Teile für Google nötig sind.', en: 'The overview shows events, date range, size and how many parts Google needs for each calendar.' }],
+    figures: [{ name: 'overview', de: 'Die Datei-Info zeigt pro Kalender Termine, Zeitraum, Größe, Serien und Zeitzone – dazu die Termine pro Jahr.', en: 'File info shows events, date range, size, recurring events and time zone for each calendar – plus events per year.' }],
     sources: ['problems', 'import', 'limits', 'delete'],
     related: ['tooLarge', 'importFails', 'split', 'undo'],
     de: {
@@ -188,7 +188,7 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Import scheitert
   importFails: {
     type: 'howto',
-    figures: [{ name: 'check', de: 'Prüfen: Problemzeilen in einfacher Sprache mit Zeilennummer und Vorschlag zur Korrektur.', en: 'Check: problem rows in plain language with row number and a suggested fix.' }],
+    figures: [{ name: 'check', de: '„Spalten und Probleme“: Problemzeilen in einfacher Sprache mit Zeilennummer und Vorschlag zur Korrektur.', en: '“Columns and problems”: problem rows in plain language with row number and a suggested fix.' }],
     sources: ['import', 'problems'],
     related: ['tooLarge', 'limits', 'convert', 'excel'],
     de: {
@@ -264,7 +264,7 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Aufteilen (Workspace)
   split: {
     type: 'howto',
-    figures: [{ name: 'editor', de: 'Links die Kalender der Datei und erkannte Kürzel, in der Mitte die gefilterten Termine, rechts das Bearbeitungsfeld.', en: 'On the left the calendars in the file and detected initials, in the middle the filtered events, on the right the editor.' }, { name: 'split', de: 'Ein Klick auf „Als eigene Kalender anlegen“ macht aus jedem Kürzel einen Ziel-Kalender – mit Anzahl der Termine.', en: 'One click on “Create as separate calendars” turns each set of initials into a target calendar – with its event count.' }],
+    figures: [{ name: 'editor', de: 'Links die Kalender der Datei und erkannte Kürzel, in der Mitte die Termine, rechts der gewählte Termin zum Bearbeiten.', en: 'On the left the calendars in the file and detected initials, in the middle the events, on the right the selected event for editing.' }, { name: 'split', de: 'Ein Klick auf „Aufteilen“ macht aus jedem Kürzel einen eigenen Kalender – mit Namen, Farbe und Anzahl der Termine.', en: 'One click on “Split” turns each set of initials into its own calendar – with a name, a colour and its event count.' }],
     sources: ['import', 'create', 'limits', 'problems'],
     related: ['tooLarge', 'ics', 'limits', 'undo'],
     de: {
@@ -284,7 +284,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Typischer Fall: vom gemeinsamen Kalender zu eigenen Workspace-Konten', html: '<p>Viele Praxen, Vereine und kleine Firmen haben jahrelang in <em>einem</em> Google Kalender geplant – wer zuständig ist, steht als Kürzel oder Name im Titel. Mit Google Workspace bekommt jede Person ein eigenes Konto. Dann muss der alte Kalender auf die Personen verteilt werden.</p><p>Das Werkzeug sucht in deinem Export automatisch nach Merkmalen, die sich zum Aufteilen eignen: Kürzel aus Großbuchstaben am Titelanfang, wiederkehrende Terminarten, Kategorien und Organisatoren. Es zeigt auch, wie viele Termine gleichzeitig stattfinden – viele parallele Termine sprechen dafür, dass mehrere Personen im selben Kalender planen.</p>' },
-        { h2: 'Praxisbeispiel: 17 Kürzel in einem gemeinsamen Kalender', html: '<p>Im echten Google-Export einer Tierarztpraxis (rund 27.000 Termine, ausgewertet nur lokal) fand der ICS Editor 17 Kürzel aus Großbuchstaben, die zusammen 39 % der Termine abdecken. Ein Klick auf „Als eigene Kalender anlegen“ ergab 18 Ziel-Kalender – einen pro Kürzel und einen für den Rest. Rund 4.000 Termine trugen zwei Kürzel und landeten auf Wunsch in beiden Kalendern. Ob ein Kürzel wirklich eine Person ist, entscheidest du: Das Werkzeug zeigt dir für jedes Kürzel Anzahl und Zeitraum. Eigener Test, Oktober 2026.</p>' },
+        { h2: 'Praxisbeispiel: 17 Kürzel in einem gemeinsamen Kalender', html: '<p>Im echten Google-Export einer Tierarztpraxis (rund 27.000 Termine, ausgewertet nur lokal) fand der ICS Editor 17 Kürzel aus Großbuchstaben, die zusammen 39 % der Termine abdecken. Ein Klick auf „Aufteilen“ ergab 18 Ziel-Kalender – einen pro Kürzel und einen für den Rest. Rund 4.000 Termine trugen zwei Kürzel und landeten auf Wunsch in beiden Kalendern. Ob ein Kürzel wirklich eine Person ist, entscheidest du: Das Werkzeug zeigt dir für jedes Kürzel Anzahl und Zeitraum. Eigener Test, Oktober 2026.</p>' },
         { h2: 'Wonach du aufteilen kannst', html: '<div class="table-wrap"><table><thead><tr><th>Merkmal</th><th>Beispiel</th><th>Gut für</th></tr></thead><tbody><tr><td>Kalender in der Datei</td><td>ZIP-Export mit mehreren ICS-Dateien</td><td>Unterkalender einzeln weitergeben</td></tr><tr><td>Kürzel oder Name im Titel</td><td>„T. AK Kontrolle“, „Dr. Müller – Impfung“</td><td>ein Kalender pro Mitarbeiter</td></tr><tr><td>Titelanfang</td><td>„Online …“, „OP …“</td><td>Terminarten trennen</td></tr><tr><td>Kategorie oder Organisator</td><td>Kategorie „Schulung“</td><td>Exporte aus Outlook und anderen Programmen</td></tr><tr><td>Jahr</td><td>2024, 2025, 2026</td><td>Archiv und aktuellen Kalender trennen</td></tr></tbody></table></div>' },
         { h2: 'Worauf du achten solltest', html: '<ul><li><strong>Gäste und Konferenzdaten</strong> übernimmt Google beim Import nicht – Einladungen müssen gegebenenfalls neu verschickt werden.</li><li><strong>Nicht zu viele Kalender auf einmal:</strong> Für Workspace-Konten nennt Google eine Einschränkung, wenn in kurzer Zeit mehr als 60 Kalender angelegt werden.</li><li><strong>Erst in einen neuen Kalender importieren:</strong> So lässt sich ein missglückter Import mit einem Klick löschen – siehe {undo|Import rückgängig machen}.</li><li><strong>Datenschutz:</strong> Stehen Patienten- oder Kundendaten in den Terminen, kannst du Telefonnummern und E-Mail-Adressen vorher ausblenden.</li></ul>' }
       ],
@@ -312,7 +312,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Typical case: from a shared calendar to individual Workspace accounts', html: '<p>Many practices, clubs and small businesses have planned in <em>one</em> Google Calendar for years – who is responsible is written as initials or a name in the title. With Google Workspace, everyone gets their own account. The old calendar then has to be distributed across those people.</p><p>The tool automatically searches your export for features suitable for splitting: initials in capital letters at the start of titles, recurring event types, categories and organizers. It also shows how many events take place at the same time – many parallel events suggest that several people plan in the same calendar.</p>' },
-        { h2: 'Real-world example: 17 sets of initials in one shared calendar', html: '<p>In the real Google export of a veterinary practice (about 27,000 events, analysed locally only), the ICS Editor found 17 sets of capital-letter initials covering 39% of the events together. One click on “Create as separate calendars” produced 18 target calendars – one per set of initials plus one for the rest. About 4,000 events carried two sets of initials and could go into both calendars. Whether a set of initials really is a person is your call: the tool shows the count and date range for each. Own test, October 2026.</p>' },
+        { h2: 'Real-world example: 17 sets of initials in one shared calendar', html: '<p>In the real Google export of a veterinary practice (about 27,000 events, analysed locally only), the ICS Editor found 17 sets of capital-letter initials covering 39% of the events together. One click on “Split” produced 18 target calendars – one per set of initials plus one for the rest. About 4,000 events carried two sets of initials and could go into both calendars. Whether a set of initials really is a person is your call: the tool shows the count and date range for each. Own test, October 2026.</p>' },
         { h2: 'What you can split by', html: '<div class="table-wrap"><table><thead><tr><th>Feature</th><th>Example</th><th>Good for</th></tr></thead><tbody><tr><td>Calendars in the file</td><td>ZIP export with several ICS files</td><td>handing out sub-calendars</td></tr><tr><td>Initials or name in the title</td><td>“T. AK check-up”, “Dr. Miller – vaccination”</td><td>one calendar per employee</td></tr><tr><td>Start of the title</td><td>“Online …”, “Surgery …”</td><td>separating event types</td></tr><tr><td>Category or organizer</td><td>category “Training”</td><td>exports from Outlook and other apps</td></tr><tr><td>Year</td><td>2024, 2025, 2026</td><td>separating archive and current calendar</td></tr></tbody></table></div>' },
         { h2: 'What to watch out for', html: '<ul><li><strong>Guests and conference data</strong> aren’t imported by Google – invitations may need to be sent again.</li><li><strong>Not too many calendars at once:</strong> for Workspace accounts, Google mentions a restriction if more than 60 calendars are created in a short period.</li><li><strong>Import into a new calendar first:</strong> that way a failed import can be deleted in one go – see {undo|undo an import}.</li><li><strong>Privacy:</strong> if events contain patient or customer data, you can hide phone numbers and email addresses beforehand.</li></ul>' }
       ],
@@ -328,7 +328,7 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Excel / Geburtstage
   excel: {
     type: 'howto',
-    figures: [{ name: 'birthdays', de: 'Aus einer Geburtstagsliste werden jährliche, ganztägige Termine – in der Liste mit „Serie“ gekennzeichnet.', en: 'A birthday list becomes yearly all-day events – marked as “Series” in the list.' }],
+    figures: [{ name: 'birthdays', de: 'Aus einer Geburtstagsliste werden jährliche, ganztägige Termine – in der Liste mit Wiederholungs-Symbol.', en: 'A birthday list becomes yearly all-day events – shown with a repeat icon in the list.' }],
     sources: ['import', 'problems'],
     related: ['convert', 'importFails', 'ics', 'undo'],
     de: {
@@ -510,7 +510,7 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Rückgängig
   undo: {
     type: 'howto',
-    figures: [{ name: 'export', de: 'Vor jedem Download erinnert der ICS Editor daran, zuerst einen neuen, leeren Kalender anzulegen.', en: 'Before every download, the ICS Editor reminds you to create a new, empty calendar first.' }],
+    figures: [{ name: 'export', de: 'Im Export-Fenster steht die Anleitung zum Import – sie beginnt mit einem neuen, leeren Kalender.', en: 'The export window includes the import steps – starting with a new, empty calendar.' }],
     sources: ['delete', 'create', 'problems'],
     related: ['ics', 'tooLarge', 'split', 'limits'],
     de: {
@@ -528,7 +528,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Wenn die Termine im Hauptkalender gelandet sind', html: '<p>Den Hauptkalender kannst du nicht löschen. Google bietet nur an, <strong>alle</strong> Termine des Hauptkalenders auf einmal zu löschen – also auch die, die nicht aus dem Import stammen. Einzelne importierte Termine musst du sonst von Hand löschen.</p><p>Genau deshalb empfiehlt das {tool|Werkzeug} vor jedem Download, zuerst einen neuen, leeren Kalender anzulegen.</p>' },
-        { h2: 'So planst du den nächsten Import', html: '<ol><li>In Google Kalender einen neuen Kalender anlegen, z. B. „Import 2026“.</li><li>Die Datei im Werkzeug prüfen und, wenn nötig, {tooLarge|in Teile unter 1 MB aufteilen}.</li><li>Jeden Teil in den neuen Kalender importieren – <strong>einmal</strong> auf „Importieren“ klicken.</li><li>Ergebnis prüfen. Passt etwas nicht, den Kalender löschen und neu beginnen.</li></ol><p>Willst du dieselben Termine ein zweites Mal importieren, kannst du im Werkzeug unter „Aufräumen“ neue Termin-Kennungen vergeben.</p>' }
+        { h2: 'So planst du den nächsten Import', html: '<ol><li>In Google Kalender einen neuen Kalender anlegen, z. B. „Import 2026“.</li><li>Die Datei im Werkzeug prüfen und, wenn nötig, {tooLarge|in Teile unter 1 MB aufteilen}.</li><li>Jeden Teil in den neuen Kalender importieren – <strong>einmal</strong> auf „Importieren“ klicken.</li><li>Ergebnis prüfen. Passt etwas nicht, den Kalender löschen und neu beginnen.</li></ol><p>Willst du dieselben Termine ein zweites Mal importieren, kannst du beim Export unter „Mehr Optionen“ neue Termin-Kennungen vergeben.</p>' }
       ],
       faq: [
         { q: 'Kann ich nur die importierten Termine im Hauptkalender löschen?', a: 'Nicht auf einmal. Google bietet für den Hauptkalender nur „alle Termine löschen“ an. Deshalb lieber in einen eigenen, neuen Kalender importieren.' },
@@ -552,7 +552,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'If the events ended up in your primary calendar', html: '<p>You can’t delete your primary calendar. Google only offers to delete <strong>all</strong> events of the primary calendar at once – including those that didn’t come from the import. Otherwise you have to delete imported events by hand.</p><p>That’s exactly why the {tool|tool} recommends creating a new, empty calendar before every download.</p>' },
-        { h2: 'How to set up your next import', html: '<ol><li>Create a new calendar in Google Calendar, e.g. “Import 2026”.</li><li>Check the file in the tool and, if necessary, {tooLarge|split it into parts under 1 MB}.</li><li>Import every part into the new calendar – click “Import” <strong>once</strong>.</li><li>Check the result. If something is wrong, delete the calendar and start again.</li></ol><p>If you want to import the same events a second time, you can assign new event IDs in the tool under “Clean up”.</p>' }
+        { h2: 'How to set up your next import', html: '<ol><li>Create a new calendar in Google Calendar, e.g. “Import 2026”.</li><li>Check the file in the tool and, if necessary, {tooLarge|split it into parts under 1 MB}.</li><li>Import every part into the new calendar – click “Import” <strong>once</strong>.</li><li>Check the result. If something is wrong, delete the calendar and start again.</li></ol><p>If you want to import the same events a second time, you can assign new event IDs when exporting, under “More options”.</p>' }
       ],
       faq: [
         { q: 'Can I delete only the imported events in my primary calendar?', a: 'Not in one go. For the primary calendar, Google only offers “delete all events”. That’s why it’s better to import into a separate, new calendar.' },

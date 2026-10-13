@@ -10,8 +10,8 @@ const out = (f) => fileURLToPath(new URL('../public/img/' + f, import.meta.url))
 const meta = {};
 
 async function shot(page, name, lang) {
-  await page.waitForTimeout(400);
-  const png = await page.locator('.app').screenshot({ animations: 'disabled' });
+  await page.waitForTimeout(500);
+  const png = await page.screenshot({ animations: 'disabled' });
   const img = sharp(png).resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 80 });
   const { width, height } = await img.clone().toBuffer({ resolveWithObject: true }).then((r) => r.info);
   await img.toFile(out(`${name}-${lang}.webp`));
@@ -22,42 +22,57 @@ async function shot(page, name, lang) {
 for (const lang of ['de', 'en']) {
   // Eigener Browser je Sprache, damit Datums- und Zeitfelder im passenden Format erscheinen
   const browser = await chromium.launch({ args: [lang === 'de' ? '--lang=de-DE' : '--lang=en-GB'] });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.25, colorScheme: 'light', locale: lang === 'de' ? 'de-DE' : 'en-GB' });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 860 }, deviceScaleFactor: 1.25, colorScheme: 'light', locale: lang === 'de' ? 'de-DE' : 'en-GB' });
   const start = async (which) => {
     await page.goto(BASE + (lang === 'de' ? '' : 'en/'));
     await page.waitForSelector('astro-island:not([ssr])', { state: 'attached' });
-    await page.locator('.samples button').nth(which).click();
-    await page.waitForSelector('.app-loaded .side-item', { timeout: 60_000 });
-    await page.waitForTimeout(800);
+    await page.locator('.samples .link').nth(which).click();
+    await page.waitForSelector('.app.loaded .cal', { timeout: 60_000 });
+    await page.waitForTimeout(900);
   };
+  const close = async () => { await page.keyboard.press('Escape'); await page.waitForTimeout(250); };
+
   await start(0);
-  await page.locator('.side-group .side-item').first().click();
-  await page.waitForTimeout(900);
-  await page.locator('.row-open').nth(2).click();
-  await page.waitForSelector('.inspector');
+  await page.locator('.chip:not(.allday)', { hasText: / [A-Z]{2} / }).nth(4).click();
+  await page.waitForSelector('.panel .p-title');
   await shot(page, 'editor', lang);
-  await page.locator('.seg-mini button').nth(1).click();
-  await page.waitForSelector('.month-ev');
-  await page.locator('.month-ev').nth(6).click();
-  await shot(page, 'month', lang);
-  await page.locator('.inspector .icon-btn').click();
-  await page.locator('.side-group .btn-block-sm').first().click();
-  await page.locator('#tab-split').click();
+  await page.locator('.panel .ib').click();
+  await page.locator('.suggest .btn').click();
+  await page.waitForSelector('dialog[open] .kz');
+  await page.locator('dialog[open] .kz input[type=text]').first().fill(lang === 'de' ? 'Dr. Weber' : 'Dr Weber');
   await shot(page, 'split', lang);
-  await page.locator('#tab-overview').click();
+  await page.locator('dialog[open] .df .btn.primary').click();
+  await page.waitForTimeout(4600); // Hinweis unten ausblenden lassen
+  await shot(page, 'month', lang);
+  await page.locator('.top .file').click();
+  await page.waitForSelector('dialog[open] .kpis');
   await shot(page, 'overview', lang);
-  await page.locator('#tab-clean').click();
-  await page.locator('#panel-clean input[type=checkbox]').first().check();
-  await shot(page, 'clean', lang);
-  await page.locator('#tab-export').click();
+  await close();
+  await page.locator('.top .btn.primary').click();
+  await page.waitForSelector('dialog[open] .result .big');
+  await page.locator('dialog[open] .files-d > summary').click();
   await shot(page, 'export', lang);
+  await page.locator('dialog[open] .seg button').nth(1).click();
+  await page.locator('dialog[open] .files-d > summary').click();
+  await page.locator('dialog[open] .more-opts > summary').click();
+  await page.locator('dialog[open] .ck input').nth(1).check();
+  await shot(page, 'clean', lang);
+  await close();
+
   await start(1);
-  await page.locator('#tab-check').click();
+  await page.locator('.banner .link').click();
+  await page.waitForSelector('dialog[open] .issue');
   await shot(page, 'check', lang);
-  await page.locator('#tab-privacy').click();
+  await page.locator('dialog[open] .db .h4').nth(1).scrollIntoViewIfNeeded();
+  await page.locator('dialog[open] .db').evaluate((el) => { const h = el.querySelectorAll('.h4')[1]; el.scrollTop = h.offsetTop - 12; });
   await shot(page, 'privacy', lang);
+  await close();
+
   await start(2);
-  await page.locator('.row-open').first().click();
+  await page.locator('.top .seg button').nth(1).click();
+  await page.waitForSelector('.list .rt');
+  await page.locator('.list .rt').first().click();
+  await page.waitForSelector('.panel .p-title');
   await shot(page, 'birthdays', lang);
   await page.close();
   await browser.close();

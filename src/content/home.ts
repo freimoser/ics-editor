@@ -17,9 +17,9 @@ export const HOME = {
     ],
     howTitle: 'So arbeitest du mit dem ICS Editor',
     how: [
-      ['editor', 'Datei öffnen: Links stehen die Kalender der Datei und erkannte Unterkalender, in der Mitte die Termine, rechts bearbeitest du den gewählten Termin.'],
-      ['month', 'Monatsansicht: Serientermine werden an jedem Tag gezeigt, an dem sie stattfinden. Ein Klick öffnet den Termin.'],
-      ['export', 'Exportieren: Das Werkzeug teilt in Dateien unter 1 MB und erinnert daran, zuerst einen neuen Kalender in Google anzulegen.']
+      ['editor', 'Datei öffnen: Links die Kalender der Datei, in der Mitte der Monat. Ein Klick auf einen Termin öffnet ihn rechts zum Bearbeiten.'],
+      ['month', 'Aufteilen: Erkannte Kürzel werden zu eigenen Kalendern. Die Farben zeigen, wo jeder Termin landet.'],
+      ['export', 'Exportieren: Zeitraum wählen, Ergebnis sehen, herunterladen. Zu große Dateien werden automatisch in Teile unter 1 MB geteilt.']
     ],
     faqTitle: 'Häufige Fragen',
     guidesTitle: 'Ratgeber',
@@ -48,9 +48,9 @@ export const HOME = {
     ],
     howTitle: 'How the ICS Editor works',
     how: [
-      ['editor', 'Open a file: the calendars in the file and detected sub-calendars are on the left, events in the middle, and you edit the selected event on the right.'],
-      ['month', 'Month view: recurring events appear on every day they occur. One click opens the event.'],
-      ['export', 'Export: the tool splits into files under 1 MB and reminds you to create a new calendar in Google first.']
+      ['editor', 'Open a file: the calendars in the file on the left, the month in the middle. Click an event to edit it on the right.'],
+      ['month', 'Split: detected initials become separate calendars. The colours show where each event goes.'],
+      ['export', 'Export: choose a date range, see the result, download. Files that are too large are split into parts under 1 MB automatically.']
     ],
     faqTitle: 'Frequently asked questions',
     guidesTitle: 'Guides',
