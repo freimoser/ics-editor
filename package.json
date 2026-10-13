@@ -9,7 +9,6 @@
     "assets": "npm i --no-save sharp && node scripts/gen-assets.mjs",
     "preview": "astro preview",
     "test": "vitest run",
-    "test:private": "vitest run --config vitest.private.config.ts",
     "test:e2e": "playwright test",
     "prepare": "git config core.hooksPath .githooks || true",
     "build:lh": "LOCAL_ROBOTS=http://localhost:4321/robots.txt astro build && node scripts/postbuild.mjs",
