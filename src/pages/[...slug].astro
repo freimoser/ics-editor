@@ -4,7 +4,7 @@ import { GUIDES as KEYS, INFO, LEGAL, ROUTES, SITE as SITE_URL, asset, path, url
 import { ABOUT } from '../content/about';
 import { GUIDES, PHONE_FAQ_DE, PHONE_FAQ_EN } from '../content/guides';
 import { LEGAL_PAGES } from '../content/legal';
-import { SRC, STAND, UPDATED } from '../content/sources';
+import { SRC, STAND, PAGE_UPDATED, day } from '../content/sources';
 import { linkify, strip } from '../content/links';
 import { LEGAL as OWNER } from '../config/legal';
 import Figure from '../components/Figure.astro';
@@ -38,13 +38,13 @@ if (def && g) {
   const citation = def.sources.map((s) => ({ '@type': 'CreativeWork', name: SRC[s][lang], url: SRC[s].url }));
   const images = def.figures.filter((f) => (IMG as Record<string, unknown>)[`${f.name}-${lang}`]).map((f) => ({ '@type': 'ImageObject', url: SITE_URL + asset(`img/${f.name}-${lang}.webp`), caption: f[lang] }));
   const main = def.type === 'article'
-    ? { '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: STAND.iso, dateModified: UPDATED.iso, author, publisher: author, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images.map((i) => i.url)], citation }
-    : { '@context': 'https://schema.org', '@type': 'HowTo', name: g.h1, description: strip(g.answer), inLanguage: lang, totalTime: 'PT10M', image: images[0], author, tool: [{ '@type': 'HowToTool', name: 'ICS Editor' }], step: g.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text })) };
+    ? { '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: def.published, dateModified: def.updated, author, publisher: author, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images.map((i) => i.url)], citation }
+    : { '@context': 'https://schema.org', '@type': 'HowTo', name: g.h1, description: strip(g.answer), inLanguage: lang, datePublished: def.published, dateModified: def.updated, totalTime: 'PT10M', image: images[0], author, tool: [{ '@type': 'HowToTool', name: 'ICS Editor' }], step: g.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text })) };
   schema = [main, faq, crumbs];
 }
 const sourceLabel = lang === 'de' ? `Stand ${STAND.de} · Quelle:` : `As of ${STAND.en} · Source:`;
 const about = isAbout ? ABOUT[lang] : null;
-if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', name: about.h1, url: url('about', lang), inLanguage: lang, dateModified: UPDATED.iso, mainEntity: author }];
+if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', name: about.h1, url: url('about', lang), inLanguage: lang, dateModified: PAGE_UPDATED.about, mainEntity: author }];
 ---
 {g && def && (
   <Base lang={lang} page={key} title={g.title} description={g.description} schema={schema}>
@@ -56,7 +56,7 @@ if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', n
         <h1>{g.h1}</h1>
         <p class="answer" set:html={g.answer} />
         <p class="source">{sourceLabel} <a href={SRC[def.sources[0]].url} rel="noopener">{SRC[def.sources[0]][lang]}</a></p>
-        <p class="byline">{lang === 'de' ? 'Von ' : 'By '}<a href={path('about', lang)} rel="author">{OWNER.operator}</a> · {lang === 'de' ? `aktualisiert am ${UPDATED.de} · Quellen geprüft am ${STAND.de}` : `updated ${UPDATED.en} · sources checked ${STAND.en}`}</p>
+        <p class="byline">{lang === 'de' ? 'Von ' : 'By '}<a href={path('about', lang)} rel="author">{OWNER.operator}</a> · {lang === 'de' ? `aktualisiert am ${day(def.updated, 'de')} · Quellen geprüft am ${STAND.de}` : `updated ${day(def.updated, 'en')} · sources checked ${STAND.en}`}</p>
         <div class="cta">
           <div class="cta-text">
             <div class="cta-title">{g.cta}</div>

@@ -3,7 +3,6 @@
 export type Lang = 'de' | 'en';
 export const SITE = 'https://freimoser.github.io';
 export const BASE = '/ics-editor/';
-export const LASTMOD = '2026-10-14';
 
 export const ROUTES = {
   home: { de: '', en: 'en/' },

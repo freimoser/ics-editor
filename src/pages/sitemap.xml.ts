@@ -1,4 +1,5 @@
-import { GUIDES, LASTMOD, SITE, asset, url, type Lang, type PageKey } from '../i18n/routes';
+import { GUIDES, SITE, asset, url, type Lang, type PageKey } from '../i18n/routes';
+import { PAGE_UPDATED } from '../content/sources';
 import { GUIDES as CONTENT } from '../content/guides';
 import { HOME } from '../content/home';
 import IMG from '../content/images.json';
@@ -9,13 +10,16 @@ function images(p: PageKey, l: Lang): { name: string; caption: string }[] {
   return list.filter((i) => (IMG as Record<string, unknown>)[`${i.name}-${l}`]);
 }
 
+/** Letzte inhaltliche Änderung je Seite – nicht pauschal für alle Seiten */
+const lastmod = (p: PageKey) => (p === 'home' ? PAGE_UPDATED.home : p === 'about' ? PAGE_UPDATED.about : CONTENT[p].updated);
+
 // Nur indexierbare Seiten. Jede URL mit Schrägstrich am Ende und mit ihren Sprachversionen.
 export function GET() {
   const pages: PageKey[] = ['home', ...GUIDES, 'about'];
   const langs: Lang[] = ['de', 'en'];
   const rows = pages.flatMap((p) => langs.map((l) => `  <url>
     <loc>${url(p, l)}</loc>
-    <lastmod>${LASTMOD}</lastmod>
+    <lastmod>${lastmod(p)}</lastmod>
     <xhtml:link rel="alternate" hreflang="de" href="${url(p, 'de')}"/>
     <xhtml:link rel="alternate" hreflang="en" href="${url(p, 'en')}"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="${url(p, 'en')}"/>
