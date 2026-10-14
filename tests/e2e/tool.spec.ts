@@ -172,6 +172,14 @@ test('Export: eigener Zeitraum mit Jahren und Datum', async ({ page }) => {
   const oneYear = await big.textContent();
   await ex.locator('.ychips button').nth(1).click();
   await expect(big).not.toHaveText(oneYear!);
+  // Schnellauswahl setzt Von/Bis
+  await ex.getByRole('button', { name: /^Vorjahr/ }).click();
+  const y = new Date().getFullYear() - 1;
+  await expect(ex.getByLabel('Von', { exact: true })).toHaveValue(`${y}-01-01`);
+  await expect(ex.getByLabel('Bis', { exact: true })).toHaveValue(`${y}-12-31`);
+  await expect(ex.locator('.ychips button[aria-pressed="true"]')).toHaveCount(0);
+  await ex.getByRole('button', { name: 'Vormonat' }).click();
+  await expect(ex.getByRole('button', { name: 'Vormonat' })).toHaveAttribute('aria-pressed', 'true');
   await ex.getByLabel('Von', { exact: true }).fill('2025-01-01');
   await ex.getByLabel('Bis', { exact: true }).fill('2025-01-31');
   await ex.getByLabel('Bis', { exact: true }).blur();

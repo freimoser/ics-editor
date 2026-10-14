@@ -13,6 +13,21 @@ export type Range = 'all' | 'from2' | 'before2' | 'from1' | 'before1' | 'future'
 const RANGES: Range[] = ['all', 'from2', 'before2', 'from1', 'before1', 'future', 'custom'];
 const rangeYear = (r: Range) => new Date().getFullYear() - (r.endsWith('2') ? 2 : 1);
 
+const isoDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+/** Schnellauswahl für den eigenen Zeitraum, vom heutigen Tag aus gerechnet */
+function quickRanges(): { label: 'k.q.thisMonth' | 'k.q.lastMonth' | 'k.q.last3m' | 'k.q.last12m' | 'k.q.thisYear' | 'k.q.lastYear'; from: string; to: string; y?: number }[] {
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  const back = (months: number) => { const d = new Date(now); d.setMonth(d.getMonth() - months); return isoDate(d); };
+  return [
+    { label: 'k.q.thisMonth', from: isoDate(new Date(y, m, 1)), to: isoDate(new Date(y, m + 1, 0)) },
+    { label: 'k.q.lastMonth', from: isoDate(new Date(y, m - 1, 1)), to: isoDate(new Date(y, m, 0)) },
+    { label: 'k.q.last3m', from: back(3), to: isoDate(now) },
+    { label: 'k.q.last12m', from: back(12), to: isoDate(now) },
+    { label: 'k.q.thisYear', from: `${y}-01-01`, to: `${y}-12-31`, y },
+    { label: 'k.q.lastYear', from: `${y - 1}-01-01`, to: `${y - 1}-12-31`, y: y - 1 }
+  ];
+}
+
 export interface ExportOpts { range: Range; from: string; to: string; years: number[]; max999: boolean; admin: boolean; cancelled: boolean; dupes: boolean; phones: boolean; desc: boolean; uids: boolean; format: Format }
 export const DEFAULT_EXPORT: ExportOpts = { range: 'all', from: '', to: '', years: [], max999: false, admin: true, cancelled: false, dupes: false, phones: false, desc: false, uids: false, format: 'ics' };
 
@@ -54,11 +69,17 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
   const tone = !plan || !plan.events ? 'bad' : files.length > withEvents ? 'warn' : 'ok';
   const status = !plan ? '' : !plan.events ? t('k.ex.empty') : files.length > withEvents ? t(opts.max999 ? 'k.ex.split999' : 'k.ex.split', { n: files.length }) : files.length === 1 ? t('k.ex.fits1') : t('k.ex.fitsN', { n: files.length });
   const bytes = plan ? (plan.format === 'csv' ? plan.csv.bytes : plan.ics.bytes) : 0;
-  const years = (() => {
+  // Jahre der angehakten Kalender (bei Kalendern aus der Datei); Ausreißer mit wenigen Terminen erst auf Wunsch
+  const shownCals = req.split.mode === 'source' ? cals.filter((c) => !(req.hidden ?? []).includes('cal' + c.index)) : cals;
+  const allYears = (() => {
     const m = new Map<number, number>();
-    for (const c of cals) for (const x of c.perYear) m.set(x.year, (m.get(x.year) ?? 0) + x.count);
+    for (const c of shownCals) for (const x of c.perYear) m.set(x.year, (m.get(x.year) ?? 0) + x.count);
     return [...m.entries()].filter(([, c]) => c > 0).sort((a, b) => b[0] - a[0]);
   })();
+  const [allShown, setAllShown] = useState(false);
+  const fewYears = allYears.filter(([, c]) => c < 10).length;
+  const years = allShown ? allYears : allYears.filter(([, c]) => c >= 10);
+  const quick = quickRanges();
   const set = (k: keyof ExportOpts, v: ExportOpts[keyof ExportOpts]) => setOpts({ ...opts, [k]: v });
 
   async function get(which: { cal: string; part: number } | 'zip', key: string) {
@@ -103,6 +124,13 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
                 <label>{t('k.ex.to')} <input type="date" value={opts.to} onChange={(e) => setOpts({ ...opts, to: (e.target as HTMLInputElement).value, years: [] })} /></label>
                 {(opts.from || opts.to || opts.years.length > 0) && <button type="button" class="link small" onClick={() => setOpts({ ...opts, from: '', to: '', years: [] })}>{t('k.ex.reset')}</button>}
               </div>
+              <div class="muted small">{t('k.ex.quick')}</div>
+              <div class="qchips">
+                {quick.map((q) => (
+                  <button type="button" aria-pressed={opts.from === q.from && opts.to === q.to && !opts.years.length}
+                    onClick={() => setOpts({ ...opts, from: q.from, to: q.to, years: [] })}>{t(q.label, { y: q.y ?? '' })}</button>
+                ))}
+              </div>
               <div class="muted small">{t('k.ex.years')} · {t('k.ex.yearsHint')}</div>
               <div class="ychips">
                 {years.map(([y, c]) => (
@@ -112,6 +140,7 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
                   </button>
                 ))}
               </div>
+              {fewYears > 0 && <button type="button" class="link small" style={{ alignSelf: 'flex-start' }} onClick={() => setAllShown(!allShown)}>{allShown ? t('k.ex.fewerYears') : t('k.ex.moreYears', { n: fewYears })}</button>}
             </div>
           )}
         </div>
