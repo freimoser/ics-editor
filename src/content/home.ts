@@ -11,7 +11,7 @@ export const HOME = {
       ['Alle Kalender sehen', 'Zeigt jeden Kalender der Datei mit Terminen, Zeitraum, Größe und Zeitzone – getestet mit einem echten Google-Export von 9,6 MB und rund 27.000 Terminen.'],
       ['Termine bearbeiten', 'Titel, Zeit, Ort und Beschreibung ändern, Termine löschen oder in einen anderen Kalender verschieben – in der Liste oder im Monat.'],
       ['Unterkalender erkennen', 'Findet Mitarbeiter-Kürzel, Terminarten und Kategorien und legt daraus mit einem Klick eigene Kalender an.'],
-      ['Unter 1 MB bringen', 'Teilt automatisch in Teile unter 950 KB. Serien bleiben mit ihren Ausnahmen zusammen.'],
+      ['Unter 1 MB bringen', 'Teilt automatisch in Teile unter 950 KB – auf Wunsch zusätzlich mit höchstens 999 Terminen pro Datei. Serien bleiben mit ihren Ausnahmen zusammen.'],
       ['Datenschutz', 'Telefonnummern und E-Mail-Adressen ausblenden, Verwaltungsdaten weglassen – die Datei verlässt dein Gerät nicht.'],
       ['CSV & Excel', 'Wandelt Tabellen – auch mit Semikolon, deutschen Datumsformaten oder als Geburtstagsliste – in ICS oder Google-CSV um.']
     ],
@@ -42,7 +42,7 @@ export const HOME = {
       ['See every calendar', 'Shows each calendar in the file with its events, date range, size and time zone – tested with a real Google export of 9.6 MB and about 27,000 events.'],
       ['Edit events', 'Change title, time, location and description, delete events or move them to another calendar – in the list or month view.'],
       ['Detect sub-calendars', 'Finds staff initials, event types and categories and turns them into separate calendars in one click.'],
-      ['Get under 1 MB', 'Automatically splits into parts under 950 KB. Recurring events stay together with their exceptions.'],
+      ['Get under 1 MB', 'Automatically splits into parts under 950 KB – optionally with at most 999 events per file. Recurring events stay together with their exceptions.'],
       ['Privacy', 'Hide phone numbers and email addresses, drop housekeeping data – the file never leaves your device.'],
       ['CSV & Excel', 'Converts spreadsheets – including semicolon files, European date formats and birthday lists – to ICS or Google CSV.']
     ],

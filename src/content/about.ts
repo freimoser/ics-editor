@@ -16,7 +16,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 <li>Automatische Tests mit erzeugten Beispieldaten: deutsche Semikolon-CSV im Windows-Zeichensatz, Excel mit Datumswerten, eine 3-MB-Terminliste, fehlerhafte Zeilen, mehrdeutige Daten, Geburtstage am 29. Februar.</li>
 <li>Jede erzeugte ICS-Datei wird mit einem unabhängigen iCalendar-Leser (ical.js) geprüft, jede Google-CSV gegen das Format aus Googles Hilfe.</li>
 <li>Browser-Tests prüfen die Bedienung am Handy (360 px), mit der Tastatur, offline – und dass beim Verarbeiten einer Datei keine einzige Netzwerkanfrage entsteht.</li>
-<li>Zusätzlich lief ein echter Google-Kalender-Export einer Tierarztpraxis mit rund 27.000 Terminen durch das Werkzeug – ausgewertet nur lokal auf dem eigenen Rechner, ohne Namen. Die Kennzahlen stehen in den Ratgebern als Praxisbeispiel.</li>
+<li>Zusätzlich lief ein echter Google-Kalender-Export einer Tierarztpraxis mit rund 27.000 Terminen durch das Werkzeug – ausgewertet nur lokal auf dem eigenen Rechner, ohne Namen. Die Kennzahlen stehen in den Ratgebern als Praxisbeispiel. Außerdem wurde ein exportierter Teil mit 999 Terminen am Computer in Google Kalender importiert: Google meldete „999 von 999 Terminen importiert“ (Oktober 2026, siehe {importParts|Kalender in Teilen importieren}).</li>
 </ul>
 <h2>Woher die Angaben stammen</h2>
 <p>Alle Aussagen über Google Kalender – etwa die Grenze von 1 MB pro Datei – stammen aus der offiziellen Hilfe von Google und sind auf jeder Seite mit Datum verlinkt. Eigene Messungen sind als solche gekennzeichnet. Der Quellcode ist öffentlich: <a href="${LEGAL.repo}" rel="noopener">github.com/freimoser/ics-editor</a>.</p>
@@ -38,7 +38,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 <li>Automated tests with generated sample data: semicolon CSV in Windows encoding, Excel with date values, a 3 MB event list, broken rows, ambiguous dates, birthdays on 29 February.</li>
 <li>Every generated ICS file is checked with an independent iCalendar reader (ical.js), every Google CSV against the format in Google’s help.</li>
 <li>Browser tests check use on phones (360 px), by keyboard, offline – and that processing a file causes no network request at all.</li>
-<li>In addition, a real Google Calendar export of a veterinary practice with about 27,000 events went through the tool – analysed only locally, without names. Its key figures appear in the guides as a real-world example.</li>
+<li>In addition, a real Google Calendar export of a veterinary practice with about 27,000 events went through the tool – analysed only locally, without names. Its key figures appear in the guides as a real-world example. In addition, an exported part with 999 events was imported into Google Calendar on a computer: Google reported 999 of 999 events imported (October 2026, see {importParts|import a calendar in parts}).</li>
 </ul>
 <h2>Where the facts come from</h2>
 <p>Every statement about Google Calendar – such as the 1 MB limit per file – comes from Google’s official help and is linked with a date on each page. Own measurements are marked as such. The source code is public: <a href="${LEGAL.repo}" rel="noopener">github.com/freimoser/ics-editor</a>.</p>

@@ -388,3 +388,16 @@ test('Englische Startseite und Sprachwechsel', async ({ page }) => {
   await page.getByRole('link', { name: /Deutsch/ }).click();
   await expect(page).toHaveURL(/\/ics-editor\/$/);
 });
+
+test('Englische Oberfläche: Dateinamen auf Englisch', async ({ page }) => {
+  await page.goto('en/');
+  await ready(page);
+  await page.getByRole('button', { name: /Practice calendar/ }).click();
+  await loaded(page);
+  await page.getByRole('button', { name: 'Export & convert', exact: true }).click();
+  const ex = page.getByRole('dialog', { name: 'Export for Google' });
+  await ex.getByText(/Show files/).click();
+  await expect(ex.locator('.f-name').first()).toContainText(/_\d{4}-\d{2}-to-\d{4}-\d{2}\.ics/);
+  await expect(ex.locator('.files')).toContainText('part-1-of-');
+  await expect(ex.locator('.files')).not.toContainText('teil-');
+});

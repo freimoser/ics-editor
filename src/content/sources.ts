@@ -2,7 +2,7 @@
 /** Datum, an dem die Google-Quellen geprüft wurden */
 export const STAND = { de: '7. Oktober 2026', en: '7 October 2026', iso: '2026-10-07' };
 /** Datum der letzten inhaltlichen Aktualisierung der Seiten */
-export const UPDATED = { de: '14. Oktober 2026', en: '14 October 2026', iso: '2026-10-14' };
+export const UPDATED = { de: '14. Oktober 2026', en: '14 October 2026', iso: '2026-10-14' }; // jüngste Änderung der Website (für llms.txt)
 
 /** Eigener Test mit einem echten, anonymen Google-Kalender-Export (nur lokal ausgewertet, ohne Namen) */
 export const OWN_TEST = { date: { de: 'Oktober 2026', en: 'October 2026' } };
@@ -17,3 +17,11 @@ export const SRC = {
 } as const;
 
 export type SourceKey = keyof typeof SRC;
+
+/** ISO-Datum als lesbares Datum, z. B. „14. Oktober 2026“ / „14 October 2026“ */
+export function day(iso: string, lang: 'de' | 'en'): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+}
+/** Letzte inhaltliche Änderung von Startseite und Über-Seite */
+export const PAGE_UPDATED = { home: '2026-10-14', about: '2026-10-14' };

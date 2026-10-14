@@ -44,7 +44,7 @@ export const DEFAULT_EXPORT: ExportOpts = { range: 'all', fromDate: '', from: ''
 const statusWords = (loaded: Loaded) => (loaded.suggestions.find((s) => s.kind === 'status')?.values ?? []).filter((v) => v.value !== 'STATUS:CANCELLED');
 
 /** Baut aus den Export-Optionen die Anfrage an den Rechenkern. */
-export function exportRequest(o: ExportOpts, sel: Selection, split: SplitConfig, loaded: Loaded, hidden: string[]): PlanRequest {
+export function exportRequest(o: ExportOpts, sel: Selection, split: SplitConfig, loaded: Loaded, hidden: string[], lang: 'de' | 'en' = 'de'): PlanRequest {
   const y = new Date().getFullYear();
   return {
     selection: {
@@ -55,7 +55,7 @@ export function exportRequest(o: ExportOpts, sel: Selection, split: SplitConfig,
       dropCancelled: o.cancelled, dropWords: o.cancelled ? statusWords(loaded).map((v) => v.value) : [], dedupe: o.dupes
     },
     clean: { ...NO_CLEAN, dropAdmin: o.admin, maskPhones: o.phones, maskEmails: o.phones, dropDescription: o.desc, newUids: o.uids },
-    split, format: o.format, hidden, maxEvents: o.max999 ? 999 : undefined
+    split, format: o.format, hidden, maxEvents: o.max999 ? 999 : undefined, lang
   };
 }
 

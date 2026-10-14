@@ -465,9 +465,13 @@ export function buildPart(part: OutPart, cal: OutCalendar, clean: CleanOptions, 
   return writeIcs(cal.head, cal.tz, evLines);
 }
 
-export function partFileName(cal: OutCalendar, part: OutPart, multiCal: boolean, ext = 'ics'): string {
+/** Wörter in Dateinamen je Sprache: …_teil-1-von-4_2024-01-bis-2024-07 bzw. …_part-1-of-4_2024-01-to-2024-07 */
+export const NAME_WORDS = { de: { part: 'teil', of: 'von', to: 'bis', fallback: 'kalender', zip: 'fuer-google' }, en: { part: 'part', of: 'of', to: 'to', fallback: 'calendar', zip: 'for-google' } };
+
+export function partFileName(cal: OutCalendar, part: OutPart, multiCal: boolean, ext = 'ics', lang: 'de' | 'en' = 'de'): string {
+  const w = NAME_WORDS[lang];
   const y = (w: number) => { const p = wallParts(w); return p.y + '-' + String(p.mo).padStart(2, '0'); };
-  const base = multiCal || cal.name ? cal.slug : 'kalender';
+  const base = multiCal || cal.name ? cal.slug : w.fallback;
   const n = cal.parts.length;
-  return `${base}${n > 1 ? `_teil-${part.index + 1}-von-${n}` : ''}_${y(part.from)}-bis-${y(part.to)}.${ext}`;
+  return `${base}${n > 1 ? `_${w.part}-${part.index + 1}-${w.of}-${n}` : ''}_${y(part.from)}-${w.to}-${y(part.to)}.${ext}`;
 }

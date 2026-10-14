@@ -24,6 +24,9 @@ export interface Guide {
 export interface FigureDef { name: string; de: string; en: string }
 export interface GuideDef {
   type: 'howto' | 'article';
+  /** Erstveröffentlichung und letzte inhaltliche Änderung dieser Seite (ISO-Datum) – nur ändern, wenn sich hier wirklich etwas geändert hat */
+  published: string;
+  updated: string;
   /** Bildschirmfotos aus public/img (Name ohne Sprache), mit Bildunterschrift je Sprache */
   figures: FigureDef[];
   sources: SourceKey[];
@@ -40,6 +43,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Datei zu groß
   tooLarge: {
     type: 'howto',
+    published: '2026-10-08',
+    updated: '2026-10-13',
     figures: [{ name: 'export', de: 'Der ICS Editor teilt eine zu große Datei automatisch in Teile unter 1 MB – mit Zeitraum und Größe je Teil.', en: 'The ICS Editor automatically splits a file that is too large into parts under 1 MB – with date range and size for each part.' }, { name: 'clean', de: 'Verkleinern: nur die letzten Jahre exportieren oder unter „Mehr Optionen“ Zusatzdaten, Beschreibungen und abgesagte Termine weglassen – Größe und Dateianzahl ändern sich sofort.', en: 'Shrinking: export only recent years or, under “More options”, leave out extras, descriptions and cancelled events – size and file count update instantly.' }],
     sources: ['problems', 'import'],
     related: ['importParts', 'split', 'limits', 'undo'],
@@ -106,6 +111,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Grenzen
   limits: {
     type: 'article',
+    published: '2026-10-08',
+    updated: '2026-10-13',
     figures: [{ name: 'overview', de: 'Die Datei-Info zeigt pro Kalender Termine, Zeitraum, Größe, Serien und Zeitzone – dazu die Termine pro Jahr.', en: 'File info shows events, date range, size, recurring events and time zone for each calendar – plus events per year.' }],
     sources: ['problems', 'import', 'limits', 'delete'],
     related: ['tooLarge', 'importFails', 'split', 'undo'],
@@ -188,6 +195,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Import scheitert
   importFails: {
     type: 'howto',
+    published: '2026-10-08',
+    updated: '2026-10-13',
     figures: [{ name: 'check', de: '„Spalten und Probleme“: Problemzeilen in einfacher Sprache mit Zeilennummer und Vorschlag zur Korrektur.', en: '“Columns and problems”: problem rows in plain language with row number and a suggested fix.' }],
     sources: ['import', 'problems'],
     related: ['tooLarge', 'limits', 'convert', 'excel'],
@@ -264,6 +273,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Aufteilen (Workspace)
   split: {
     type: 'howto',
+    published: '2026-10-08',
+    updated: '2026-10-14',
     figures: [{ name: 'editor', de: 'Links die Kalender der Datei und erkannte Kürzel, in der Mitte die Termine, rechts der gewählte Termin zum Bearbeiten.', en: 'On the left the calendars in the file and detected initials, in the middle the events, on the right the selected event for editing.' }, { name: 'split', de: 'Ein Klick auf „Aufteilen“ macht aus jedem Kürzel einen eigenen Kalender – mit Namen, Farbe und Anzahl der Termine.', en: 'One click on “Split” turns each set of initials into its own calendar – with a name, a colour and its event count.' }],
     sources: ['import', 'create', 'limits', 'problems'],
     related: ['tooLarge', 'importParts', 'ics', 'undo'],
@@ -278,9 +289,9 @@ export const GUIDES: Record<string, GuideDef> = {
       steps: [
         { name: 'Kalender exportieren', text: 'In Google Kalender am Computer: Einstellungen → Importieren & Exportieren → Exportieren. Du erhältst eine ZIP-Datei mit einer ICS-Datei pro Kalender.' },
         { name: 'ZIP ins Werkzeug ziehen', text: 'Das Werkzeug zeigt, wie viele Kalender in der Datei sind, und für jeden Termine, Zeitraum, Größe und Auffälligkeiten.' },
-        { name: 'Aufteilung wählen', text: 'Unter „Aufteilen“ schlägt das Werkzeug vor, was es gefunden hat – zum Beispiel 12 Kürzel im Titel. Ein Klick legt pro Kürzel einen Ziel-Kalender an; Namen und Suchbegriffe kannst du anpassen.' },
-        { name: 'Prüfen', text: 'Das Live-Ergebnis zeigt pro Ziel-Kalender die Zahl der Termine. Termine mit zwei Kürzeln landen auf Wunsch in beiden Kalendern; Termine ohne Treffer in einem Rest-Kalender.' },
-        { name: 'Herunterladen und verteilen', text: 'Jede Person bekommt ihre Datei(en). Sie meldet sich am Computer mit ihrem eigenen Konto an, legt einen neuen Kalender an und importiert ihre Datei.' }
+        { name: 'Aufteilung wählen', text: 'Links zeigt das Werkzeug, was es gefunden hat – zum Beispiel 12 Kürzel im Titel. Ein Klick auf „Aufteilen“ öffnet die Liste: Kürzel an- oder abwählen, jedem einen Namen geben (etwa „Dr. Muster“) und die Kalender anlegen.' },
+        { name: 'Prüfen', text: 'Links steht jetzt jeder neue Kalender mit Farbe und Zahl der Termine. Termine mit zwei Kürzeln landen in beiden Kalendern, Termine ohne Kürzel im Kalender „Sonstige“. Einzelne Termine hängst du per Klick in einen anderen Kalender um.' },
+        { name: 'Herunterladen und verteilen', text: 'Unter „Exportieren & konvertieren“ entsteht pro Kalender eine eigene Datei (bei Bedarf in Teilen). Jede Person meldet sich am Computer mit ihrem eigenen Konto an, legt einen neuen Kalender an und importiert ihre Datei.' }
       ],
       sections: [
         { h2: 'Typischer Fall: vom gemeinsamen Kalender zu eigenen Workspace-Konten', html: '<p>Viele Praxen, Vereine und kleine Firmen haben jahrelang in <em>einem</em> Google Kalender geplant – wer zuständig ist, steht als Kürzel oder Name im Titel. Mit Google Workspace bekommt jede Person ein eigenes Konto. Dann muss der alte Kalender auf die Personen verteilt werden.</p><p>Das Werkzeug sucht in deinem Export automatisch nach Merkmalen, die sich zum Aufteilen eignen: Kürzel aus Großbuchstaben am Titelanfang, wiederkehrende Terminarten, Kategorien und Organisatoren. Es zeigt auch, wie viele Termine gleichzeitig stattfinden – viele parallele Termine sprechen dafür, dass mehrere Personen im selben Kalender planen.</p>' },
@@ -306,9 +317,9 @@ export const GUIDES: Record<string, GuideDef> = {
       steps: [
         { name: 'Export the calendar', text: 'In Google Calendar on a computer: Settings → Import & export → Export. You get a ZIP file with one ICS file per calendar.' },
         { name: 'Drop the ZIP into the tool', text: 'The tool shows how many calendars are in the file and, for each, the events, date range, size and anything unusual.' },
-        { name: 'Choose how to split', text: 'Under “Split”, the tool suggests what it found – for example 12 sets of initials in titles. One click creates a target calendar per set of initials; you can edit names and keywords.' },
-        { name: 'Review', text: 'The live result shows the number of events per target calendar. Events with two sets of initials can go into both calendars; events without a match go into a “rest” calendar.' },
-        { name: 'Download and hand out', text: 'Each person gets their file(s). They sign in with their own account on a computer, create a new calendar and import their file.' }
+        { name: 'Choose how to split', text: 'On the left the tool shows what it found – for example 12 sets of initials in titles. Clicking “Split” opens the list: tick or untick initials, give each a name (e.g. “Dr Example”) and create the calendars.' },
+        { name: 'Review', text: 'Each new calendar now appears on the left with its colour and event count. Events with two sets of initials go into both calendars, events without initials into “Other”. You can move single events to another calendar with a click.' },
+        { name: 'Download and hand out', text: 'Under “Export & convert” you get one file per calendar (in parts if needed). Each person signs in with their own account on a computer, creates a new calendar and imports their file.' }
       ],
       sections: [
         { h2: 'Typical case: from a shared calendar to individual Workspace accounts', html: '<p>Many practices, clubs and small businesses have planned in <em>one</em> Google Calendar for years – who is responsible is written as initials or a name in the title. With Google Workspace, everyone gets their own account. The old calendar then has to be distributed across those people.</p><p>The tool automatically searches your export for features suitable for splitting: initials in capital letters at the start of titles, recurring event types, categories and organizers. It also shows how many events take place at the same time – many parallel events suggest that several people plan in the same calendar.</p>' },
@@ -328,6 +339,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Excel / Geburtstage
   excel: {
     type: 'howto',
+    published: '2026-10-08',
+    updated: '2026-10-13',
     figures: [{ name: 'birthdays', de: 'Aus einer Geburtstagsliste werden jährliche, ganztägige Termine – in der Liste mit Wiederholungs-Symbol.', en: 'A birthday list becomes yearly all-day events – shown with a repeat icon in the list.' }],
     sources: ['import', 'problems'],
     related: ['convert', 'importFails', 'ics', 'undo'],
@@ -390,6 +403,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ ICS
   ics: {
     type: 'howto',
+    published: '2026-10-08',
+    updated: '2026-10-13',
     figures: [{ name: 'editor', de: 'Eine ICS-Datei im ICS Editor: Kalender, Termine und das Bearbeitungsfeld für den gewählten Termin.', en: 'An ICS file in the ICS Editor: calendars, events and the editor for the selected event.' }, { name: 'month', de: 'In der Monatsansicht erscheinen Serientermine an jedem Tag, an dem sie stattfinden.', en: 'In the month view, recurring events appear on every day they occur.' }],
     sources: ['import', 'problems'],
     related: ['tooLarge', 'split', 'convert', 'undo'],
@@ -452,6 +467,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ In Teilen importieren
   importParts: {
     type: 'howto',
+    published: '2026-10-14',
+    updated: '2026-10-14',
     figures: [{ name: 'parts', de: 'Nur der Kalender „Anna (A)“ angehakt und „Höchstens 999 Termine pro Datei“: Der ICS Editor teilt in vier Dateien und zeigt je Teil Zeitraum und Zahl der Termine (Beispieldaten).', en: 'Only the calendar “Anna (A)” ticked and “At most 999 events per file”: the ICS Editor splits into four files and lists each part’s date range and event count (example data).' }],
     sources: ['import', 'problems', 'create'],
     related: ['tooLarge', 'split', 'ics', 'undo'],
@@ -498,13 +515,13 @@ export const GUIDES: Record<string, GuideDef> = {
         { name: 'Choose the calendars', text: 'On the left, tick only the calendars you want to import – for example one person’s calendar. Hidden calendars are not exported.' },
         { name: 'Split and download', text: 'Click “Export & convert”, choose the date range and, if you like, tick “At most 999 events per file” under “More options”. Then download the ZIP file and unzip it.' },
         { name: 'Create the destination calendar', text: 'In Google Calendar on a computer, create a new, empty calendar. If something goes wrong, you only delete that calendar.' },
-        { name: 'Import the first part', text: 'Gear icon → Settings → Import & export. Under “Import”, select the file “…_teil-1-von-…” (part 1), choose the new calendar as the destination and click “Import” once.' },
+        { name: 'Import the first part', text: 'Gear icon → Settings → Import & export. Under “Import”, select the file “…_part-1-of-…”, choose the new calendar as the destination and click “Import” once.' },
         { name: 'Check the message', text: 'Google reports how many events were imported, for example 999 of 999. If both numbers match, the part is complete.' },
         { name: 'Import the remaining parts', text: 'Import the other files the same way, one after the other, into the same calendar – and check the message each time.' }
       ],
       sections: [
         { h2: 'Field test: 999 of 999 events', html: '<p>We tested the process in October 2026 with a real Google Calendar export from a practice (analysed in the browser only, without names). For one person’s calendar we chose the date range “From 2025” in the ICS Editor and ticked “At most 999 events per file”. That produced three files, the first with events from January to October 2025.</p><p>We imported this first file into that person’s calendar in Google Calendar on a computer. Google (German interface) reported: <strong>“999 von 999 Terminen importiert”</strong> – 999 of 999 events imported. The number matched exactly what the ICS Editor had shown before the download, so every part can be checked at once.</p>' },
-        { h2: 'Reading the file names', html: '<p>The ICS Editor names each file after the calendar, the part and the date range, for example <code>anna-a_teil-1-von-4_2014-01-bis-2017-07.ics</code>: calendar “Anna (A)”, part 1 of 4 (“teil-1-von-4”), events from January 2014 to July 2017. Recurring events always sit complete in one file, so no repetition is lost.</p>' },
+        { h2: 'Reading the file names', html: '<p>The ICS Editor names each file after the calendar, the part and the date range, for example <code>anna-a_part-1-of-4_2014-01-to-2017-07.ics</code>: calendar “Anna (A)”, part 1 of 4, events from January 2014 to July 2017. Recurring events always sit complete in one file, so no repetition is lost.</p>' },
         { h2: 'If the numbers don’t match', html: '<div class="table-wrap"><table><thead><tr><th>Message</th><th>Meaning</th><th>What helps</th></tr></thead><tbody><tr><td>Fewer imported than in the file</td><td>Google couldn’t read some events.</td><td>Open the file in the {tool|ICS Editor}, check it and export again.</td></tr><tr><td>“Processed zero events”</td><td>According to Google often a second click on “Import” – the first one worked.</td><td>Check the calendar, don’t import again.</td></tr><tr><td>“Google Calendar is temporarily unavailable”</td><td>Usually the file is larger than 1 MB.</td><td>{tooLarge|Shrink or split the file further}.</td></tr></tbody></table></div><p>If an import went wrong, see {undo|undo a Google Calendar import}.</p>' }
       ],
       faq: [
@@ -520,6 +537,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ CSV → ICS
   convert: {
     type: 'howto',
+    published: '2026-10-08',
+    updated: '2026-10-13',
     figures: [{ name: 'export', de: 'Beim Export wählst du zwischen ICS (mit Serien und Zeitzone) und Google-CSV.', en: 'When exporting you choose between ICS (with recurrence and time zone) and Google CSV.' }, { name: 'privacy', de: 'Vor dem Umwandeln lassen sich Spalten mit Namen, Telefonnummern oder Geburtsdaten weglassen oder kürzen.', en: 'Before converting, columns with names, phone numbers or birth dates can be left out or shortened.' }],
     sources: ['import', 'rfc5545'],
     related: ['excel', 'ics', 'importFails', 'tooLarge'],
@@ -578,6 +597,8 @@ export const GUIDES: Record<string, GuideDef> = {
   // ------------------------------------------------------------------ Rückgängig
   undo: {
     type: 'howto',
+    published: '2026-10-08',
+    updated: '2026-10-14',
     figures: [{ name: 'export', de: 'Im Export-Fenster steht die Anleitung zum Import – sie beginnt mit einem neuen, leeren Kalender.', en: 'The export window includes the import steps – starting with a new, empty calendar.' }],
     sources: ['delete', 'create', 'problems'],
     related: ['importParts', 'ics', 'tooLarge', 'split'],
@@ -598,12 +619,14 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Praxistest: Löschen klappt nicht immer beim ersten Mal', html: '<p>In unserem Test im Oktober 2026 haben wir einen Kalender gelöscht, in den wir vorher einen Teil mit 999 Terminen {importParts|importiert} hatten. Das klappte <strong>nicht jedes Mal beim ersten Versuch</strong>. Wenn es klappt, sieht es so aus:</p><ol><li>Nach „Löschen“ fragt Google: „Sie sind dabei, alle Termine in [Kalendername] zu löschen. Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?“</li><li>Nach „Endgültig löschen“ erscheint unten die Meldung „Wird gelöscht…“.</li><li>Danach fehlt der Kalender in der Liste links.</li></ol><p>Steht der Kalender danach noch da oder sind noch Termine zu sehen, lade die Seite neu und lösche ihn noch einmal.</p>' },
+        { h2: 'Wenn Google „Fehler beim Löschen des Kalenders“ meldet', html: '<p>Google erklärt diese Meldung nicht. Am wahrscheinlichsten ist eine Zeitüberschreitung: Das Löschen eines ganzen Kalenders dauert zu lange, und Google bricht ab. Im Google-Hilfeforum beschreibt ein Nutzer genau das bei einem Kalender mit 26.999 Terminen – erst als die meisten Termine entfernt waren, ließ sich der Kalender löschen. Das ist ein Erfahrungsbericht, keine Aussage von Google.</p><ol><li>Ein paar Minuten warten, die Seite neu laden und prüfen, ob der Kalender schon weg ist.</li><li>Noch einmal „Löschen“ wählen – in unserem Test klappte es nicht jedes Mal, ein weiterer Versuch kann helfen.</li><li>Prüfen, ob es der Hauptkalender ist: Den kann man nicht löschen, nur alle seine Termine.</li><li>Vorbeugen: große Exporte auf mehrere kleinere Kalender verteilen ({split|aufteilen}, {importParts|in Teilen importieren}) und zuerst mit einem Teil testen, ob sich der Kalender wieder löschen lässt.</li></ol><p class="source">Erfahrungsbericht: <a href="https://support.google.com/calendar/thread/161642596" rel="ugc noopener">Google Kalender-Hilfeforum: „I can’t delete a calendar that has 26,999 events“</a></p>' },
         { h2: 'Wenn die Termine im Hauptkalender gelandet sind', html: '<p>Den Hauptkalender kannst du nicht löschen. Google bietet nur an, <strong>alle</strong> Termine des Hauptkalenders auf einmal zu löschen – also auch die, die nicht aus dem Import stammen. Einzelne importierte Termine musst du sonst von Hand löschen.</p><p>Genau deshalb empfiehlt das {tool|Werkzeug} vor jedem Download, zuerst einen neuen, leeren Kalender anzulegen.</p>' },
         { h2: 'So planst du den nächsten Import', html: '<ol><li>In Google Kalender einen neuen Kalender anlegen, z. B. „Import 2026“.</li><li>Die Datei im Werkzeug prüfen und, wenn nötig, {tooLarge|in Teile unter 1 MB aufteilen}.</li><li>Jeden Teil in den neuen Kalender importieren – <strong>einmal</strong> auf „Importieren“ klicken.</li><li>Ergebnis prüfen. Passt etwas nicht, den Kalender löschen und neu beginnen.</li></ol><p>Willst du dieselben Termine ein zweites Mal importieren, kannst du beim Export unter „Mehr Optionen“ neue Termin-Kennungen vergeben.</p>' }
       ],
       faq: [
         { q: 'Kann ich nur die importierten Termine im Hauptkalender löschen?', a: 'Nicht auf einmal. Google bietet für den Hauptkalender nur „alle Termine löschen“ an. Deshalb lieber in einen eigenen, neuen Kalender importieren.' },
         { q: 'Gehen beim Löschen eines Kalenders auch geteilte Termine verloren?', a: 'Ja. Wenn du einen Kalender löschst, den du mit anderen teilst, wird er laut Google für alle entfernt.' },
+        { q: 'Warum meldet Google „Fehler beim Löschen des Kalenders“?', a: 'Google erklärt die Meldung nicht. Am wahrscheinlichsten bricht das Löschen bei Kalendern mit vielen Terminen wegen einer Zeitüberschreitung ab. Warten, Seite neu laden, erneut löschen – und künftig lieber mehrere kleinere Kalender anlegen.' },
         { q: 'Warum zeigt Google nach dem Import „Processed zero events“?', a: 'Laut Google oft, weil zweimal auf „Importieren“ geklickt wurde. Die Termine sind dann meist schon vom ersten Klick da.' }
       ],
       cta: 'Nächsten Import sicher vorbereiten'
@@ -625,12 +648,14 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Field test: deleting doesn’t always work the first time', html: '<p>In our test in October 2026 we deleted a calendar into which we had {importParts|imported} a part with 999 events. It <strong>didn’t always work on the first try</strong>. When it works, it looks like this (German interface):</p><ol><li>After “Delete”, Google asks for confirmation and warns that deleting all events in the calendar can’t be undone.</li><li>After “Delete permanently”, a “Deleting…” notice appears at the bottom.</li><li>Then the calendar is gone from the list on the left.</li></ol><p>If the calendar is still there or events are still visible, reload the page and delete it again.</p>' },
+        { h2: 'If Google says the calendar couldn’t be deleted', html: '<p>Google doesn’t explain this message. The most likely cause is a timeout: deleting a whole calendar takes too long and Google gives up. In the Google Help Community, a user describes exactly this for a calendar with 26,999 events – only after most events had been removed could the calendar be deleted. That is a user report, not a statement by Google.</p><ol><li>Wait a few minutes, reload the page and check whether the calendar is already gone.</li><li>Choose “Delete” again – in our test it didn’t work every time, another try can help.</li><li>Check whether it is your primary calendar: that one can’t be deleted, only all of its events.</li><li>Prevent it: spread large exports over several smaller calendars ({split|split}, {importParts|import in parts}) and first test with one part whether the calendar can be deleted again.</li></ol><p class="source">User report: <a href="https://support.google.com/calendar/thread/161642596" rel="ugc noopener">Google Calendar Help Community: “I can’t delete a calendar that has 26,999 events”</a></p>' },
         { h2: 'If the events ended up in your primary calendar', html: '<p>You can’t delete your primary calendar. Google only offers to delete <strong>all</strong> events of the primary calendar at once – including those that didn’t come from the import. Otherwise you have to delete imported events by hand.</p><p>That’s exactly why the {tool|tool} recommends creating a new, empty calendar before every download.</p>' },
         { h2: 'How to set up your next import', html: '<ol><li>Create a new calendar in Google Calendar, e.g. “Import 2026”.</li><li>Check the file in the tool and, if necessary, {tooLarge|split it into parts under 1 MB}.</li><li>Import every part into the new calendar – click “Import” <strong>once</strong>.</li><li>Check the result. If something is wrong, delete the calendar and start again.</li></ol><p>If you want to import the same events a second time, you can assign new event IDs when exporting, under “More options”.</p>' }
       ],
       faq: [
         { q: 'Can I delete only the imported events in my primary calendar?', a: 'Not in one go. For the primary calendar, Google only offers “delete all events”. That’s why it’s better to import into a separate, new calendar.' },
         { q: 'Are shared events lost when I delete a calendar?', a: 'Yes. According to Google, if you delete a calendar you share with others, it is removed for everyone.' },
+        { q: 'Why does Google say the calendar couldn’t be deleted?', a: 'Google doesn’t explain the message. Most likely, deleting a calendar with many events times out. Wait, reload the page, delete again – and in future, prefer several smaller calendars.' },
         { q: 'Why does Google show “Processed zero events” after importing?', a: 'According to Google, often because Import was clicked twice. The events are then usually already there from the first click.' }
       ],
       cta: 'Prepare your next import safely'
