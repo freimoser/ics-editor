@@ -59,6 +59,21 @@ for (const lang of ['de', 'en']) {
   await shot(page, 'clean', lang);
   await close();
 
+  // In Teilen importieren: nur ein Kalender, höchstens 999 Termine pro Datei
+  await start(0);
+  await page.locator('.label-row .link').click();
+  await page.locator('.side .cal', { hasText: 'Anna' }).locator('input').check();
+  await page.waitForTimeout(500);
+  await page.locator('.top .btn.primary').click();
+  await page.waitForSelector('dialog[open] .result .big');
+  await page.locator('dialog[open] .more-opts > summary').click();
+  await page.locator('dialog[open] .ck', { hasText: '999' }).locator('input').check();
+  await page.waitForTimeout(600);
+  await page.locator('dialog[open] .more-opts > summary').click();
+  await page.locator('dialog[open] .files-d > summary').click();
+  await shot(page, 'parts', lang);
+  await close();
+
   await start(1);
   await page.locator('.banner .link').click();
   await page.waitForSelector('dialog[open] .issue');
