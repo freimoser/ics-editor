@@ -122,7 +122,7 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
   }, [studio]);
 
   const viewReq = useMemo<PlanRequest>(() => ({ selection: { ...ALL, today, deleted: sel.deleted }, clean: NO_CLEAN, split, format: 'ics' }), [sel.deleted, split, today]);
-  const exportReq = useMemo<PlanRequest | null>(() => (loaded ? exportRequest(opts, sel, split, loaded, hidden) : null), [opts, sel, split, loaded, hidden]);
+  const exportReq = useMemo<PlanRequest | null>(() => (loaded ? exportRequest(opts, sel, split, loaded, hidden, lang) : null), [opts, sel, split, loaded, hidden, lang]);
 
   useEffect(() => {
     if (!loaded || !exportReq) return;

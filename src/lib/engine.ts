@@ -7,7 +7,7 @@ import type { IcsCalendar, IcsEvent } from './ics';
 import { decodeText, readIcsInput, readIcsInputs } from './input';
 import { calendarStats, suggest, type CalendarStats, type Suggestion } from './analyze';
 import {
-  ALL, NO_CLEAN, NO_SPLIT, PART_LIMIT, assign, buildGroups, buildPart, cleanedSizes, partFileName, planCalendars, ruleMatches, select,
+  ALL, NAME_WORDS, NO_CLEAN, NO_SPLIT, PART_LIMIT, assign, buildGroups, buildPart, cleanedSizes, partFileName, planCalendars, ruleMatches, select,
   type CleanOptions, type Group, type Selection, type SplitConfig, type OutCalendar
 } from './plan';
 import { buildCsv, csvSizes, packCsv, templateCsv, type CsvPart } from './google-csv';
@@ -23,7 +23,7 @@ import { encodeWindows1252, sampleBirthdayRows, samplePracticeCsv, sampleGoogleE
 export type Format = 'ics' | 'csv';
 
 /** hidden: Ziel-Kalender (Schlüssel), die links ausgeblendet sind – sie kommen nicht in den Export. */
-export interface PlanRequest { selection: Selection; clean: CleanOptions; split: SplitConfig; format: Format; hidden?: string[]; /** zusätzlich höchstens so viele Termine pro Datei */ maxEvents?: number }
+export interface PlanRequest { selection: Selection; clean: CleanOptions; split: SplitConfig; format: Format; hidden?: string[]; /** Sprache der Dateinamen */ lang?: 'de' | 'en'; /** zusätzlich höchstens so viele Termine pro Datei */ maxEvents?: number }
 
 export interface PartInfo { index: number; events: number; bytes: number; from: number; to: number; file: string }
 export interface CalInfo { key: string; name: string; events: number; bytes: number; rest?: boolean; parts: PartInfo[] }
@@ -249,9 +249,10 @@ function computePlan(req: PlanRequest): Planned {
 
 const ym = (w: number) => { const p = wallParts(w); return p.y + '-' + String(p.mo).padStart(2, '0'); };
 
-function csvFileName(name: string, slug: string, part: CsvPart, n: number, multi: boolean): string {
-  const base = multi || name ? slug : 'kalender';
-  return `${base}${n > 1 ? `_teil-${part.index + 1}-von-${n}` : ''}_${ym(part.from)}-bis-${ym(part.to)}.csv`;
+function csvFileName(name: string, slug: string, part: CsvPart, n: number, multi: boolean, lang: 'de' | 'en' = 'de'): string {
+  const w = NAME_WORDS[lang];
+  const base = multi || name ? slug : w.fallback;
+  return `${base}${n > 1 ? `_${w.part}-${part.index + 1}-${w.of}-${n}` : ''}_${ym(part.from)}-${w.to}-${ym(part.to)}.csv`;
 }
 
 export function plan(req: PlanRequest): PlanResult {
@@ -265,12 +266,12 @@ export function plan(req: PlanRequest): PlanResult {
   const calendars: CalInfo[] = req.format === 'ics'
     ? p.out.map((c) => ({
         key: c.key, name: c.name, events: c.events, bytes: c.bytes, rest: c.rest,
-        parts: c.parts.map((x) => ({ index: x.index, events: x.events, bytes: x.bytes, from: x.from, to: x.to, file: partFileName(c, x, multi) }))
+        parts: c.parts.map((x) => ({ index: x.index, events: x.events, bytes: x.bytes, from: x.from, to: x.to, file: partFileName(c, x, multi, 'ics', req.lang) }))
       }))
     : p.csvOut.map((c, i) => ({
         key: c.key, name: c.name, events: c.parts.reduce((a, x) => a + x.events.length, 0), bytes: c.parts.reduce((a, x) => a + x.bytes, 0),
         rest: p.out[i]?.rest,
-        parts: c.parts.map((x) => ({ index: x.index, events: x.events.length, bytes: x.bytes, from: x.from, to: x.to, file: csvFileName(c.name, p.out[i].slug, x, c.parts.length, multi) }))
+        parts: c.parts.map((x) => ({ index: x.index, events: x.events.length, bytes: x.bytes, from: x.from, to: x.to, file: csvFileName(c.name, p.out[i].slug, x, c.parts.length, multi, req.lang) }))
       }));
   return {
     format: req.format, calendars, events: p.out.reduce((a, c) => a + c.events, 0), removed: p.removed, multiMatched: p.multiMatched,
@@ -292,7 +293,7 @@ export function build(req: PlanRequest, which: { cal: string; part: number } | '
   if (req.format === 'ics') {
     for (const c of p.out) for (const part of c.parts) {
       if (!want(c.key, part.index)) continue;
-      const name = partFileName(c, part, multi);
+      const name = partFileName(c, part, multi, 'ics', req.lang);
       const data = enc.encode(buildPart(part, c, req.clean, uidSalt));
       if (which !== 'zip') return { name, data, type: 'text/calendar;charset=utf-8' };
       files[(multi ? c.slug + '/' : '') + name] = data;
@@ -301,7 +302,7 @@ export function build(req: PlanRequest, which: { cal: string; part: number } | '
     p.csvOut.forEach((c, i) => {
       for (const part of c.parts) {
         if (!want(c.key, part.index)) continue;
-        const name = csvFileName(c.name, p.out[i].slug, part, c.parts.length, multi);
+        const name = csvFileName(c.name, p.out[i].slug, part, c.parts.length, multi, req.lang);
         files[(multi ? p.out[i].slug + '/' : '') + name] = enc.encode(buildCsv(part.events, req.clean));
       }
     });
@@ -312,7 +313,7 @@ export function build(req: PlanRequest, which: { cal: string; part: number } | '
   }
   const zip = zipSync(files, { level: 6 });
   const base = S.fileName.replace(/\.[^.]+$/, '').replace(/[^\w.-]+/g, '-').slice(0, 40) || 'kalender';
-  return { name: `${base}_fuer-google.zip`, data: zip, type: 'application/zip' };
+  return { name: `${base}_${NAME_WORDS[req.lang ?? 'de'].zip}.zip`, data: zip, type: 'application/zip' };
 }
 
 /** Ziel-Kalender je Termingruppe für die Ansicht (ohne Ausgabefilter). Zwischengespeichert, bis sich Termine oder Aufteilung ändern. */
