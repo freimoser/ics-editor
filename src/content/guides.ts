@@ -274,7 +274,7 @@ export const GUIDES: Record<string, GuideDef> = {
   split: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-13',
+    updated: '2026-10-14',
     figures: [{ name: 'editor', de: 'Links die Kalender der Datei und erkannte Kürzel, in der Mitte die Termine, rechts der gewählte Termin zum Bearbeiten.', en: 'On the left the calendars in the file and detected initials, in the middle the events, on the right the selected event for editing.' }, { name: 'split', de: 'Ein Klick auf „Aufteilen“ macht aus jedem Kürzel einen eigenen Kalender – mit Namen, Farbe und Anzahl der Termine.', en: 'One click on “Split” turns each set of initials into its own calendar – with a name, a colour and its event count.' }],
     sources: ['import', 'create', 'limits', 'problems'],
     related: ['tooLarge', 'importParts', 'ics', 'undo'],
@@ -289,9 +289,9 @@ export const GUIDES: Record<string, GuideDef> = {
       steps: [
         { name: 'Kalender exportieren', text: 'In Google Kalender am Computer: Einstellungen → Importieren & Exportieren → Exportieren. Du erhältst eine ZIP-Datei mit einer ICS-Datei pro Kalender.' },
         { name: 'ZIP ins Werkzeug ziehen', text: 'Das Werkzeug zeigt, wie viele Kalender in der Datei sind, und für jeden Termine, Zeitraum, Größe und Auffälligkeiten.' },
-        { name: 'Aufteilung wählen', text: 'Unter „Aufteilen“ schlägt das Werkzeug vor, was es gefunden hat – zum Beispiel 12 Kürzel im Titel. Ein Klick legt pro Kürzel einen Ziel-Kalender an; Namen und Suchbegriffe kannst du anpassen.' },
-        { name: 'Prüfen', text: 'Das Live-Ergebnis zeigt pro Ziel-Kalender die Zahl der Termine. Termine mit zwei Kürzeln landen auf Wunsch in beiden Kalendern; Termine ohne Treffer in einem Rest-Kalender.' },
-        { name: 'Herunterladen und verteilen', text: 'Jede Person bekommt ihre Datei(en). Sie meldet sich am Computer mit ihrem eigenen Konto an, legt einen neuen Kalender an und importiert ihre Datei.' }
+        { name: 'Aufteilung wählen', text: 'Links zeigt das Werkzeug, was es gefunden hat – zum Beispiel 12 Kürzel im Titel. Ein Klick auf „Aufteilen“ öffnet die Liste: Kürzel an- oder abwählen, jedem einen Namen geben (etwa „Dr. Muster“) und die Kalender anlegen.' },
+        { name: 'Prüfen', text: 'Links steht jetzt jeder neue Kalender mit Farbe und Zahl der Termine. Termine mit zwei Kürzeln landen in beiden Kalendern, Termine ohne Kürzel im Kalender „Sonstige“. Einzelne Termine hängst du per Klick in einen anderen Kalender um.' },
+        { name: 'Herunterladen und verteilen', text: 'Unter „Exportieren & konvertieren“ entsteht pro Kalender eine eigene Datei (bei Bedarf in Teilen). Jede Person meldet sich am Computer mit ihrem eigenen Konto an, legt einen neuen Kalender an und importiert ihre Datei.' }
       ],
       sections: [
         { h2: 'Typischer Fall: vom gemeinsamen Kalender zu eigenen Workspace-Konten', html: '<p>Viele Praxen, Vereine und kleine Firmen haben jahrelang in <em>einem</em> Google Kalender geplant – wer zuständig ist, steht als Kürzel oder Name im Titel. Mit Google Workspace bekommt jede Person ein eigenes Konto. Dann muss der alte Kalender auf die Personen verteilt werden.</p><p>Das Werkzeug sucht in deinem Export automatisch nach Merkmalen, die sich zum Aufteilen eignen: Kürzel aus Großbuchstaben am Titelanfang, wiederkehrende Terminarten, Kategorien und Organisatoren. Es zeigt auch, wie viele Termine gleichzeitig stattfinden – viele parallele Termine sprechen dafür, dass mehrere Personen im selben Kalender planen.</p>' },
@@ -317,9 +317,9 @@ export const GUIDES: Record<string, GuideDef> = {
       steps: [
         { name: 'Export the calendar', text: 'In Google Calendar on a computer: Settings → Import & export → Export. You get a ZIP file with one ICS file per calendar.' },
         { name: 'Drop the ZIP into the tool', text: 'The tool shows how many calendars are in the file and, for each, the events, date range, size and anything unusual.' },
-        { name: 'Choose how to split', text: 'Under “Split”, the tool suggests what it found – for example 12 sets of initials in titles. One click creates a target calendar per set of initials; you can edit names and keywords.' },
-        { name: 'Review', text: 'The live result shows the number of events per target calendar. Events with two sets of initials can go into both calendars; events without a match go into a “rest” calendar.' },
-        { name: 'Download and hand out', text: 'Each person gets their file(s). They sign in with their own account on a computer, create a new calendar and import their file.' }
+        { name: 'Choose how to split', text: 'On the left the tool shows what it found – for example 12 sets of initials in titles. Clicking “Split” opens the list: tick or untick initials, give each a name (e.g. “Dr Example”) and create the calendars.' },
+        { name: 'Review', text: 'Each new calendar now appears on the left with its colour and event count. Events with two sets of initials go into both calendars, events without initials into “Other”. You can move single events to another calendar with a click.' },
+        { name: 'Download and hand out', text: 'Under “Export & convert” you get one file per calendar (in parts if needed). Each person signs in with their own account on a computer, creates a new calendar and imports their file.' }
       ],
       sections: [
         { h2: 'Typical case: from a shared calendar to individual Workspace accounts', html: '<p>Many practices, clubs and small businesses have planned in <em>one</em> Google Calendar for years – who is responsible is written as initials or a name in the title. With Google Workspace, everyone gets their own account. The old calendar then has to be distributed across those people.</p><p>The tool automatically searches your export for features suitable for splitting: initials in capital letters at the start of titles, recurring event types, categories and organizers. It also shows how many events take place at the same time – many parallel events suggest that several people plan in the same calendar.</p>' },

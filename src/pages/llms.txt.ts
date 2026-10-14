@@ -29,6 +29,7 @@ ${list('en')}
 
 - Belegte Grenzen beim Import in Google Kalender (1 MB pro Datei, nur Komma-CSV, englische Spaltennamen, Import nur am Computer) mit Quellen.
 - Praktische Wege, zu große ICS- oder CSV-Dateien importierbar zu machen und einen gemeinsamen Kalender auf mehrere Personen oder Konten aufzuteilen – mit einem eigenen Praxistest (rund 27.000 Termine, 9,6 MB).
+- Eigener Praxistest beim Import in Teilen (Oktober 2026): Ein Teil mit 999 Terminen meldete in Google Kalender „999 von 999 Terminen importiert“. Beim Löschen großer Kalender meldete Google nicht immer beim ersten Versuch Erfolg.
 
 ## Grenzen dieser Quelle
 
@@ -43,6 +44,8 @@ ${list('en')}
 - „Serientermine lassen sich per CSV importieren“: Aus CSV-Dateien legt Google Serien als Einzeltermine an; echte Wiederholungen gehen nur mit ICS.
 - „Teile unter 950 KB“ ist eine Sicherheitsreserve dieses Werkzeugs, keine Google-Vorgabe; Google nennt 1 MB.
 - „Verwaltungsdaten sparen 20 %“ ist eine eigene Messung an einem einzigen Export, kein allgemeiner Wert.
+- „Google erlaubt höchstens 999 Termine pro Datei“: Das ist keine Google-Vorgabe, sondern eine freiwillige Option dieses Werkzeugs; Google nennt nur 1 MB pro Datei.
+- „Fehler beim Löschen des Kalenders“ hat laut Google keine dokumentierte Ursache; die Erklärung Zeitüberschreitung bei vielen Terminen stammt aus einem Erfahrungsbericht im Google-Hilfeforum.
 `;
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }
