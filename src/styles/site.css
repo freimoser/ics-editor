@@ -311,6 +311,7 @@ html.studio-mode .tool-shell { position: fixed; top: var(--hh); left: 0; right: 
 /* Dialoge */
 dialog.dlg { border: 1px solid var(--line); border-radius: 14px; padding: 0; background: var(--bg); color: var(--text); box-shadow: var(--shadow); width: min(580px, calc(100vw - 32px)); max-height: calc(100vh - 48px); font-size: 14px; line-height: 1.45; }
 dialog.dlg.wide { width: min(720px, calc(100vw - 32px)); }
+dialog.dlg.export { width: min(820px, calc(100vw - 32px)); }
 dialog.dlg[open] { display: flex; flex-direction: column; }
 dialog.dlg::backdrop { background: var(--scrim); }
 .dh { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 14px 4px 22px; }
@@ -427,7 +428,7 @@ dialog.dlg::backdrop { background: var(--scrim); }
   .list { padding: 0 12px 24px; }
   .day { grid-template-columns: 1fr; gap: 0; }
   .row { grid-template-columns: 16px 80px 8px minmax(0, 1fr); gap: 8px; padding: 0 4px; }
-  dialog.dlg, dialog.dlg.wide { width: 100vw; max-width: 100vw; height: 100%; max-height: 100%; border-radius: 0; margin: 0; border: 0; }
+  dialog.dlg, dialog.dlg.wide, dialog.dlg.export { width: 100vw; max-width: 100vw; height: 100%; max-height: 100%; border-radius: 0; margin: 0; border: 0; }
   .xr { grid-template-columns: 1fr; gap: 6px; }
   .xl { padding: 0; }
   .kz { grid-template-columns: 15px minmax(30px, max-content) minmax(0, 1fr) 48px; gap: 8px; }

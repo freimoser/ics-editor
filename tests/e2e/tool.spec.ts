@@ -187,6 +187,26 @@ test('Export: eigener Zeitraum mit Jahren und Datum', async ({ page }) => {
   await expect(big).not.toHaveText(oneYear!);
 });
 
+test('Export: Ab Datum mit Schnelltasten', async ({ page }) => {
+  await sample(page);
+  await page.getByRole('button', { name: 'Exportieren' }).click();
+  const ex = page.getByRole('dialog', { name: 'Für Google exportieren' });
+  const big = ex.locator('.result .big');
+  const count = async () => Number((await big.textContent())!.match(/^([\d.]+) Termine/)![1].replace(/\./g, ''));
+  await expect(big).toContainText('Termine');
+  const all = await count();
+  await ex.getByRole('button', { name: 'Ab Datum' }).click();
+  const n = new Date();
+  const monthStart = `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-01`;
+  await expect(ex.getByLabel('Ab', { exact: true })).toHaveValue(monthStart);
+  await expect(ex.getByText('Alle Termine ab dem gewählten Tag')).toBeVisible();
+  await expect.poll(count).toBeLessThan(all);
+  const fromMonth = await count();
+  await ex.getByRole('button', { name: 'Anfang Vorjahr' }).click();
+  await expect(ex.getByLabel('Ab', { exact: true })).toHaveValue(`${n.getFullYear() - 1}-01-01`);
+  await expect.poll(count).toBeGreaterThan(fromMonth);
+});
+
 test('Export: Ab und Vor ein Jahr ergänzen sich zu allen Terminen', async ({ page }) => {
   await sample(page);
   await page.getByRole('button', { name: 'Exportieren' }).click();

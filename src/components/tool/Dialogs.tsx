@@ -9,7 +9,7 @@ import { CheckTab, ColumnsTab, PrivacyTab, type TableProps } from './Editor';
 import { bestSuggestion } from './Studio';
 import type { UiKey } from '../../i18n/ui';
 
-export function Modal({ open, onClose, title, children, foot, wide = false }: { open: boolean; onClose: () => void; title: string; children: ComponentChildren; foot?: ComponentChildren; wide?: boolean }) {
+export function Modal({ open, onClose, title, children, foot, wide = false, cls = '' }: { open: boolean; onClose: () => void; title: string; children: ComponentChildren; foot?: ComponentChildren; wide?: boolean; cls?: string }) {
   const { t } = useT();
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -19,7 +19,7 @@ export function Modal({ open, onClose, title, children, foot, wide = false }: { 
     if (!open && d.open) d.close();
   }, [open]);
   return (
-    <dialog ref={ref} class={'dlg' + (wide ? ' wide' : '')} aria-label={title} onClose={onClose}
+    <dialog ref={ref} class={'dlg' + (wide ? ' wide' : '') + (cls ? ' ' + cls : '')} aria-label={title} onClose={onClose}
       onClick={(e) => { if (e.target === ref.current) onClose(); }}>
       {open && <>
         <div class="dh"><h2>{title}</h2><button type="button" class="ib" aria-label={t('k.close')} onClick={onClose}><Icon name="x" size={18} /></button></div>
