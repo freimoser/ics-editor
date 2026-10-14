@@ -9,12 +9,37 @@ import { H, Icon, useT } from './ui';
 import { Modal } from './Dialogs';
 
 /** Zeitraum: fromN/beforeN beziehen sich auf das Jahr (aktuelles Jahr − N), z. B. 2026 − 2 = „Ab 2024“ / „Vor 2024“. */
-export type Range = 'all' | 'from2' | 'before2' | 'from1' | 'before1' | 'future' | 'custom';
-const RANGES: Range[] = ['all', 'from2', 'before2', 'from1', 'before1', 'future', 'custom'];
+export type Range = 'all' | 'from2' | 'before2' | 'from1' | 'before1' | 'future' | 'fromDate' | 'custom';
+const RANGES: Range[] = ['all', 'from2', 'before2', 'from1', 'before1', 'future', 'fromDate', 'custom'];
+const isoDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const rangeYear = (r: Range) => new Date().getFullYear() - (r.endsWith('2') ? 2 : 1);
+/** Schnelltasten für „Ab Datum“ */
+function startDates(): { label: 'k.s.monthStart' | 'k.s.lastMonthStart' | 'k.s.yearStart' | 'k.s.lastYearStart'; date: string }[] {
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  return [
+    { label: 'k.s.monthStart', date: isoDate(new Date(y, m, 1)) },
+    { label: 'k.s.lastMonthStart', date: isoDate(new Date(y, m - 1, 1)) },
+    { label: 'k.s.yearStart', date: `${y}-01-01` },
+    { label: 'k.s.lastYearStart', date: `${y - 1}-01-01` }
+  ];
+}
 
-export interface ExportOpts { range: Range; from: string; to: string; years: number[]; max999: boolean; admin: boolean; cancelled: boolean; dupes: boolean; phones: boolean; desc: boolean; uids: boolean; format: Format }
-export const DEFAULT_EXPORT: ExportOpts = { range: 'all', from: '', to: '', years: [], max999: false, admin: true, cancelled: false, dupes: false, phones: false, desc: false, uids: false, format: 'ics' };
+/** Schnellauswahl für den eigenen Zeitraum, vom heutigen Tag aus gerechnet */
+function quickRanges(): { label: 'k.q.thisMonth' | 'k.q.lastMonth' | 'k.q.last3m' | 'k.q.last12m' | 'k.q.thisYear' | 'k.q.lastYear'; from: string; to: string; y?: number }[] {
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  const back = (months: number) => { const d = new Date(now); d.setMonth(d.getMonth() - months); return isoDate(d); };
+  return [
+    { label: 'k.q.thisMonth', from: isoDate(new Date(y, m, 1)), to: isoDate(new Date(y, m + 1, 0)) },
+    { label: 'k.q.lastMonth', from: isoDate(new Date(y, m - 1, 1)), to: isoDate(new Date(y, m, 0)) },
+    { label: 'k.q.last3m', from: back(3), to: isoDate(now) },
+    { label: 'k.q.last12m', from: back(12), to: isoDate(now) },
+    { label: 'k.q.thisYear', from: `${y}-01-01`, to: `${y}-12-31`, y },
+    { label: 'k.q.lastYear', from: `${y - 1}-01-01`, to: `${y - 1}-12-31`, y: y - 1 }
+  ];
+}
+
+export interface ExportOpts { range: Range; fromDate: string; from: string; to: string; years: number[]; max999: boolean; admin: boolean; cancelled: boolean; dupes: boolean; phones: boolean; desc: boolean; uids: boolean; format: Format }
+export const DEFAULT_EXPORT: ExportOpts = { range: 'all', fromDate: '', from: '', to: '', years: [], max999: false, admin: true, cancelled: false, dupes: false, phones: false, desc: false, uids: false, format: 'ics' };
 
 const statusWords = (loaded: Loaded) => (loaded.suggestions.find((s) => s.kind === 'status')?.values ?? []).filter((v) => v.value !== 'STATUS:CANCELLED');
 
@@ -25,7 +50,7 @@ export function exportRequest(o: ExportOpts, sel: Selection, split: SplitConfig,
     selection: {
       ...ALL, today: sel.today, deleted: sel.deleted,
       years: o.range === 'custom' && o.years.length ? [...o.years].sort() : null, hidePast: o.range === 'future',
-      from: o.range.startsWith('from') ? Date.UTC(rangeYear(o.range), 0, 1) : o.range === 'custom' ? parseIsoDay(o.from) : null,
+      from: o.range === 'fromDate' ? parseIsoDay(o.fromDate) : o.range.startsWith('from') ? Date.UTC(rangeYear(o.range), 0, 1) : o.range === 'custom' ? parseIsoDay(o.from) : null,
       to: o.range.startsWith('before') ? Date.UTC(rangeYear(o.range) - 1, 11, 31) : o.range === 'custom' ? parseIsoDay(o.to) : null,
       dropCancelled: o.cancelled, dropWords: o.cancelled ? statusWords(loaded).map((v) => v.value) : [], dedupe: o.dupes
     },
@@ -54,11 +79,17 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
   const tone = !plan || !plan.events ? 'bad' : files.length > withEvents ? 'warn' : 'ok';
   const status = !plan ? '' : !plan.events ? t('k.ex.empty') : files.length > withEvents ? t(opts.max999 ? 'k.ex.split999' : 'k.ex.split', { n: files.length }) : files.length === 1 ? t('k.ex.fits1') : t('k.ex.fitsN', { n: files.length });
   const bytes = plan ? (plan.format === 'csv' ? plan.csv.bytes : plan.ics.bytes) : 0;
-  const years = (() => {
+  // Jahre der angehakten Kalender (bei Kalendern aus der Datei); Ausreißer mit wenigen Terminen erst auf Wunsch
+  const shownCals = req.split.mode === 'source' ? cals.filter((c) => !(req.hidden ?? []).includes('cal' + c.index)) : cals;
+  const allYears = (() => {
     const m = new Map<number, number>();
-    for (const c of cals) for (const x of c.perYear) m.set(x.year, (m.get(x.year) ?? 0) + x.count);
+    for (const c of shownCals) for (const x of c.perYear) m.set(x.year, (m.get(x.year) ?? 0) + x.count);
     return [...m.entries()].filter(([, c]) => c > 0).sort((a, b) => b[0] - a[0]);
   })();
+  const [allShown, setAllShown] = useState(false);
+  const fewYears = allYears.filter(([, c]) => c < 10).length;
+  const years = allShown ? allYears : allYears.filter(([, c]) => c >= 10);
+  const quick = quickRanges();
   const set = (k: keyof ExportOpts, v: ExportOpts[keyof ExportOpts]) => setOpts({ ...opts, [k]: v });
 
   async function get(which: { cal: string; part: number } | 'zip', key: string) {
@@ -73,7 +104,7 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
     <label class="ck"><input type="checkbox" checked={opts[k]} onChange={(e) => set(k, (e.target as HTMLInputElement).checked)} /><span>{label}</span><span class="muted">{hint}</span></label>
   );
   return (
-    <Modal open={open} onClose={onClose} title={t('k.ex.title')} wide foot={
+    <Modal open={open} onClose={onClose} title={t('k.ex.title')} wide cls="export" foot={
       <>
         <span class="grow" />
         <button type="button" class="btn primary" disabled={!main || !!busy} onClick={main}>
@@ -93,15 +124,32 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
         <div class="xl" id="ex-range">{t('k.ex.range')}</div>
         <div class="stack-sm">
           <div class="seg" role="group" aria-labelledby="ex-range">
-            {RANGES.map((r) => <button type="button" aria-pressed={opts.range === r} onClick={() => set('range', r)}>{t(r === 'all' ? 'k.ex.all' : r.startsWith('from') ? 'k.ex.fromY' : r.startsWith('before') ? 'k.ex.beforeY' : r === 'future' ? 'k.ex.future' : 'k.ex.custom', { y: rangeYear(r) })}</button>)}
+            {RANGES.map((r) => <button type="button" aria-pressed={opts.range === r} onClick={() => setOpts({ ...opts, range: r, fromDate: r === 'fromDate' && !opts.fromDate ? startDates()[0].date : opts.fromDate })}>{t(r === 'all' ? 'k.ex.all' : r === 'fromDate' ? 'k.ex.fromDate' : r.startsWith('from') ? 'k.ex.fromY' : r.startsWith('before') ? 'k.ex.beforeY' : r === 'future' ? 'k.ex.future' : 'k.ex.custom', { y: rangeYear(r) })}</button>)}
           </div>
           <div class="muted small">{t(('k.ex.hint.' + opts.range.replace(/\d$/, '')) as 'k.ex.hint.all', { y: rangeYear(opts.range), last: rangeYear(opts.range) - 1, d: d(req.selection.today) })}</div>
+          {opts.range === 'fromDate' && (
+            <div class="custom">
+              <div class="dates">
+                <label>{t('k.ex.fromLabel')} <input type="date" value={opts.fromDate} onChange={(e) => set('fromDate', (e.target as HTMLInputElement).value)} /></label>
+              </div>
+              <div class="qchips">
+                {startDates().map((q) => <button type="button" aria-pressed={opts.fromDate === q.date} onClick={() => set('fromDate', q.date)}>{t(q.label)}</button>)}
+              </div>
+            </div>
+          )}
           {opts.range === 'custom' && (
             <div class="custom">
               <div class="dates">
                 <label>{t('k.ex.from')} <input type="date" value={opts.from} onChange={(e) => setOpts({ ...opts, from: (e.target as HTMLInputElement).value, years: [] })} /></label>
                 <label>{t('k.ex.to')} <input type="date" value={opts.to} onChange={(e) => setOpts({ ...opts, to: (e.target as HTMLInputElement).value, years: [] })} /></label>
                 {(opts.from || opts.to || opts.years.length > 0) && <button type="button" class="link small" onClick={() => setOpts({ ...opts, from: '', to: '', years: [] })}>{t('k.ex.reset')}</button>}
+              </div>
+              <div class="muted small">{t('k.ex.quick')}</div>
+              <div class="qchips">
+                {quick.map((q) => (
+                  <button type="button" aria-pressed={opts.from === q.from && opts.to === q.to && !opts.years.length}
+                    onClick={() => setOpts({ ...opts, from: q.from, to: q.to, years: [] })}>{t(q.label, { y: q.y ?? '' })}</button>
+                ))}
               </div>
               <div class="muted small">{t('k.ex.years')} · {t('k.ex.yearsHint')}</div>
               <div class="ychips">
@@ -112,6 +160,7 @@ export function ExportDialog({ open, onClose, loaded, plan, opts, setOpts, req, 
                   </button>
                 ))}
               </div>
+              {fewYears > 0 && <button type="button" class="link small" style={{ alignSelf: 'flex-start' }} onClick={() => setAllShown(!allShown)}>{allShown ? t('k.ex.fewerYears') : t('k.ex.moreYears', { n: fewYears })}</button>}
             </div>
           )}
         </div>

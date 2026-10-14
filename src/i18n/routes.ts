@@ -3,7 +3,7 @@
 export type Lang = 'de' | 'en';
 export const SITE = 'https://freimoser.github.io';
 export const BASE = '/ics-editor/';
-export const LASTMOD = '2026-10-13';
+export const LASTMOD = '2026-10-14';
 
 export const ROUTES = {
   home: { de: '', en: 'en/' },
@@ -11,6 +11,7 @@ export const ROUTES = {
   tooLarge: { de: 'google-kalender-datei-zu-gross/', en: 'en/google-calendar-import-file-too-large/' },
   importFails: { de: 'csv-datei-kann-nicht-importiert-werden/', en: 'en/cant-import-csv-to-google-calendar/' },
   split: { de: 'google-kalender-aufteilen/', en: 'en/split-google-calendar/' },
+  importParts: { de: 'kalender-in-teilen-importieren/', en: 'en/import-calendar-in-parts/' },
   excel: { de: 'excel-geburtstagsliste-google-kalender/', en: 'en/excel-to-google-calendar/' },
   ics: { de: 'ics-datei-google-kalender-importieren/', en: 'en/import-ics-file-to-google-calendar/' },
   convert: { de: 'csv-in-ics-umwandeln/', en: 'en/csv-to-ics-converter/' },
@@ -23,7 +24,7 @@ export const ROUTES = {
 
 export type PageKey = keyof typeof ROUTES;
 
-export const GUIDES: PageKey[] = ['tooLarge', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo'];
+export const GUIDES: PageKey[] = ['tooLarge', 'importParts', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo'];
 export const LEGAL: PageKey[] = ['imprint', 'privacy', 'terms'];
 /** indexierbare Infoseiten außerhalb der Ratgeber */
 export const INFO: PageKey[] = ['about'];
