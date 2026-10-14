@@ -97,7 +97,7 @@ if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', n
     <article class="prose">
       <nav class="crumbs" aria-label={lang === 'de' ? 'Brotkrumen' : 'Breadcrumb'}><a href={path('home', lang)}>{home}</a> › <span aria-current="page">{about.h1}</span></nav>
       <h1>{about.h1}</h1>
-      <Fragment set:html={about.html} />
+      <Fragment set:html={linkify(about.html, lang)} />
     </article>
   </Base>
 )}
