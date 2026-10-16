@@ -87,7 +87,7 @@ export const LEGAL_PAGES: Record<'imprint' | 'privacy' | 'terms', Record<Lang, L
 <p>Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel beim <a href="https://www.lda.bayern.de" rel="noopener">Bayerischen Landesamt für Datenschutzaufsicht</a>.</p>
 <h2>8. Keine automatisierte Entscheidungsfindung</h2>
 <p>Es findet keine automatisierte Entscheidungsfindung und kein Profiling statt.</p>
-<p class="muted">Stand: 7. Oktober 2026</p>`
+<p class="muted">Stand: 13. Oktober 2026</p>`
     },
     en: {
       title: 'Privacy – ICS Editor',
@@ -117,7 +117,7 @@ export const LEGAL_PAGES: Record<'imprint' | 'privacy' | 'terms', Record<Lang, L
 <p>You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20) and objection (Art. 21). You can also lodge a complaint with a data protection supervisory authority, for example the <a href="https://www.lda.bayern.de" rel="noopener">Bavarian Data Protection Authority (BayLDA)</a>.</p>
 <h2>8. No automated decision-making</h2>
 <p>There is no automated decision-making and no profiling.</p>
-<p class="muted">As of 7 October 2026</p>`
+<p class="muted">As of 13 October 2026</p>`
     }
   },
   terms: {
