@@ -44,6 +44,10 @@ for (const [route, h] of html) {
   const desc = get(h, /<meta name="description" content="([^"]*)"/);
   const canonical = get(h, /<link rel="canonical" href="([^"]*)"/);
   const noindex = /<meta name="robots" content="noindex/.test(h);
+  // Sprungmarken: jede id nur einmal, jeder interne #-Link hat ein Ziel
+  const ids = [...h.matchAll(/ id="([^"]+)"/g)].map((m) => m[1]);
+  for (const id of new Set(ids.filter((x, i) => ids.indexOf(x) !== i))) fail(route, `id doppelt: ${id}`);
+  for (const m of h.matchAll(/href="#([^"]+)"/g)) if (!ids.includes(m[1])) fail(route, `Sprungmarke ohne Ziel: #${m[1]}`);
   if (!title) fail(route, 'Title fehlt');
   else {
     if (title.length > 60) fail(route, `Title zu lang (${title.length} > 60): ${title}`);

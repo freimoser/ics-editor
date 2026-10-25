@@ -49,6 +49,9 @@ const sourceLabel = lang === 'de' ? `Stand ${STAND.de} · Quelle:` : `As of ${ST
 const about = isAbout ? ABOUT[lang] : null;
 if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', name: about.h1, url: url('about', lang), inLanguage: lang, dateModified: PAGE_UPDATED.about, mainEntity: author }];
 const hub = isHub ? HUB[lang] : null;
+/** Sprungmarken für Überschriften: stabil, ohne Umlaute, für „Springe zu“-Links in der Suche und für Zitate */
+const anchor = (t: string) => t.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/<[^>]+>/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+const toc = g ? [{ id: 'schritte', label: g.stepsTitle }, ...g.sections.map((s) => ({ id: anchor(s.h2), label: s.h2 })), { id: 'faq', label: lang === 'de' ? 'Häufige Fragen' : 'Frequently asked questions' }] : [];
 if (hub) {
   const all = hub.groups.flatMap((gr) => gr.keys);
   schema = [
@@ -104,14 +107,20 @@ if (hub) {
           </div>
           <a class="btn btn-primary btn-xl" href={path('home', lang) + '#werkzeug'}>{lang === 'de' ? 'ICS Editor öffnen' : 'Open the ICS Editor'}</a>
         </div>
-        <h2>{g.stepsTitle}</h2>
+        {toc.length >= 4 && (
+          <nav class="toc" aria-label={lang === 'de' ? 'Inhalt' : 'Contents'}>
+            <strong>{lang === 'de' ? 'Inhalt' : 'Contents'}</strong>
+            <ol>{toc.map((x) => <li><a href={'#' + x.id}>{x.label}</a></li>)}</ol>
+          </nav>
+        )}
+        <h2 id="schritte">{g.stepsTitle}</h2>
         <ol class="how">
           {g.steps.map((s) => <li><div><strong>{s.name}</strong><br />{s.text}</div></li>)}
         </ol>
         {def.figures[0] && <Figure name={def.figures[0].name} lang={lang} caption={def.figures[0][lang]} />}
         {g.sections.map((s, i) => (
           <>
-            <h2>{s.h2}</h2>
+            <h2 id={anchor(s.h2)}>{s.h2}</h2>
             <Fragment set:html={linkify(s.html, lang)} />
             {i === 0 && def.figures[1] && <Figure name={def.figures[1].name} lang={lang} caption={def.figures[1][lang]} />}
           </>
