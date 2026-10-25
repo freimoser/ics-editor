@@ -73,6 +73,7 @@ const schema = [
     <div class="guide-grid related">
       {KEYS.map((k) => <a href={path(k, lang)}><strong>{GUIDES[k][lang].h1}</strong><span>{GUIDES[k][lang].teaser}</span></a>)}
     </div>
+    <p><a href={path('guides', lang)}>{lang === 'de' ? 'Alle Ratgeber im Überblick →' : 'All guides at a glance →'}</a></p>
   </section>
   </div>
 </Base>

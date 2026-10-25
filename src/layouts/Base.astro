@@ -87,7 +87,9 @@ const site = {
         </a>
         <nav class="site-nav" aria-label={t('nav.main')}>
           <a href={path('home', lang)} aria-current={page === 'home' ? 'page' : undefined}>{t('nav.editor')}</a>
-          <a href={path('home', lang) + '#ratgeber'} data-guides>{t('nav.guides')}</a>
+          {page === 'home'
+            ? <a href={path('home', lang) + '#ratgeber'} data-guides>{t('nav.guides')}</a>
+            : <a href={path('guides', lang)} aria-current={page === 'guides' ? 'page' : undefined}>{t('nav.guides')}</a>}
           <a href={path('about', lang)} aria-current={page === 'about' ? 'page' : undefined}>{t('nav.about')}</a>
           <a class="lang-switch" href={path(page, other)} hreflang={other} lang={other}>{other.toUpperCase()}<span class="sr-only"> – {other === 'de' ? 'Deutsch' : 'English'}</span></a>
         </nav>
@@ -105,7 +107,10 @@ const site = {
         </div>
         <nav aria-label={t('nav.guides')}>
           <h2>{t('nav.guides')}</h2>
-          <ul>{footerGuides.map((g) => <li><a href={g.href}>{g.label}</a></li>)}</ul>
+          <ul>
+            <li><a href={path('guides', lang)}>{lang === 'de' ? 'Alle Ratgeber' : 'All guides'}</a></li>
+            {footerGuides.map((g) => <li><a href={g.href}>{g.label}</a></li>)}
+          </ul>
         </nav>
         <nav aria-label={t('footer.legal')}>
           <h2>{t('footer.legal')}</h2>

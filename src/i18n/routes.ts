@@ -15,6 +15,7 @@ export const ROUTES = {
   ics: { de: 'ics-datei-google-kalender-importieren/', en: 'en/import-ics-file-to-google-calendar/' },
   convert: { de: 'csv-in-ics-umwandeln/', en: 'en/csv-to-ics-converter/' },
   undo: { de: 'google-kalender-import-rueckgaengig/', en: 'en/undo-google-calendar-import/' },
+  guides: { de: 'ratgeber/', en: 'en/guides/' },
   about: { de: 'ueber/', en: 'en/about/' },
   imprint: { de: 'impressum/', en: 'en/legal-notice/' },
   privacy: { de: 'datenschutz/', en: 'en/privacy/' },
@@ -26,7 +27,7 @@ export type PageKey = keyof typeof ROUTES;
 export const GUIDES: PageKey[] = ['tooLarge', 'importParts', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo'];
 export const LEGAL: PageKey[] = ['imprint', 'privacy', 'terms'];
 /** indexierbare Infoseiten außerhalb der Ratgeber */
-export const INFO: PageKey[] = ['about'];
+export const INFO: PageKey[] = ['guides', 'about'];
 
 /** Pfad mit Basis, z. B. /ics-editor/en/ */
 export function path(key: PageKey, lang: Lang): string {
