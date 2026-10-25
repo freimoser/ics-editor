@@ -14,6 +14,7 @@ export const ROUTES = {
   excel: { de: 'excel-geburtstagsliste-google-kalender/', en: 'en/excel-to-google-calendar/' },
   ics: { de: 'ics-datei-google-kalender-importieren/', en: 'en/import-ics-file-to-google-calendar/' },
   convert: { de: 'csv-in-ics-umwandeln/', en: 'en/csv-to-ics-converter/' },
+  dupes: { de: 'google-kalender-doppelte-termine/', en: 'en/google-calendar-duplicate-events/' },
   undo: { de: 'google-kalender-import-rueckgaengig/', en: 'en/undo-google-calendar-import/' },
   guides: { de: 'ratgeber/', en: 'en/guides/' },
   about: { de: 'ueber/', en: 'en/about/' },
@@ -24,7 +25,7 @@ export const ROUTES = {
 
 export type PageKey = keyof typeof ROUTES;
 
-export const GUIDES: PageKey[] = ['tooLarge', 'importParts', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo'];
+export const GUIDES: PageKey[] = ['tooLarge', 'importParts', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo', 'dupes'];
 export const LEGAL: PageKey[] = ['imprint', 'privacy', 'terms'];
 /** indexierbare Infoseiten außerhalb der Ratgeber */
 export const INFO: PageKey[] = ['guides', 'about'];

@@ -108,6 +108,72 @@ export const GUIDES: Record<string, GuideDef> = {
     }
   },
 
+  // ------------------------------------------------------------------ Doppelte Termine
+  dupes: {
+    type: 'howto',
+    published: '2026-10-26',
+    updated: '2026-10-26',
+    figures: [{ name: 'export', de: 'Im Export-Fenster unter „Mehr Optionen“ → „Weglassen“ steht „Doppelte Termine“ mit der Anzahl, die das Werkzeug gefunden hat.', en: 'In the export window under “More options” → “Leave out” you’ll find “Duplicate events” with the number the tool found.' }],
+    sources: ['problems', 'import', 'create', 'delete'],
+    related: ['undo', 'importParts', 'ics', 'tooLarge'],
+    de: {
+      title: 'Doppelte Termine in Google Kalender: entfernen & vermeiden',
+      description: 'Termine nach dem Import doppelt? So entfernst du doppelte Termine aus der Datei, bevor sie in Google Kalender landen – und räumst einen Kalender neu auf.',
+      h1: 'Doppelte Termine in Google Kalender entfernen und vermeiden',
+      crumb: 'Doppelte Termine',
+      teaser: 'Duplikate vor dem Import herausfiltern',
+      answer: '<strong>Am einfachsten entfernst du doppelte Termine, bevor du importierst:</strong> Der ICS Editor zählt Termine mit gleichem Titel, gleichem Beginn und gleichem Ende im selben Kalender und lässt sie beim Export auf Wunsch weg. Sind die Duplikate schon in Google Kalender, exportierst du den Kalender, bereinigst die Datei und importierst sie in einen neuen, leeren Kalender.',
+      stepsTitle: 'Schritt für Schritt: Duplikate vor dem Import entfernen',
+      steps: [
+        { name: 'Datei öffnen', text: 'ICS-Datei, ZIP-Export von Google Kalender oder CSV-Datei in den ICS Editor ziehen. Die Datei bleibt auf deinem Gerät.' },
+        { name: 'Duplikate ansehen', text: 'In der Datei-Info steht unter „Doppelt“, wie viele Termine mehrfach vorkommen. Gezählt werden einzelne Termine mit gleichem Titel, Beginn und Ende; Serien zählen nicht dazu.' },
+        { name: 'Beim Export weglassen', text: '„Exportieren & konvertieren“ öffnen, unter „Mehr Optionen“ → „Weglassen“ den Haken bei „Doppelte Termine“ setzen. Von jedem Duplikat bleibt genau ein Termin übrig.' },
+        { name: 'Neuen Kalender anlegen', text: 'In Google Kalender einen neuen, leeren Kalender anlegen. So kannst du ihn komplett löschen, falls etwas nicht passt.' },
+        { name: 'Einmal importieren', text: 'Jede Datei in den neuen Kalender importieren und nur einmal auf „Importieren“ klicken.' }
+      ],
+      sections: [
+        { h2: 'Woher doppelte Termine kommen', html: '<ul><li><strong>Die Datei enthält sie schon:</strong> etwa wenn mehrere Exporte zusammengeführt oder Termine von Hand kopiert wurden. Das zeigt der ICS Editor vor dem Import.</li><li><strong>Dieselben Termine in zwei Kalendern:</strong> Wer einen Export in den Hauptkalender und zusätzlich in einen neuen Kalender importiert, sieht jeden Termin zweimal – einmal pro Kalender. Hier hilft es, einen der beiden Kalender auszublenden oder zu löschen.</li><li><strong>Zweimal auf „Importieren“ geklickt:</strong> Laut Google meldet der zweite Klick „Processed zero events“, weil die Termine schon beim ersten Klick angekommen sind. Prüfe deinen Kalender, bevor du es noch einmal versuchst.</li></ul>' },
+        { h2: 'Duplikate sind schon in Google Kalender: so räumst du auf', html: '<ol><li>Den betroffenen Kalender in Google Kalender exportieren (Einstellungen → Importieren &amp; Exportieren → Exportieren). Du erhältst eine ZIP-Datei.</li><li>Das ZIP in den {tool|ICS Editor} ziehen und beim Export „Doppelte Termine“ weglassen.</li><li>Einen neuen, leeren Kalender anlegen und die bereinigte Datei dort importieren – große Dateien {importParts|in Teilen}.</li><li>Ergebnis prüfen. Passt alles, den alten Kalender löschen ({undo|so geht das}).</li></ol><p>Im Hauptkalender klappt der letzte Schritt nicht: Den kannst du nicht löschen, nur alle seine Termine auf einmal.</p>' },
+        { h2: 'Was als doppelt gilt – und was nicht', html: '<div class="table-wrap"><table><thead><tr><th>Fall</th><th>Gilt als doppelt?</th></tr></thead><tbody><tr><td>Gleicher Titel, gleicher Beginn, gleiches Ende im selben Kalender</td><td>Ja – einer bleibt</td></tr><tr><td>Gleicher Termin in zwei verschiedenen Kalendern</td><td>Nein – jeder Kalender behält seinen</td></tr><tr><td>Gleicher Titel, aber andere Uhrzeit</td><td>Nein</td></tr><tr><td>Serientermine und ihre Ausnahmen</td><td>Nein – Serien bleiben vollständig</td></tr></tbody></table></div><p>So verschwinden keine Termine, die nur ähnlich aussehen. Ob du doppelte Termine weglässt, entscheidest du beim Export – ohne Haken bleibt die Datei unverändert.</p>' }
+      ],
+      faq: [
+        { q: 'Hat Google Kalender eine Funktion zum Entfernen doppelter Termine?', a: 'In der Google-Hilfe zum Import und zu Importproblemen ist keine solche Funktion beschrieben. Deshalb ist es am einfachsten, Duplikate vor dem Import aus der Datei zu entfernen.' },
+        { q: 'Warum meldet Google beim zweiten Import „Processed zero events“?', a: 'Laut Google passiert das, wenn man mehr als einmal auf „Importieren“ klickt: Die Termine wurden beim ersten Klick schon importiert, beim zweiten gibt es nichts Neues. Prüfe deinen Kalender – die Termine sind meist schon da.' },
+        { q: 'Werden beim Entfernen von Duplikaten auch Serientermine gelöscht?', a: 'Nein. Der ICS Editor vergleicht nur einzelne Termine. Serien bleiben mit allen Ausnahmen vollständig erhalten.' },
+        { q: 'Wird meine Datei dafür hochgeladen?', a: 'Nein. Der ICS Editor arbeitet ausschließlich in deinem Browser. Eine Sicherheitsregel verbietet der Seite Verbindungen zu fremden Servern.' }
+      ],
+      cta: 'Doppelte Termine jetzt finden'
+    },
+    en: {
+      title: 'Duplicate Events in Google Calendar: Remove & Prevent',
+      description: 'Events duplicated after an import? Remove duplicate events from the file before they reach Google Calendar – and clean up a calendar that already has them.',
+      h1: 'Remove and prevent duplicate events in Google Calendar',
+      crumb: 'Duplicate events',
+      teaser: 'Filter out duplicates before importing',
+      answer: '<strong>The easiest way to get rid of duplicate events is before you import:</strong> the ICS Editor counts events with the same title, start and end in the same calendar and leaves them out on export if you want. If the duplicates are already in Google Calendar, export the calendar, clean the file and import it into a new, empty calendar.',
+      stepsTitle: 'Step by step: remove duplicates before importing',
+      steps: [
+        { name: 'Open the file', text: 'Drop an ICS file, Google Calendar’s ZIP export or a CSV file into the ICS Editor. The file stays on your device.' },
+        { name: 'Check the duplicates', text: 'The file info shows under “Duplicates” how many events appear more than once. Single events with the same title, start and end are counted; recurring events are not.' },
+        { name: 'Leave them out on export', text: 'Open “Export & convert”, then under “More options” → “Leave out” tick “Duplicate events”. Exactly one event of each duplicate remains.' },
+        { name: 'Create a new calendar', text: 'Create a new, empty calendar in Google Calendar. That way you can delete it completely if something isn’t right.' },
+        { name: 'Import once', text: 'Import every file into the new calendar and click “Import” only once.' }
+      ],
+      sections: [
+        { h2: 'Where duplicate events come from', html: '<ul><li><strong>The file already contains them:</strong> for example when several exports were merged or events were copied by hand. The ICS Editor shows this before you import.</li><li><strong>The same events in two calendars:</strong> if you import an export into your primary calendar and also into a new calendar, you see every event twice – once per calendar. Hiding or deleting one of the two calendars helps.</li><li><strong>Import clicked twice:</strong> according to Google, the second click reports “Processed zero events”, because the events already arrived with the first click. Check your calendar before trying again.</li></ul>' },
+        { h2: 'Duplicates are already in Google Calendar: how to clean up', html: '<ol><li>Export the affected calendar from Google Calendar (Settings → Import &amp; export → Export). You get a ZIP file.</li><li>Drop the ZIP into the {tool|ICS Editor} and leave out “Duplicate events” on export.</li><li>Create a new, empty calendar and import the cleaned file there – large files {importParts|in parts}.</li><li>Check the result. If everything is fine, delete the old calendar ({undo|here’s how}).</li></ol><p>This last step doesn’t work for your primary calendar: it can’t be deleted, you can only delete all of its events at once.</p>' },
+        { h2: 'What counts as a duplicate – and what doesn’t', html: '<div class="table-wrap"><table><thead><tr><th>Case</th><th>Duplicate?</th></tr></thead><tbody><tr><td>Same title, same start, same end in the same calendar</td><td>Yes – one remains</td></tr><tr><td>Same event in two different calendars</td><td>No – each calendar keeps its own</td></tr><tr><td>Same title, but a different time</td><td>No</td></tr><tr><td>Recurring events and their exceptions</td><td>No – series stay complete</td></tr></tbody></table></div><p>So no events disappear just because they look similar. You decide on export whether to leave out duplicates – without the tick, the file stays unchanged.</p>' }
+      ],
+      faq: [
+        { q: 'Does Google Calendar have a feature to remove duplicate events?', a: 'Google’s help pages on importing and on import problems don’t describe such a feature. That’s why it’s easiest to remove duplicates from the file before importing.' },
+        { q: 'Why does Google say “Processed zero events” on a second import?', a: 'According to Google, this happens when you click “Import” more than once: the events were already imported with the first click, so there’s nothing new the second time. Check your calendar – the events are usually already there.' },
+        { q: 'Are recurring events deleted when removing duplicates?', a: 'No. The ICS Editor only compares single events. Series stay complete with all their exceptions.' },
+        { q: 'Is my file uploaded for this?', a: 'No. The ICS Editor works entirely in your browser. A security policy forbids the page to connect to other servers.' }
+      ],
+      cta: 'Find duplicate events now'
+    }
+  },
+
   // ------------------------------------------------------------------ Grenzen
   limits: {
     type: 'article',
@@ -601,7 +667,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-10-14',
     figures: [{ name: 'export', de: 'Im Export-Fenster steht die Anleitung zum Import – sie beginnt mit einem neuen, leeren Kalender.', en: 'The export window includes the import steps – starting with a new, empty calendar.' }],
     sources: ['delete', 'create', 'problems'],
-    related: ['importParts', 'ics', 'tooLarge', 'split'],
+    related: ['dupes', 'importParts', 'ics', 'tooLarge'],
     de: {
       title: 'Google Kalender Import rückgängig machen & Termine löschen',
       description: 'Einen Import rückgängig machen kann Google Kalender nicht. So löschst du importierte Termine trotzdem – und so planst du den nächsten Import richtig.',
