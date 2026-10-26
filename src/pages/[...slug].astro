@@ -6,7 +6,7 @@ import { HUB } from '../content/hub';
 import { GLOSSARY_PAGE, TERMS, TERM_EN } from '../content/glossary';
 import { GUIDES, PHONE_FAQ_DE, PHONE_FAQ_EN } from '../content/guides';
 import { LEGAL_PAGES } from '../content/legal';
-import { SRC, STAND, PAGE_UPDATED, day } from '../content/sources';
+import { SRC, STAND, PAGE_UPDATED, ENTITIES, day } from '../content/sources';
 import { linkify, strip } from '../content/links';
 import { LEGAL as OWNER } from '../config/legal';
 import Figure from '../components/Figure.astro';
@@ -43,8 +43,8 @@ if (def && g) {
   const citation = def.sources.map((s) => ({ '@type': 'CreativeWork', name: SRC[s][lang], url: SRC[s].url }));
   const images = def.figures.filter((f) => (IMG as Record<string, unknown>)[`${f.name}-${lang}`]).map((f) => ({ '@type': 'ImageObject', url: SITE_URL + asset(`img/${f.name}-${lang}.webp`), caption: f[lang] }));
   const main = def.type === 'article'
-    ? { '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: def.published, dateModified: def.updated, author, publisher: author, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images.map((i) => i.url)], citation }
-    : { '@context': 'https://schema.org', '@type': 'HowTo', name: g.h1, description: strip(g.answer), inLanguage: lang, datePublished: def.published, dateModified: def.updated, totalTime: 'PT10M', image: images[0], author, tool: [{ '@type': 'HowToTool', name: 'ICS Editor' }], step: g.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text })) };
+    ? { '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: def.published, dateModified: def.updated, about: [ENTITIES.gcal, ENTITIES.ical], author, publisher: author, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images.map((i) => i.url)], citation }
+    : { '@context': 'https://schema.org', '@type': 'HowTo', name: g.h1, description: strip(g.answer), inLanguage: lang, datePublished: def.published, dateModified: def.updated, about: [ENTITIES.gcal, ENTITIES.ical], totalTime: 'PT10M', image: images[0], author, tool: [{ '@type': 'HowToTool', name: 'ICS Editor' }], step: g.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text })) };
   schema = [main, faq, crumbs];
 }
 const sourceLabel = lang === 'de' ? `Stand ${STAND.de} · Quelle:` : `As of ${STAND.en} · Source:`;
@@ -57,7 +57,7 @@ const toc = g ? [{ id: 'schritte', label: g.stepsTitle }, ...g.sections.map((s) 
 if (hub) {
   const all = hub.groups.flatMap((gr) => gr.keys);
   schema = [
-    { '@context': 'https://schema.org', '@type': 'CollectionPage', name: hub.h1, description: hub.description, url: url('guides', lang), inLanguage: lang, dateModified: PAGE_UPDATED.guides, author,
+    { '@context': 'https://schema.org', '@type': 'CollectionPage', name: hub.h1, about: [ENTITIES.gcal, ENTITIES.ical], description: hub.description, url: url('guides', lang), inLanguage: lang, dateModified: PAGE_UPDATED.guides, author,
       mainEntity: { '@type': 'ItemList', numberOfItems: all.length, itemListElement: all.map((k, i) => ({ '@type': 'ListItem', position: i + 1, url: url(k, lang), name: GUIDES[k][lang].h1 })) } },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: home, item: url('home', lang) },
@@ -69,7 +69,7 @@ const gl = isGlossary ? GLOSSARY_PAGE[lang] : null;
 const termName = (x: { id: string; term: string }) => (lang === 'en' && TERM_EN[x.id]) || x.term;
 if (gl) {
   schema = [
-    { '@context': 'https://schema.org', '@type': 'DefinedTermSet', name: gl.h1, description: gl.description, url: url('glossary', lang), inLanguage: lang, dateModified: PAGE_UPDATED.glossary, author,
+    { '@context': 'https://schema.org', '@type': 'DefinedTermSet', name: gl.h1, about: ENTITIES.ical, description: gl.description, url: url('glossary', lang), inLanguage: lang, dateModified: PAGE_UPDATED.glossary, author,
       hasDefinedTerm: TERMS.map((x) => ({ '@type': 'DefinedTerm', '@id': url('glossary', lang) + '#' + x.id, name: termName(x), description: strip(linkify(x[lang], lang)), url: url('glossary', lang) + '#' + x.id })) },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: home, item: url('home', lang) },

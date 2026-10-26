@@ -18,10 +18,16 @@ export const SRC = {
 
 export type SourceKey = keyof typeof SRC;
 
+/** Eindeutige Entitäten für Schema „about“ (Wikidata geprüft am 26.10.2026) – hilft Suchmaschinen und Antwortmaschinen bei der Zuordnung */
+export const ENTITIES = {
+  gcal: { '@type': 'SoftwareApplication', name: 'Google Calendar', applicationCategory: 'BusinessApplication', sameAs: ['https://www.wikidata.org/wiki/Q223563', 'https://en.wikipedia.org/wiki/Google_Calendar'] },
+  ical: { '@type': 'Thing', name: 'iCalendar', sameAs: ['https://www.wikidata.org/wiki/Q284651', 'https://en.wikipedia.org/wiki/ICalendar'] }
+};
+
 /** ISO-Datum als lesbares Datum, z. B. „14. Oktober 2026“ / „14 October 2026“ */
 export function day(iso: string, lang: 'de' | 'en'): string {
   const [y, m, d] = iso.split('-').map(Number);
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 /** Letzte inhaltliche Änderung von Startseite und Über-Seite */
-export const PAGE_UPDATED = { home: '2026-10-14', about: '2026-10-14', guides: '2026-10-26', glossary: '2026-10-26' };
+export const PAGE_UPDATED = { home: '2026-10-26', about: '2026-10-14', guides: '2026-10-26', glossary: '2026-10-26' };
