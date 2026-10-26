@@ -16,6 +16,7 @@ export const ROUTES = {
   convert: { de: 'csv-in-ics-umwandeln/', en: 'en/csv-to-ics-converter/' },
   dupes: { de: 'google-kalender-doppelte-termine/', en: 'en/google-calendar-duplicate-events/' },
   outlook: { de: 'outlook-kalender-in-google-kalender-importieren/', en: 'en/import-outlook-calendar-to-google-calendar/' },
+  apple: { de: 'apple-kalender-in-google-kalender-importieren/', en: 'en/import-apple-calendar-to-google-calendar/' },
   undo: { de: 'google-kalender-import-rueckgaengig/', en: 'en/undo-google-calendar-import/' },
   guides: { de: 'ratgeber/', en: 'en/guides/' },
   glossary: { de: 'ics-glossar/', en: 'en/ics-glossary/' },
@@ -27,7 +28,7 @@ export const ROUTES = {
 
 export type PageKey = keyof typeof ROUTES;
 
-export const GUIDES: PageKey[] = ['tooLarge', 'importParts', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo', 'dupes', 'outlook'];
+export const GUIDES: PageKey[] = ['tooLarge', 'importParts', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo', 'dupes', 'outlook', 'apple'];
 export const LEGAL: PageKey[] = ['imprint', 'privacy', 'terms'];
 /** indexierbare Infoseiten außerhalb der Ratgeber */
 export const INFO: PageKey[] = ['guides', 'glossary', 'about'];

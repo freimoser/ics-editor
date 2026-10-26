@@ -14,6 +14,7 @@ export const SRC = {
   create: { url: 'https://support.google.com/calendar/answer/37095', de: 'Google Kalender-Hilfe: Neuen Kalender erstellen', en: 'Google Calendar Help: Create a new calendar' },
   delete: { url: 'https://support.google.com/calendar/answer/37188', de: 'Google Kalender-Hilfe: Kalender löschen oder abbestellen', en: 'Google Calendar Help: Delete or unsubscribe from a calendar' },
   outlook: { url: 'https://support.microsoft.com/en-us/outlook/export-an-outlook-calendar-to-google-calendar', de: 'Microsoft Support: Outlook-Kalender nach Google Kalender exportieren', en: 'Microsoft Support: Export an Outlook calendar to Google Calendar' },
+  apple: { url: 'https://support.apple.com/guide/calendar/icl1023/mac', de: 'Apple Support: Exportieren oder Importieren von Kalendern auf dem Mac', en: 'Apple Support: Import or export calendars on Mac' },
   rfc5545: { url: 'https://www.rfc-editor.org/rfc/rfc5545', de: 'RFC 5545: iCalendar-Format', en: 'RFC 5545: Internet Calendaring and Scheduling (iCalendar)' }
 } as const;
 

@@ -242,6 +242,74 @@ export const GUIDES: Record<string, GuideDef> = {
     }
   },
 
+  // ------------------------------------------------------------------ Apple Kalender
+  apple: {
+    type: 'howto',
+    published: '2026-10-26',
+    updated: '2026-10-26',
+    figures: [{ name: 'editor', de: 'Mehrere aus Apple Kalender exportierte ICS-Dateien im ICS Editor: links jeder Kalender mit Zeitraum und Größe.', en: 'Several ICS files exported from Apple Calendar in the ICS Editor: each calendar on the left with its date range and size.' }],
+    sources: ['apple', 'import', 'problems', 'create'],
+    related: ['outlook', 'ics', 'importParts', 'dupes'],
+    de: {
+      title: 'Apple Kalender (Mac) in Google Kalender importieren',
+      description: 'Apple-Kalender vom Mac in Google Kalender übertragen: jeden Kalender als ICS exportieren, prüfen, unter 1 MB bringen und importieren. Ohne Upload.',
+      h1: 'Apple Kalender vom Mac in Google Kalender importieren',
+      crumb: 'Apple → Google',
+      teaser: 'Mac-Kalender als ICS exportieren und importieren',
+      answer: '<strong>Exportiere in der App „Kalender“ auf dem Mac jeden Kalender einzeln über „Ablage“ → „Exportieren“ → „Exportieren“ als ICS-Datei und importiere sie in Google Kalender am Computer.</strong> Das „Kalender-Archiv“ (.icbu) eignet sich dafür nicht: Google importiert nur ICS- und CSV-Dateien, jede höchstens 1 MB groß.',
+      stepsTitle: 'Schritt für Schritt: vom Mac nach Google Kalender',
+      steps: [
+        { name: 'Kalender auswählen', text: 'Die App „Kalender“ auf dem Mac öffnen und in der Kalenderliste auf den Namen des Kalenders klicken. Fehlt die Liste: „Darstellung“ → „Kalenderliste einblenden“.' },
+        { name: 'Als ICS exportieren', text: '„Ablage“ → „Exportieren“ → „Exportieren“ wählen, Speicherort festlegen und auf „Exportieren“ klicken. Laut Apple entsteht dabei immer eine Kalenderdatei (.ics) – für jeden Kalender eine eigene.' },
+        { name: 'Dateien im ICS Editor prüfen', text: 'Alle ICS-Dateien zusammen in den ICS Editor ziehen. Du siehst jeden Kalender mit Terminen, Zeitraum und Größe. Nichts wird hochgeladen.' },
+        { name: 'Bei Bedarf aufteilen', text: 'Ist eine Datei größer als 1 MB, unter „Exportieren & konvertieren“ einen kürzeren Zeitraum wählen oder in Teile unter 1 MB aufteilen lassen.' },
+        { name: 'Neue Kalender anlegen', text: 'In Google Kalender pro Apple-Kalender einen neuen, leeren Kalender anlegen. So bleiben Arbeit, Familie & Co. getrennt und jeder Import lässt sich wieder löschen.' },
+        { name: 'In Google importieren', text: 'Am Computer: Zahnrad → „Einstellungen“ → „Importieren & Exportieren“ → Datei auswählen, Ziel-Kalender wählen, einmal auf „Importieren“ klicken. Für jede Datei wiederholen.' }
+      ],
+      sections: [
+        { h2: 'ICS-Datei oder Kalender-Archiv?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Exportieren (.ics)</th><th>Kalender-Archiv (.icbu)</th></tr></thead><tbody><tr><td>Menü in Apple Kalender</td><td>„Ablage“ → „Exportieren“ → „Exportieren“</td><td>„Ablage“ → „Exportieren“ → „Kalender-Archiv“</td></tr><tr><td>Inhalt</td><td>ein Kalender</td><td>alle Kalender auf einmal</td></tr><tr><td>Wofür gedacht</td><td>teilen, in andere Kalender übertragen</td><td>Sicherung und Wiederherstellung am Mac</td></tr><tr><td>In Google Kalender importierbar</td><td>Ja</td><td>Nein – Google nimmt nur ICS und CSV</td></tr></tbody></table></div><p>Für den Umzug nach Google brauchst du also die einzelnen ICS-Dateien. Bei vielen Kalendern ist das etwas Klickarbeit, aber jeder Kalender landet sauber in einem eigenen Google-Kalender.</p>' },
+        { h2: 'iCloud-Kalender: erst wählen, dann exportieren', html: '<p>Laut Apple liegen Kalender eines Accounts wie iCloud oder Exchange ohnehin auf dem Server des Anbieters. Für den Export spielt das keine Rolle: Auch ein iCloud-Kalender wird in der App „Kalender“ ausgewählt und über „Ablage“ → „Exportieren“ als ICS-Datei gespeichert. Der Export ist eine Kopie – spätere Änderungen in Apple Kalender kommen nicht automatisch in Google an.</p>' },
+        { h2: 'Große Kalender und Fehler beim Import', html: '<ul><li><strong>Datei größer als 1 MB:</strong> Google meldet dann „Google Calendar is temporarily unavailable“. Im {tool|ICS Editor} teilst du sie {tooLarge|automatisch in Teile unter 1 MB}.</li><li><strong>Falsche Uhrzeiten:</strong> Google empfiehlt, die Zeitzone in Google Kalender mit der des Ursprungsprogramms abzugleichen und neu zu exportieren und zu importieren.</li><li><strong>Termine doppelt:</strong> {dupes|So findest und entfernst du Duplikate.}</li><li><strong>Import ging schief:</strong> den neuen Kalender löschen und neu beginnen – {undo|so geht das}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Kann ich alle Apple-Kalender auf einmal in Google importieren?', a: 'Nicht über das Kalender-Archiv: Es ist eine .icbu-Datei, Google importiert aber nur ICS und CSV. Exportiere jeden Kalender einzeln als ICS-Datei – im ICS Editor kannst du alle Dateien zusammen öffnen und prüfen.' },
+        { q: 'Werden Änderungen in Apple Kalender danach automatisch übernommen?', a: 'Nein. Ein Export ist eine Kopie zum Zeitpunkt des Exports. Spätere Änderungen erscheinen nicht automatisch in Google Kalender.' },
+        { q: 'Geht das auch am iPhone?', a: 'Den Import in Google Kalender gibt es nur am Computer. Die Export-Schritte von Apple beschreiben die App „Kalender“ auf dem Mac.' },
+        { q: 'Wird mein Kalender dabei hochgeladen?', a: 'Nicht zum ICS Editor: Er arbeitet ausschließlich in deinem Browser. Erst beim Import in Google Kalender geht die Datei an Google.' }
+      ],
+      cta: 'Apple-Kalender jetzt prüfen'
+    },
+    en: {
+      title: 'Import Apple Calendar (Mac) into Google Calendar',
+      description: 'Move Apple Calendar from your Mac to Google Calendar: export each calendar as ICS, check it, get it under 1 MB and import it. No upload.',
+      h1: 'Import Apple Calendar from your Mac into Google Calendar',
+      crumb: 'Apple → Google',
+      teaser: 'Export Mac calendars as ICS and import them',
+      answer: '<strong>In the Calendar app on your Mac, export each calendar separately via “File” → “Export” → “Export” as an ICS file and import it into Google Calendar on a computer.</strong> The “Calendar Archive” (.icbu) doesn’t work for this: Google only imports ICS and CSV files, each at most 1 MB.',
+      stepsTitle: 'Step by step: from your Mac to Google Calendar',
+      steps: [
+        { name: 'Select the calendar', text: 'Open the Calendar app on your Mac and click the calendar’s name in the calendar list. If the list is hidden: “View” → “Show Calendar List”.' },
+        { name: 'Export as ICS', text: 'Choose “File” → “Export” → “Export”, pick a location and click “Export”. According to Apple, this always creates a calendar (.ics) file – one per calendar.' },
+        { name: 'Check the files in the ICS Editor', text: 'Drop all ICS files into the ICS Editor together. You see each calendar with its events, date range and size. Nothing is uploaded.' },
+        { name: 'Split if needed', text: 'If a file is larger than 1 MB, choose a shorter date range under “Export & convert” or let the tool split it into parts under 1 MB.' },
+        { name: 'Create new calendars', text: 'In Google Calendar, create a new, empty calendar for each Apple calendar. That keeps work, family and so on separate, and every import can be deleted again.' },
+        { name: 'Import into Google', text: 'On a computer: gear icon → “Settings” → “Import & export” → select the file, choose the destination calendar, click “Import” once. Repeat for each file.' }
+      ],
+      sections: [
+        { h2: 'ICS file or Calendar Archive?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Export (.ics)</th><th>Calendar Archive (.icbu)</th></tr></thead><tbody><tr><td>Menu in Apple Calendar</td><td>“File” → “Export” → “Export”</td><td>“File” → “Export” → “Calendar Archive”</td></tr><tr><td>Contents</td><td>one calendar</td><td>all calendars at once</td></tr><tr><td>Meant for</td><td>sharing, moving to other calendars</td><td>backup and restore on the Mac</td></tr><tr><td>Importable into Google Calendar</td><td>Yes</td><td>No – Google only accepts ICS and CSV</td></tr></tbody></table></div><p>To move to Google, you need the individual ICS files. With many calendars that’s a few extra clicks, but every calendar ends up cleanly in its own Google calendar.</p>' },
+        { h2: 'iCloud calendars: select first, then export', html: '<p>According to Apple, calendars of an account such as iCloud or Exchange are stored on the provider’s servers anyway. For exporting, that makes no difference: an iCloud calendar is also selected in the Calendar app and saved as an ICS file via “File” → “Export”. The export is a copy – later changes in Apple Calendar don’t reach Google automatically.</p>' },
+        { h2: 'Large calendars and import errors', html: '<ul><li><strong>File larger than 1 MB:</strong> Google then reports “Google Calendar is temporarily unavailable”. In the {tool|ICS Editor} you {tooLarge|split it into parts under 1 MB automatically}.</li><li><strong>Wrong times:</strong> Google recommends matching the time zone in Google Calendar with the one in the original app, then exporting and importing again.</li><li><strong>Duplicate events:</strong> {dupes|here’s how to find and remove duplicates}.</li><li><strong>Import went wrong:</strong> delete the new calendar and start over – {undo|here’s how}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Can I import all Apple calendars into Google at once?', a: 'Not via the Calendar Archive: it’s an .icbu file, but Google only imports ICS and CSV. Export each calendar separately as an ICS file – in the ICS Editor you can open and check all files together.' },
+        { q: 'Are later changes in Apple Calendar synced automatically?', a: 'No. An export is a copy at the time of exporting. Later changes don’t appear in Google Calendar automatically.' },
+        { q: 'Does this work on an iPhone?', a: 'Importing into Google Calendar is only possible on a computer. Apple’s export steps describe the Calendar app on the Mac.' },
+        { q: 'Is my calendar uploaded?', a: 'Not to the ICS Editor: it works entirely in your browser. Only when you import into Google Calendar does the file go to Google.' }
+      ],
+      cta: 'Check your Apple calendars now'
+    }
+  },
+
   // ------------------------------------------------------------------ Grenzen
   limits: {
     type: 'article',
