@@ -13,6 +13,7 @@ export const SRC = {
   limits: { url: 'https://knowledge.workspace.google.com/admin/calendar/avoid-calendar-use-limits', de: 'Google Workspace-Hilfe: Nutzungslimits von Google Kalender vermeiden', en: 'Google Workspace Help: Avoid Calendar use limits' },
   create: { url: 'https://support.google.com/calendar/answer/37095', de: 'Google Kalender-Hilfe: Neuen Kalender erstellen', en: 'Google Calendar Help: Create a new calendar' },
   delete: { url: 'https://support.google.com/calendar/answer/37188', de: 'Google Kalender-Hilfe: Kalender löschen oder abbestellen', en: 'Google Calendar Help: Delete or unsubscribe from a calendar' },
+  outlook: { url: 'https://support.microsoft.com/en-us/outlook/export-an-outlook-calendar-to-google-calendar', de: 'Microsoft Support: Outlook-Kalender nach Google Kalender exportieren', en: 'Microsoft Support: Export an Outlook calendar to Google Calendar' },
   rfc5545: { url: 'https://www.rfc-editor.org/rfc/rfc5545', de: 'RFC 5545: iCalendar-Format', en: 'RFC 5545: Internet Calendaring and Scheduling (iCalendar)' }
 } as const;
 

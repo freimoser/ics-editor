@@ -174,6 +174,74 @@ export const GUIDES: Record<string, GuideDef> = {
     }
   },
 
+  // ------------------------------------------------------------------ Outlook
+  outlook: {
+    type: 'howto',
+    published: '2026-10-26',
+    updated: '2026-10-26',
+    figures: [{ name: 'editor', de: 'Die aus Outlook gespeicherte ICS-Datei im ICS Editor: links der Kalender mit Zeitraum und Größe, in der Mitte die Termine.', en: 'The ICS file saved from Outlook in the ICS Editor: the calendar with date range and size on the left, the events in the middle.' }],
+    sources: ['outlook', 'import', 'problems', 'create'],
+    related: ['ics', 'tooLarge', 'importParts', 'dupes'],
+    de: {
+      title: 'Outlook-Kalender in Google Kalender importieren (ICS)',
+      description: 'So kommt dein Outlook-Kalender in Google Kalender: als ICS-Datei speichern, prüfen, bei Bedarf unter 1 MB aufteilen und importieren. Ohne Upload.',
+      h1: 'Outlook-Kalender in Google Kalender importieren',
+      crumb: 'Outlook → Google',
+      teaser: 'Kalender als ICS speichern und importieren',
+      answer: '<strong>Speichere den Kalender in Outlook als ICS-Datei („Datei“ → „Kalender speichern“) und importiere sie in Google Kalender am Computer.</strong> Laut Microsoft ist das eine Momentaufnahme: Spätere Änderungen in Outlook landen nicht automatisch in Google. Ist die Datei größer als 1 MB, nimmt Google sie nicht an – dann teilst du sie vorher auf.',
+      stepsTitle: 'Schritt für Schritt: von Outlook nach Google Kalender',
+      steps: [
+        { name: 'Kalender in Outlook speichern', text: 'Im klassischen Outlook (Microsoft 365, 2024, 2021) den Kalender öffnen und auswählen, dann „Datei“ → „Kalender speichern“.' },
+        { name: 'Zeitraum und Details wählen', text: 'Über „Weitere Optionen“ den Datumsbereich festlegen – oder den gesamten Kalender – und die Detailstufe wählen. Microsoft weist darauf hin, dass ein großer Zeitraum eine große Datei erzeugt.' },
+        { name: 'Datei im ICS Editor prüfen', text: 'Die ICS-Datei in den ICS Editor ziehen. Du siehst Termine, Zeitraum und Größe – und ob die Datei unter 1 MB bleibt. Nichts wird hochgeladen.' },
+        { name: 'Bei Bedarf aufteilen', text: 'Ist sie größer, unter „Exportieren & konvertieren“ einen kürzeren Zeitraum wählen oder automatisch in Teile unter 1 MB aufteilen lassen.' },
+        { name: 'Neuen Kalender anlegen', text: 'In Google Kalender einen neuen, leeren Kalender anlegen, etwa „Outlook“. So lässt sich der Import bei Bedarf komplett rückgängig machen.' },
+        { name: 'In Google importieren', text: 'Am Computer: Zahnrad → „Einstellungen“ → „Importieren & Exportieren“ → Datei auswählen, den neuen Kalender als Ziel wählen und einmal auf „Importieren“ klicken.' }
+      ],
+      sections: [
+        { h2: 'Was beim Umzug von Outlook mitkommt – und was nicht', html: '<div class="table-wrap"><table><thead><tr><th>Inhalt</th><th>Kommt mit?</th></tr></thead><tbody><tr><td>Termine mit Titel, Zeit, Ort und Beschreibung</td><td>Ja – je nach gewählter Detailstufe in Outlook</td></tr><tr><td>Serientermine</td><td>Ja, so wie Outlook sie speichert – laut Google exportieren manche Programme Serien als Einzeltermine, die dann auch so ankommen</td></tr><tr><td>Gäste und Konferenzdaten</td><td>Nein – Google importiert sie laut seiner Hilfe nicht</td></tr><tr><td>Spätere Änderungen in Outlook</td><td>Nein – der Export ist laut Microsoft eine Momentaufnahme</td></tr></tbody></table></div><p>Wer dauerhaft beide Kalender nutzen will, braucht ein Abo oder eine Synchronisation statt eines einmaligen Imports. Für den Umzug reicht der Import.</p>' },
+        { h2: 'Große Outlook-Kalender: unter 1 MB bringen', html: '<p>Google Kalender nimmt pro Import-Datei höchstens 1 MB an. Ein Outlook-Kalender mit vielen Jahren und Beschreibungen ist schnell größer. Zwei Wege helfen:</p><ol><li><strong>Schon in Outlook</strong> einen kürzeren Datumsbereich wählen, etwa nur die letzten zwei Jahre und die Zukunft.</li><li><strong>Im {tool|ICS Editor}</strong> die ganze Datei öffnen und {tooLarge|automatisch in Teile unter 1 MB aufteilen}. Serien bleiben dabei mit ihren Ausnahmen zusammen. Wie das Importieren der Teile in der Praxis aussieht, zeigt {importParts|Kalender in Teilen importieren}.</li></ol>' },
+        { h2: 'Wenn nach dem Import etwas nicht stimmt', html: '<ul><li><strong>Termine zur falschen Uhrzeit:</strong> Google empfiehlt, die Zeitzone in Google Kalender mit der in Outlook abzugleichen und neu zu exportieren und zu importieren.</li><li><strong>Termine doppelt:</strong> Meist wurde zweimal importiert. Mehr dazu: {dupes|doppelte Termine entfernen}.</li><li><strong>Alles falsch:</strong> Den neu angelegten Kalender löschen und von vorn beginnen – {undo|so geht das}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Werden Änderungen in Outlook automatisch in Google Kalender übernommen?', a: 'Nein. Laut Microsoft ist der Export eine Momentaufnahme. Änderungen, die du danach in Outlook machst, erscheinen nicht automatisch in Google Kalender.' },
+        { q: 'Warum lässt sich meine Outlook-Datei nicht in Google importieren?', a: 'Häufigster Grund ist die Größe: Google nimmt höchstens 1 MB pro Datei an und meldet sonst „Google Calendar is temporarily unavailable“. Wähle in Outlook einen kürzeren Zeitraum oder teile die Datei im ICS Editor auf.' },
+        { q: 'Kann ich den Outlook-Kalender am Handy in Google importieren?', a: 'Nein. Google Kalender erlaubt den Import nur am Computer. Vorbereiten kannst du die Datei aber auch am Handy.' },
+        { q: 'Wird meine Outlook-Datei dabei hochgeladen?', a: 'Nicht zum ICS Editor: Er arbeitet ausschließlich in deinem Browser. Erst beim Import in Google Kalender geht die Datei an Google.' }
+      ],
+      cta: 'Outlook-Datei jetzt prüfen'
+    },
+    en: {
+      title: 'Import an Outlook Calendar into Google Calendar (ICS)',
+      description: 'Move your Outlook calendar to Google Calendar: save it as an ICS file, check it, split it under 1 MB if needed, and import it. No upload.',
+      h1: 'Import an Outlook calendar into Google Calendar',
+      crumb: 'Outlook → Google',
+      teaser: 'Save the calendar as ICS and import it',
+      answer: '<strong>Save the calendar in Outlook as an ICS file (“File” → “Save Calendar”) and import it into Google Calendar on a computer.</strong> According to Microsoft, this is a snapshot: later changes in Outlook don’t reach Google automatically. If the file is larger than 1 MB, Google won’t accept it – so split it first.',
+      stepsTitle: 'Step by step: from Outlook to Google Calendar',
+      steps: [
+        { name: 'Save the calendar in Outlook', text: 'In classic Outlook (Microsoft 365, 2024, 2021), open and select the calendar, then choose “File” → “Save Calendar”.' },
+        { name: 'Choose date range and detail', text: 'Under “More Options”, set the date range – or the whole calendar – and the level of detail. Microsoft notes that a large date range creates a large file.' },
+        { name: 'Check the file in the ICS Editor', text: 'Drop the ICS file into the ICS Editor. You see the events, date range and size – and whether the file stays under 1 MB. Nothing is uploaded.' },
+        { name: 'Split if needed', text: 'If it’s larger, choose a shorter date range under “Export & convert” or let the tool split it into parts under 1 MB automatically.' },
+        { name: 'Create a new calendar', text: 'Create a new, empty calendar in Google Calendar, e.g. “Outlook”. That way you can undo the whole import if needed.' },
+        { name: 'Import into Google', text: 'On a computer: gear icon → “Settings” → “Import & export” → select the file, choose the new calendar as the destination and click “Import” once.' }
+      ],
+      sections: [
+        { h2: 'What moves from Outlook – and what doesn’t', html: '<div class="table-wrap"><table><thead><tr><th>Content</th><th>Included?</th></tr></thead><tbody><tr><td>Events with title, time, location and description</td><td>Yes – depending on the detail level chosen in Outlook</td></tr><tr><td>Recurring events</td><td>Yes, as Outlook saves them – according to Google, some apps export series as single events, which then arrive that way</td></tr><tr><td>Guests and conference data</td><td>No – according to Google’s help, they aren’t imported</td></tr><tr><td>Later changes in Outlook</td><td>No – according to Microsoft, the export is a snapshot</td></tr></tbody></table></div><p>If you want to keep using both calendars, you need a subscription or sync instead of a one-off import. For moving over, the import is enough.</p>' },
+        { h2: 'Large Outlook calendars: get under 1 MB', html: '<p>Google Calendar accepts at most 1 MB per import file. An Outlook calendar with many years and descriptions quickly exceeds that. Two ways help:</p><ol><li><strong>In Outlook already</strong>, choose a shorter date range, such as the last two years plus the future.</li><li><strong>In the {tool|ICS Editor}</strong>, open the whole file and {tooLarge|split it into parts under 1 MB automatically}. Recurring events stay together with their exceptions. What importing the parts looks like in practice is shown in {importParts|import a calendar in parts}.</li></ol>' },
+        { h2: 'If something is wrong after the import', html: '<ul><li><strong>Events at the wrong time:</strong> Google recommends matching the time zone in Google Calendar with the one in Outlook, then exporting and importing again.</li><li><strong>Duplicate events:</strong> usually the file was imported twice. More: {dupes|remove duplicate events}.</li><li><strong>Everything is wrong:</strong> delete the newly created calendar and start over – {undo|here’s how}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Are changes in Outlook synced to Google Calendar automatically?', a: 'No. According to Microsoft, the export is a snapshot. Changes you make in Outlook afterwards don’t appear in Google Calendar automatically.' },
+        { q: 'Why won’t my Outlook file import into Google Calendar?', a: 'The most common reason is size: Google accepts at most 1 MB per file and otherwise reports “Google Calendar is temporarily unavailable”. Choose a shorter date range in Outlook or split the file in the ICS Editor.' },
+        { q: 'Can I import my Outlook calendar into Google on my phone?', a: 'No. Google Calendar only allows importing on a computer. You can still prepare the file on your phone.' },
+        { q: 'Is my Outlook file uploaded?', a: 'Not to the ICS Editor: it works entirely in your browser. Only when you import into Google Calendar does the file go to Google.' }
+      ],
+      cta: 'Check your Outlook file now'
+    }
+  },
+
   // ------------------------------------------------------------------ Grenzen
   limits: {
     type: 'article',
