@@ -153,7 +153,17 @@ for (const r of indexable) {
 // llms.txt
 const llms = readFileSync(join(dist, 'llms.txt'), 'utf8');
 for (const m of llms.matchAll(/\]\((https:[^)]+)\)/g)) if (!exists(m[1].replace(SITE, ''))) fail('llms.txt', `Link ins Leere: ${m[1]}`);
-for (const f of ['favicon.svg', 'favicon-48.png', 'favicon-96.png', 'apple-touch-icon.png', 'manifest.webmanifest', 'sw.js']) if (!existsSync(join(dist, f))) fail('build', `${f} fehlt`);
+for (const f of ['favicon.svg', 'favicon-48.png', 'favicon-96.png', 'apple-touch-icon.png', 'manifest.webmanifest', 'sw.js', 'feed.xml', 'en/feed.xml']) if (!existsSync(join(dist, f))) fail('build', `${f} fehlt`);
+// Feeds: jede indexierbare Ratgeberseite steht drin, mit demselben Datum wie in der Sitemap
+for (const f of ['feed.xml', 'en/feed.xml']) {
+  if (!existsSync(join(dist, f))) continue;
+  const x = readFileSync(join(dist, f), 'utf8');
+  for (const m of x.matchAll(/<id>([^<]+\/)<\/id>[\s\S]*?<updated>(\d{4}-\d{2}-\d{2})T/g)) {
+    const r = new URL(m[1]).pathname;
+    if (!html.has(r)) fail(f, `Eintrag ohne Seite: ${r}`);
+    else if (modified.get(r) && modified.get(r) !== m[2]) fail(f, `Datum ${m[2]} ≠ dateModified ${modified.get(r)}: ${r}`);
+  }
+}
 if (existsSync(join(dist, 'robots.txt'))) warn.push('robots.txt im Projekt wirkt auf GitHub Pages nicht (liegt nicht im Wurzelverzeichnis).');
 
 for (const w of warn) console.log('Hinweis:', w);

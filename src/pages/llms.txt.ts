@@ -9,7 +9,7 @@ export function GET() {
 
 > Kostenloser ICS-Editor im Browser: ICS-Dateien und Google-Kalender-Exporte (ZIP) öffnen, alle Kalender und Termine ansehen, bearbeiten, filtern, auf mehrere Kalender aufteilen und in Dateien unter 1 MB für den Import in Google Kalender zerlegen. CSV und Excel werden in ICS oder Google-CSV umgewandelt. Ohne Upload.
 
-Betrieben von ${LEGAL.operator} (München). Dateien werden ausschließlich im Browser verarbeitet; eine Content-Security-Policy erlaubt der Seite keine Verbindungen außer zur öffentlichen robots.txt der Domain. Alle Angaben zu Google Kalender stammen aus Googles eigener Hilfe (Quellen geprüft am ${STAND.de}, Seiten aktualisiert am ${UPDATED.de}) und sind auf jeder Seite verlinkt. Volltext der Ratgeber: ${url('home', 'de')}llms-full.txt
+Betrieben von ${LEGAL.operator} (München). Dateien werden ausschließlich im Browser verarbeitet; eine Content-Security-Policy erlaubt der Seite keine Verbindungen außer zur öffentlichen robots.txt der Domain. Alle Angaben zu Google Kalender stammen aus Googles eigener Hilfe (Quellen geprüft am ${STAND.de}, Seiten aktualisiert am ${UPDATED.de}) und sind auf jeder Seite verlinkt. Volltext der Ratgeber: ${url('home', 'de')}llms-full.txt · Änderungen als Feed: ${url('home', 'de')}feed.xml (EN: ${url('home', 'de')}en/feed.xml)
 
 ## Werkzeug
 
