@@ -4,7 +4,7 @@ import Tool from './tool/Tool';
 import { GUIDES as KEYS, path, url, type Lang } from '../i18n/routes';
 import { GUIDES } from '../content/guides';
 import { HOME } from '../content/home';
-import { SRC, STAND } from '../content/sources';
+import { SRC, STAND, PAGE_UPDATED } from '../content/sources';
 import { LEGAL } from '../config/legal';
 import { asset } from '../i18n/routes';
 import Figure from './Figure.astro';
@@ -32,6 +32,8 @@ const schema = [
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
     description: c.description,
     featureList: c.features.map((f) => f[0]),
+    softwareHelp: { '@type': 'CreativeWork', name: lang === 'de' ? 'Ratgeber zu Google Kalender' : 'Google Calendar guides', url: url('guides', lang) },
+    dateModified: PAGE_UPDATED.home,
     screenshot: (IMG as Record<string, unknown>)[`editor-${lang}`] ? 'https://freimoser.github.io' + asset(`img/editor-${lang}.webp`) : undefined,
     author: { '@type': 'Person', name: LEGAL.operator, url: url('about', lang), sameAs: [LEGAL.linkedin, LEGAL.website] }
   },
@@ -73,6 +75,7 @@ const schema = [
     <div class="guide-grid related">
       {KEYS.map((k) => <a href={path(k, lang)}><strong>{GUIDES[k][lang].h1}</strong><span>{GUIDES[k][lang].teaser}</span></a>)}
     </div>
+    <p><a href={path('guides', lang)}>{lang === 'de' ? 'Alle Ratgeber im Überblick →' : 'All guides at a glance →'}</a></p>
   </section>
   </div>
 </Base>

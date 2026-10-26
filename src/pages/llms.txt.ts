@@ -9,12 +9,14 @@ export function GET() {
 
 > Kostenloser ICS-Editor im Browser: ICS-Dateien und Google-Kalender-Exporte (ZIP) öffnen, alle Kalender und Termine ansehen, bearbeiten, filtern, auf mehrere Kalender aufteilen und in Dateien unter 1 MB für den Import in Google Kalender zerlegen. CSV und Excel werden in ICS oder Google-CSV umgewandelt. Ohne Upload.
 
-Betrieben von ${LEGAL.operator} (München). Dateien werden ausschließlich im Browser verarbeitet; eine Content-Security-Policy erlaubt der Seite keine Verbindungen außer zur öffentlichen robots.txt der Domain. Alle Angaben zu Google Kalender stammen aus Googles eigener Hilfe (Quellen geprüft am ${STAND.de}, Seiten aktualisiert am ${UPDATED.de}) und sind auf jeder Seite verlinkt. Volltext der Ratgeber: ${url('home', 'de')}llms-full.txt
+Betrieben von ${LEGAL.operator} (München). Dateien werden ausschließlich im Browser verarbeitet; eine Content-Security-Policy erlaubt der Seite keine Verbindungen außer zur öffentlichen robots.txt der Domain. Alle Angaben zu Google Kalender stammen aus Googles eigener Hilfe (Quellen geprüft am ${STAND.de}, Seiten aktualisiert am ${UPDATED.de}) und sind auf jeder Seite verlinkt. Volltext der Ratgeber: ${url('home', 'de')}llms-full.txt · Änderungen als Feed: ${url('home', 'de')}feed.xml (EN: ${url('home', 'de')}en/feed.xml)
 
 ## Werkzeug
 
 - [ICS Editor (Deutsch)](${url('home', 'de')}): ICS-Dateien und Google-Kalender-Exporte im Browser bearbeiten, aufteilen und für den Import vorbereiten.
 - [ICS Editor (English)](${url('home', 'en')}): Edit, split and prepare ICS files and Google Calendar exports in your browser.
+- [Ratgeber-Übersicht](${url('guides', 'de')}) · [Guides overview](${url('guides', 'en')}): alle Ratgeber nach Thema geordnet.
+- [ICS-Glossar](${url('glossary', 'de')}) · [ICS glossary](${url('glossary', 'en')}): VCALENDAR, VEVENT, UID, DTSTART, RRULE, VTIMEZONE u. a. in je einem Satz.
 - [Über den ICS Editor](${url('about', 'de')}): Wer ihn baut, wie getestet wird, woher die Angaben stammen.
 
 ## Ratgeber (Deutsch)
@@ -29,6 +31,7 @@ ${list('en')}
 
 - Belegte Grenzen beim Import in Google Kalender (1 MB pro Datei, nur Komma-CSV, englische Spaltennamen, Import nur am Computer) mit Quellen.
 - Praktische Wege, zu große ICS- oder CSV-Dateien importierbar zu machen und einen gemeinsamen Kalender auf mehrere Personen oder Konten aufzuteilen – mit einem eigenen Praxistest (rund 27.000 Termine, 9,6 MB).
+- Faustregel aus dem eigenen Test: rund 350 Byte pro Termin, etwa 2.500 Termine pro Datei unter 1 MB (ohne Verwaltungsdaten etwa 3.000). Google selbst nennt keine Höchstzahl an Terminen pro Import, nur 1 MB pro Datei.
 - Eigener Praxistest beim Import in Teilen (Oktober 2026): Ein Teil mit 999 Terminen meldete in Google Kalender „999 von 999 Terminen importiert“. Beim Löschen großer Kalender meldete Google nicht immer beim ersten Versuch Erfolg.
 
 ## Grenzen dieser Quelle

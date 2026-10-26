@@ -65,7 +65,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Was die Meldung „Google Calendar is temporarily unavailable“ bedeutet', html: '<p>Laut Google tritt diese Meldung beim Import meist auf, wenn die Datei zu groß ist. Google Kalender verarbeitet Dateien bis 1 MB. Als Lösung nennt Google, einen kürzeren Zeitraum aus dem ursprünglichen Programm zu exportieren oder die Datei in kleinere Dateien aufzuteilen – wobei Google dafür das Bearbeiten des CSV- oder ICS-Codes von Hand voraussetzt.</p><p>Genau diesen Teil übernimmt das {tool|Werkzeug zum Aufteilen}: Es filtert, teilt und prüft, ohne dass du eine Zeile Code anfassen musst. Welche weiteren Grenzen es gibt, steht in der Übersicht {limits|Google Kalender Limits}.</p>' },
-        { h2: 'CSV-Datei verkleinern: Was wirklich Platz spart', html: '<table><thead><tr><th>Maßnahme</th><th>Wirkung</th></tr></thead><tbody><tr><td>Zeitraum begrenzen (z. B. nur die letzten drei Jahre)</td><td>meist die größte Ersparnis, weil alte Termine wegfallen</td></tr><tr><td>Beschreibungen weglassen</td><td>stark, wenn viele Termine Notizen haben</td></tr><tr><td>Verwaltungsdaten weglassen (Erstellt-/Geändert-Stempel in ICS)</td><td>in unserem Test mit einem echten Google-Export 1,9 von 9,6 MB (rund 20 %)</td></tr><tr><td>Abgesagte und doppelte Termine entfernen</td><td>klein, aber sauberer Kalender</td></tr></tbody></table><p>Reicht das nicht, wird aufgeteilt. Das Werkzeug teilt chronologisch, sodass jeder Teil einen klaren Zeitraum hat.</p>' },
+        { h2: 'CSV-Datei verkleinern: Was wirklich Platz spart', html: '<table><thead><tr><th>Maßnahme</th><th>Wirkung</th></tr></thead><tbody><tr><td>Zeitraum begrenzen (z. B. nur die letzten drei Jahre)</td><td>meist die größte Ersparnis, weil alte Termine wegfallen</td></tr><tr><td>Beschreibungen weglassen</td><td>stark, wenn viele Termine Notizen haben</td></tr><tr><td>Verwaltungsdaten weglassen (Erstellt-/Geändert-Stempel in ICS)</td><td>in unserem Test mit einem echten Google-Export 1,9 von 9,6 MB (rund 20 %)</td></tr><tr><td>Abgesagte und {dupes|doppelte Termine} entfernen</td><td>klein, aber sauberer Kalender</td></tr></tbody></table><p>Reicht das nicht, wird aufgeteilt. Das Werkzeug teilt chronologisch, sodass jeder Teil einen klaren Zeitraum hat.</p>' },
         { h2: 'Praxisbeispiel: ein echter Google-Export mit 9,6 MB', html: '<p>Getestet haben wir den ICS Editor unter anderem mit dem echten Google-Kalender-Export einer Tierarztpraxis (ausgewertet nur lokal, ohne Namen). Die Zahlen:</p><div class="table-wrap"><table><thead><tr><th>Schritt</th><th>Termine</th><th>Größe</th><th>Dateien für Google</th></tr></thead><tbody><tr><td>Datei unverändert</td><td>rund 27.000</td><td>9,6 MB</td><td>11</td></tr><tr><td>Verwaltungsdaten weggelassen</td><td>rund 27.000</td><td>7,7 MB</td><td>9</td></tr><tr><td>nur 2024–2026</td><td>rund 3.600</td><td>1,5 MB</td><td>2</td></tr><tr><td>nur 2024–2026, ohne Verwaltungsdaten</td><td>rund 3.600</td><td>1,2 MB</td><td>2</td></tr></tbody></table></div><p>Jede der Dateien war kleiner als 950 KB; beim Zurücklesen fehlte kein einziger Termin. Eigener Test, Oktober 2026.</p>' },
         { h2: 'Warum Teile unter 950 KB und nicht genau 1 MB?', html: '<p>„1 MB“ kann 1.000.000 oder 1.048.576 Byte bedeuten. Mit 950.000 Byte bleibt jeder Teil in beiden Fällen sicher darunter. Die angezeigte Größe ist byte-genau die Größe der Datei, die du herunterlädst.</p>' }
       ],
@@ -94,7 +94,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'What “Google Calendar is temporarily unavailable” means', html: '<p>According to Google, this message usually appears when the import file is too large. Google Calendar works with files of 1 MB or smaller. Google suggests exporting a shorter date range from the original application or splitting the file into smaller files – which, in Google’s words, requires manually editing the CSV or ICS code.</p><p>That is exactly the part the {tool|calendar splitting tool} does for you: it filters, splits and checks without you touching any code. For all other limits, see {limits|Google Calendar limits}.</p>' },
-        { h2: 'How to shrink a CSV file: what really saves space', html: '<table><thead><tr><th>Measure</th><th>Effect</th></tr></thead><tbody><tr><td>Limit the date range (e.g. only the last three years)</td><td>usually the biggest saving, because old events disappear</td></tr><tr><td>Leave out descriptions</td><td>large if many events have notes</td></tr><tr><td>Drop housekeeping data (created/modified stamps in ICS)</td><td>in our test with a real Google export, 1.9 of 9.6 MB (about 20%)</td></tr><tr><td>Remove cancelled and duplicate events</td><td>small, but a cleaner calendar</td></tr></tbody></table><p>If that isn’t enough, the file is split. The tool splits chronologically, so every part covers a clear date range.</p>' },
+        { h2: 'How to shrink a CSV file: what really saves space', html: '<table><thead><tr><th>Measure</th><th>Effect</th></tr></thead><tbody><tr><td>Limit the date range (e.g. only the last three years)</td><td>usually the biggest saving, because old events disappear</td></tr><tr><td>Leave out descriptions</td><td>large if many events have notes</td></tr><tr><td>Drop housekeeping data (created/modified stamps in ICS)</td><td>in our test with a real Google export, 1.9 of 9.6 MB (about 20%)</td></tr><tr><td>Remove cancelled and {dupes|duplicate events}</td><td>small, but a cleaner calendar</td></tr></tbody></table><p>If that isn’t enough, the file is split. The tool splits chronologically, so every part covers a clear date range.</p>' },
         { h2: 'Real-world example: a 9.6 MB Google export', html: '<p>Among other files, we tested the ICS Editor with the real Google Calendar export of a veterinary practice (analysed locally only, without names). The numbers:</p><div class="table-wrap"><table><thead><tr><th>Step</th><th>Events</th><th>Size</th><th>Files for Google</th></tr></thead><tbody><tr><td>File unchanged</td><td>about 27,000</td><td>9.6 MB</td><td>11</td></tr><tr><td>Housekeeping data removed</td><td>about 27,000</td><td>7.7 MB</td><td>9</td></tr><tr><td>Only 2024–2026</td><td>about 3,600</td><td>1.5 MB</td><td>2</td></tr><tr><td>Only 2024–2026, no housekeeping data</td><td>about 3,600</td><td>1.2 MB</td><td>2</td></tr></tbody></table></div><p>Every file was smaller than 950 KB; reading them back, not a single event was missing. Own test, October 2026.</p>' },
         { h2: 'Why parts under 950 KB and not exactly 1 MB?', html: '<p>“1 MB” can mean 1,000,000 or 1,048,576 bytes. At 950,000 bytes every part stays safely below either. The size shown is exactly the size of the file you download.</p>' }
       ],
@@ -108,11 +108,213 @@ export const GUIDES: Record<string, GuideDef> = {
     }
   },
 
+  // ------------------------------------------------------------------ Doppelte Termine
+  dupes: {
+    type: 'howto',
+    published: '2026-10-26',
+    updated: '2026-10-26',
+    figures: [{ name: 'export', de: 'Im Export-Fenster unter „Mehr Optionen“ → „Weglassen“ steht „Doppelte Termine“ mit der Anzahl, die das Werkzeug gefunden hat.', en: 'In the export window under “More options” → “Leave out” you’ll find “Duplicate events” with the number the tool found.' }],
+    sources: ['problems', 'import', 'create', 'delete'],
+    related: ['undo', 'importParts', 'ics', 'tooLarge'],
+    de: {
+      title: 'Doppelte Termine in Google Kalender: entfernen & vermeiden',
+      description: 'Termine nach dem Import doppelt? So entfernst du doppelte Termine aus der Datei, bevor sie in Google Kalender landen – und räumst einen Kalender neu auf.',
+      h1: 'Doppelte Termine in Google Kalender entfernen und vermeiden',
+      crumb: 'Doppelte Termine',
+      teaser: 'Duplikate vor dem Import herausfiltern',
+      answer: '<strong>Am einfachsten entfernst du doppelte Termine, bevor du importierst:</strong> Der ICS Editor zählt Termine mit gleichem Titel, gleichem Beginn und gleichem Ende im selben Kalender und lässt sie beim Export auf Wunsch weg. Sind die Duplikate schon in Google Kalender, exportierst du den Kalender, bereinigst die Datei und importierst sie in einen neuen, leeren Kalender.',
+      stepsTitle: 'Schritt für Schritt: Duplikate vor dem Import entfernen',
+      steps: [
+        { name: 'Datei öffnen', text: 'ICS-Datei, ZIP-Export von Google Kalender oder CSV-Datei in den ICS Editor ziehen. Die Datei bleibt auf deinem Gerät.' },
+        { name: 'Duplikate ansehen', text: 'In der Datei-Info steht unter „Doppelt“, wie viele Termine mehrfach vorkommen. Gezählt werden einzelne Termine mit gleichem Titel, Beginn und Ende; Serien zählen nicht dazu.' },
+        { name: 'Beim Export weglassen', text: '„Exportieren & konvertieren“ öffnen, unter „Mehr Optionen“ → „Weglassen“ den Haken bei „Doppelte Termine“ setzen. Von jedem Duplikat bleibt genau ein Termin übrig.' },
+        { name: 'Neuen Kalender anlegen', text: 'In Google Kalender einen neuen, leeren Kalender anlegen. So kannst du ihn komplett löschen, falls etwas nicht passt.' },
+        { name: 'Einmal importieren', text: 'Jede Datei in den neuen Kalender importieren und nur einmal auf „Importieren“ klicken.' }
+      ],
+      sections: [
+        { h2: 'Woher doppelte Termine kommen', html: '<ul><li><strong>Die Datei enthält sie schon:</strong> etwa wenn mehrere Exporte zusammengeführt oder Termine von Hand kopiert wurden. Das zeigt der ICS Editor vor dem Import.</li><li><strong>Dieselben Termine in zwei Kalendern:</strong> Wer einen Export in den Hauptkalender und zusätzlich in einen neuen Kalender importiert, sieht jeden Termin zweimal – einmal pro Kalender. Hier hilft es, einen der beiden Kalender auszublenden oder zu löschen.</li><li><strong>Zweimal auf „Importieren“ geklickt:</strong> Laut Google meldet der zweite Klick „Processed zero events“, weil die Termine schon beim ersten Klick angekommen sind. Prüfe deinen Kalender, bevor du es noch einmal versuchst.</li></ul>' },
+        { h2: 'Duplikate sind schon in Google Kalender: so räumst du auf', html: '<ol><li>Den betroffenen Kalender in Google Kalender exportieren (Einstellungen → Importieren &amp; Exportieren → Exportieren). Du erhältst eine ZIP-Datei.</li><li>Das ZIP in den {tool|ICS Editor} ziehen und beim Export „Doppelte Termine“ weglassen.</li><li>Einen neuen, leeren Kalender anlegen und die bereinigte Datei dort importieren – große Dateien {importParts|in Teilen}.</li><li>Ergebnis prüfen. Passt alles, den alten Kalender löschen ({undo|so geht das}).</li></ol><p>Im Hauptkalender klappt der letzte Schritt nicht: Den kannst du nicht löschen, nur alle seine Termine auf einmal.</p>' },
+        { h2: 'Was als doppelt gilt – und was nicht', html: '<div class="table-wrap"><table><thead><tr><th>Fall</th><th>Gilt als doppelt?</th></tr></thead><tbody><tr><td>Gleicher Titel, gleicher Beginn, gleiches Ende im selben Kalender</td><td>Ja – einer bleibt</td></tr><tr><td>Gleicher Termin in zwei verschiedenen Kalendern</td><td>Nein – jeder Kalender behält seinen</td></tr><tr><td>Gleicher Titel, aber andere Uhrzeit</td><td>Nein</td></tr><tr><td>Serientermine und ihre Ausnahmen</td><td>Nein – Serien bleiben vollständig</td></tr></tbody></table></div><p>So verschwinden keine Termine, die nur ähnlich aussehen. Ob du doppelte Termine weglässt, entscheidest du beim Export – ohne Haken bleibt die Datei unverändert.</p>' }
+      ],
+      faq: [
+        { q: 'Hat Google Kalender eine Funktion zum Entfernen doppelter Termine?', a: 'In der Google-Hilfe zum Import und zu Importproblemen ist keine solche Funktion beschrieben. Deshalb ist es am einfachsten, Duplikate vor dem Import aus der Datei zu entfernen.' },
+        { q: 'Warum meldet Google beim zweiten Import „Processed zero events“?', a: 'Laut Google passiert das, wenn man mehr als einmal auf „Importieren“ klickt: Die Termine wurden beim ersten Klick schon importiert, beim zweiten gibt es nichts Neues. Prüfe deinen Kalender – die Termine sind meist schon da.' },
+        { q: 'Werden beim Entfernen von Duplikaten auch Serientermine gelöscht?', a: 'Nein. Der ICS Editor vergleicht nur einzelne Termine. Serien bleiben mit allen Ausnahmen vollständig erhalten.' },
+        { q: 'Wird meine Datei dafür hochgeladen?', a: 'Nein. Der ICS Editor arbeitet ausschließlich in deinem Browser. Eine Sicherheitsregel verbietet der Seite Verbindungen zu fremden Servern.' }
+      ],
+      cta: 'Doppelte Termine jetzt finden'
+    },
+    en: {
+      title: 'Duplicate Events in Google Calendar: Remove & Prevent',
+      description: 'Events duplicated after an import? Remove duplicate events from the file before they reach Google Calendar – and clean up a calendar that already has them.',
+      h1: 'Remove and prevent duplicate events in Google Calendar',
+      crumb: 'Duplicate events',
+      teaser: 'Filter out duplicates before importing',
+      answer: '<strong>The easiest way to get rid of duplicate events is before you import:</strong> the ICS Editor counts events with the same title, start and end in the same calendar and leaves them out on export if you want. If the duplicates are already in Google Calendar, export the calendar, clean the file and import it into a new, empty calendar.',
+      stepsTitle: 'Step by step: remove duplicates before importing',
+      steps: [
+        { name: 'Open the file', text: 'Drop an ICS file, Google Calendar’s ZIP export or a CSV file into the ICS Editor. The file stays on your device.' },
+        { name: 'Check the duplicates', text: 'The file info shows under “Duplicates” how many events appear more than once. Single events with the same title, start and end are counted; recurring events are not.' },
+        { name: 'Leave them out on export', text: 'Open “Export & convert”, then under “More options” → “Leave out” tick “Duplicate events”. Exactly one event of each duplicate remains.' },
+        { name: 'Create a new calendar', text: 'Create a new, empty calendar in Google Calendar. That way you can delete it completely if something isn’t right.' },
+        { name: 'Import once', text: 'Import every file into the new calendar and click “Import” only once.' }
+      ],
+      sections: [
+        { h2: 'Where duplicate events come from', html: '<ul><li><strong>The file already contains them:</strong> for example when several exports were merged or events were copied by hand. The ICS Editor shows this before you import.</li><li><strong>The same events in two calendars:</strong> if you import an export into your primary calendar and also into a new calendar, you see every event twice – once per calendar. Hiding or deleting one of the two calendars helps.</li><li><strong>Import clicked twice:</strong> according to Google, the second click reports “Processed zero events”, because the events already arrived with the first click. Check your calendar before trying again.</li></ul>' },
+        { h2: 'Duplicates are already in Google Calendar: how to clean up', html: '<ol><li>Export the affected calendar from Google Calendar (Settings → Import &amp; export → Export). You get a ZIP file.</li><li>Drop the ZIP into the {tool|ICS Editor} and leave out “Duplicate events” on export.</li><li>Create a new, empty calendar and import the cleaned file there – large files {importParts|in parts}.</li><li>Check the result. If everything is fine, delete the old calendar ({undo|here’s how}).</li></ol><p>This last step doesn’t work for your primary calendar: it can’t be deleted, you can only delete all of its events at once.</p>' },
+        { h2: 'What counts as a duplicate – and what doesn’t', html: '<div class="table-wrap"><table><thead><tr><th>Case</th><th>Duplicate?</th></tr></thead><tbody><tr><td>Same title, same start, same end in the same calendar</td><td>Yes – one remains</td></tr><tr><td>Same event in two different calendars</td><td>No – each calendar keeps its own</td></tr><tr><td>Same title, but a different time</td><td>No</td></tr><tr><td>Recurring events and their exceptions</td><td>No – series stay complete</td></tr></tbody></table></div><p>So no events disappear just because they look similar. You decide on export whether to leave out duplicates – without the tick, the file stays unchanged.</p>' }
+      ],
+      faq: [
+        { q: 'Does Google Calendar have a feature to remove duplicate events?', a: 'Google’s help pages on importing and on import problems don’t describe such a feature. That’s why it’s easiest to remove duplicates from the file before importing.' },
+        { q: 'Why does Google say “Processed zero events” on a second import?', a: 'According to Google, this happens when you click “Import” more than once: the events were already imported with the first click, so there’s nothing new the second time. Check your calendar – the events are usually already there.' },
+        { q: 'Are recurring events deleted when removing duplicates?', a: 'No. The ICS Editor only compares single events. Series stay complete with all their exceptions.' },
+        { q: 'Is my file uploaded for this?', a: 'No. The ICS Editor works entirely in your browser. A security policy forbids the page to connect to other servers.' }
+      ],
+      cta: 'Find duplicate events now'
+    }
+  },
+
+  // ------------------------------------------------------------------ Outlook
+  outlook: {
+    type: 'howto',
+    published: '2026-10-26',
+    updated: '2026-10-26',
+    figures: [{ name: 'editor', de: 'Die aus Outlook gespeicherte ICS-Datei im ICS Editor: links der Kalender mit Zeitraum und Größe, in der Mitte die Termine.', en: 'The ICS file saved from Outlook in the ICS Editor: the calendar with date range and size on the left, the events in the middle.' }],
+    sources: ['outlook', 'import', 'problems', 'create'],
+    related: ['ics', 'tooLarge', 'importParts', 'dupes'],
+    de: {
+      title: 'Outlook-Kalender in Google Kalender importieren (ICS)',
+      description: 'So kommt dein Outlook-Kalender in Google Kalender: als ICS-Datei speichern, prüfen, bei Bedarf unter 1 MB aufteilen und importieren. Ohne Upload.',
+      h1: 'Outlook-Kalender in Google Kalender importieren',
+      crumb: 'Outlook → Google',
+      teaser: 'Kalender als ICS speichern und importieren',
+      answer: '<strong>Speichere den Kalender in Outlook als ICS-Datei („Datei“ → „Kalender speichern“) und importiere sie in Google Kalender am Computer.</strong> Laut Microsoft ist das eine Momentaufnahme: Spätere Änderungen in Outlook landen nicht automatisch in Google. Ist die Datei größer als 1 MB, nimmt Google sie nicht an – dann teilst du sie vorher auf.',
+      stepsTitle: 'Schritt für Schritt: von Outlook nach Google Kalender',
+      steps: [
+        { name: 'Kalender in Outlook speichern', text: 'Im klassischen Outlook (Microsoft 365, 2024, 2021) den Kalender öffnen und auswählen, dann „Datei“ → „Kalender speichern“.' },
+        { name: 'Zeitraum und Details wählen', text: 'Über „Weitere Optionen“ den Datumsbereich festlegen – oder den gesamten Kalender – und die Detailstufe wählen. Microsoft weist darauf hin, dass ein großer Zeitraum eine große Datei erzeugt.' },
+        { name: 'Datei im ICS Editor prüfen', text: 'Die ICS-Datei in den ICS Editor ziehen. Du siehst Termine, Zeitraum und Größe – und ob die Datei unter 1 MB bleibt. Nichts wird hochgeladen.' },
+        { name: 'Bei Bedarf aufteilen', text: 'Ist sie größer, unter „Exportieren & konvertieren“ einen kürzeren Zeitraum wählen oder automatisch in Teile unter 1 MB aufteilen lassen.' },
+        { name: 'Neuen Kalender anlegen', text: 'In Google Kalender einen neuen, leeren Kalender anlegen, etwa „Outlook“. So lässt sich der Import bei Bedarf komplett rückgängig machen.' },
+        { name: 'In Google importieren', text: 'Am Computer: Zahnrad → „Einstellungen“ → „Importieren & Exportieren“ → Datei auswählen, den neuen Kalender als Ziel wählen und einmal auf „Importieren“ klicken.' }
+      ],
+      sections: [
+        { h2: 'Was beim Umzug von Outlook mitkommt – und was nicht', html: '<div class="table-wrap"><table><thead><tr><th>Inhalt</th><th>Kommt mit?</th></tr></thead><tbody><tr><td>Termine mit Titel, Zeit, Ort und Beschreibung</td><td>Ja – je nach gewählter Detailstufe in Outlook</td></tr><tr><td>Serientermine</td><td>Ja, so wie Outlook sie speichert – laut Google exportieren manche Programme Serien als Einzeltermine, die dann auch so ankommen</td></tr><tr><td>Gäste und Konferenzdaten</td><td>Nein – Google importiert sie laut seiner Hilfe nicht</td></tr><tr><td>Spätere Änderungen in Outlook</td><td>Nein – der Export ist laut Microsoft eine Momentaufnahme</td></tr></tbody></table></div><p>Wer dauerhaft beide Kalender nutzen will, braucht ein Abo oder eine Synchronisation statt eines einmaligen Imports. Für den Umzug reicht der Import.</p>' },
+        { h2: 'Große Outlook-Kalender: unter 1 MB bringen', html: '<p>Google Kalender nimmt pro Import-Datei höchstens 1 MB an. Ein Outlook-Kalender mit vielen Jahren und Beschreibungen ist schnell größer. Zwei Wege helfen:</p><ol><li><strong>Schon in Outlook</strong> einen kürzeren Datumsbereich wählen, etwa nur die letzten zwei Jahre und die Zukunft.</li><li><strong>Im {tool|ICS Editor}</strong> die ganze Datei öffnen und {tooLarge|automatisch in Teile unter 1 MB aufteilen}. Serien bleiben dabei mit ihren Ausnahmen zusammen. Wie das Importieren der Teile in der Praxis aussieht, zeigt {importParts|Kalender in Teilen importieren}.</li></ol>' },
+        { h2: 'Wenn nach dem Import etwas nicht stimmt', html: '<ul><li><strong>Termine zur falschen Uhrzeit:</strong> Google empfiehlt, die Zeitzone in Google Kalender mit der in Outlook abzugleichen und neu zu exportieren und zu importieren.</li><li><strong>Termine doppelt:</strong> Meist wurde zweimal importiert. Mehr dazu: {dupes|doppelte Termine entfernen}.</li><li><strong>Alles falsch:</strong> Den neu angelegten Kalender löschen und von vorn beginnen – {undo|so geht das}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Werden Änderungen in Outlook automatisch in Google Kalender übernommen?', a: 'Nein. Laut Microsoft ist der Export eine Momentaufnahme. Änderungen, die du danach in Outlook machst, erscheinen nicht automatisch in Google Kalender.' },
+        { q: 'Warum lässt sich meine Outlook-Datei nicht in Google importieren?', a: 'Häufigster Grund ist die Größe: Google nimmt höchstens 1 MB pro Datei an und meldet sonst „Google Calendar is temporarily unavailable“. Wähle in Outlook einen kürzeren Zeitraum oder teile die Datei im ICS Editor auf.' },
+        { q: 'Kann ich den Outlook-Kalender am Handy in Google importieren?', a: 'Nein. Google Kalender erlaubt den Import nur am Computer. Vorbereiten kannst du die Datei aber auch am Handy.' },
+        { q: 'Wird meine Outlook-Datei dabei hochgeladen?', a: 'Nicht zum ICS Editor: Er arbeitet ausschließlich in deinem Browser. Erst beim Import in Google Kalender geht die Datei an Google.' }
+      ],
+      cta: 'Outlook-Datei jetzt prüfen'
+    },
+    en: {
+      title: 'Import an Outlook Calendar into Google Calendar (ICS)',
+      description: 'Move your Outlook calendar to Google Calendar: save it as an ICS file, check it, split it under 1 MB if needed, and import it. No upload.',
+      h1: 'Import an Outlook calendar into Google Calendar',
+      crumb: 'Outlook → Google',
+      teaser: 'Save the calendar as ICS and import it',
+      answer: '<strong>Save the calendar in Outlook as an ICS file (“File” → “Save Calendar”) and import it into Google Calendar on a computer.</strong> According to Microsoft, this is a snapshot: later changes in Outlook don’t reach Google automatically. If the file is larger than 1 MB, Google won’t accept it – so split it first.',
+      stepsTitle: 'Step by step: from Outlook to Google Calendar',
+      steps: [
+        { name: 'Save the calendar in Outlook', text: 'In classic Outlook (Microsoft 365, 2024, 2021), open and select the calendar, then choose “File” → “Save Calendar”.' },
+        { name: 'Choose date range and detail', text: 'Under “More Options”, set the date range – or the whole calendar – and the level of detail. Microsoft notes that a large date range creates a large file.' },
+        { name: 'Check the file in the ICS Editor', text: 'Drop the ICS file into the ICS Editor. You see the events, date range and size – and whether the file stays under 1 MB. Nothing is uploaded.' },
+        { name: 'Split if needed', text: 'If it’s larger, choose a shorter date range under “Export & convert” or let the tool split it into parts under 1 MB automatically.' },
+        { name: 'Create a new calendar', text: 'Create a new, empty calendar in Google Calendar, e.g. “Outlook”. That way you can undo the whole import if needed.' },
+        { name: 'Import into Google', text: 'On a computer: gear icon → “Settings” → “Import & export” → select the file, choose the new calendar as the destination and click “Import” once.' }
+      ],
+      sections: [
+        { h2: 'What moves from Outlook – and what doesn’t', html: '<div class="table-wrap"><table><thead><tr><th>Content</th><th>Included?</th></tr></thead><tbody><tr><td>Events with title, time, location and description</td><td>Yes – depending on the detail level chosen in Outlook</td></tr><tr><td>Recurring events</td><td>Yes, as Outlook saves them – according to Google, some apps export series as single events, which then arrive that way</td></tr><tr><td>Guests and conference data</td><td>No – according to Google’s help, they aren’t imported</td></tr><tr><td>Later changes in Outlook</td><td>No – according to Microsoft, the export is a snapshot</td></tr></tbody></table></div><p>If you want to keep using both calendars, you need a subscription or sync instead of a one-off import. For moving over, the import is enough.</p>' },
+        { h2: 'Large Outlook calendars: get under 1 MB', html: '<p>Google Calendar accepts at most 1 MB per import file. An Outlook calendar with many years and descriptions quickly exceeds that. Two ways help:</p><ol><li><strong>In Outlook already</strong>, choose a shorter date range, such as the last two years plus the future.</li><li><strong>In the {tool|ICS Editor}</strong>, open the whole file and {tooLarge|split it into parts under 1 MB automatically}. Recurring events stay together with their exceptions. What importing the parts looks like in practice is shown in {importParts|import a calendar in parts}.</li></ol>' },
+        { h2: 'If something is wrong after the import', html: '<ul><li><strong>Events at the wrong time:</strong> Google recommends matching the time zone in Google Calendar with the one in Outlook, then exporting and importing again.</li><li><strong>Duplicate events:</strong> usually the file was imported twice. More: {dupes|remove duplicate events}.</li><li><strong>Everything is wrong:</strong> delete the newly created calendar and start over – {undo|here’s how}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Are changes in Outlook synced to Google Calendar automatically?', a: 'No. According to Microsoft, the export is a snapshot. Changes you make in Outlook afterwards don’t appear in Google Calendar automatically.' },
+        { q: 'Why won’t my Outlook file import into Google Calendar?', a: 'The most common reason is size: Google accepts at most 1 MB per file and otherwise reports “Google Calendar is temporarily unavailable”. Choose a shorter date range in Outlook or split the file in the ICS Editor.' },
+        { q: 'Can I import my Outlook calendar into Google on my phone?', a: 'No. Google Calendar only allows importing on a computer. You can still prepare the file on your phone.' },
+        { q: 'Is my Outlook file uploaded?', a: 'Not to the ICS Editor: it works entirely in your browser. Only when you import into Google Calendar does the file go to Google.' }
+      ],
+      cta: 'Check your Outlook file now'
+    }
+  },
+
+  // ------------------------------------------------------------------ Apple Kalender
+  apple: {
+    type: 'howto',
+    published: '2026-10-26',
+    updated: '2026-10-26',
+    figures: [{ name: 'editor', de: 'Mehrere aus Apple Kalender exportierte ICS-Dateien im ICS Editor: links jeder Kalender mit Zeitraum und Größe.', en: 'Several ICS files exported from Apple Calendar in the ICS Editor: each calendar on the left with its date range and size.' }],
+    sources: ['apple', 'import', 'problems', 'create'],
+    related: ['outlook', 'ics', 'importParts', 'dupes'],
+    de: {
+      title: 'Apple Kalender (Mac) in Google Kalender importieren',
+      description: 'Apple-Kalender vom Mac in Google Kalender übertragen: jeden Kalender als ICS exportieren, prüfen, unter 1 MB bringen und importieren. Ohne Upload.',
+      h1: 'Apple Kalender vom Mac in Google Kalender importieren',
+      crumb: 'Apple → Google',
+      teaser: 'Mac-Kalender als ICS exportieren und importieren',
+      answer: '<strong>Exportiere in der App „Kalender“ auf dem Mac jeden Kalender einzeln über „Ablage“ → „Exportieren“ → „Exportieren“ als ICS-Datei und importiere sie in Google Kalender am Computer.</strong> Das „Kalender-Archiv“ (.icbu) eignet sich dafür nicht: Google importiert nur ICS- und CSV-Dateien, jede höchstens 1 MB groß.',
+      stepsTitle: 'Schritt für Schritt: vom Mac nach Google Kalender',
+      steps: [
+        { name: 'Kalender auswählen', text: 'Die App „Kalender“ auf dem Mac öffnen und in der Kalenderliste auf den Namen des Kalenders klicken. Fehlt die Liste: „Darstellung“ → „Kalenderliste einblenden“.' },
+        { name: 'Als ICS exportieren', text: '„Ablage“ → „Exportieren“ → „Exportieren“ wählen, Speicherort festlegen und auf „Exportieren“ klicken. Laut Apple entsteht dabei immer eine Kalenderdatei (.ics) – für jeden Kalender eine eigene.' },
+        { name: 'Dateien im ICS Editor prüfen', text: 'Alle ICS-Dateien zusammen in den ICS Editor ziehen. Du siehst jeden Kalender mit Terminen, Zeitraum und Größe. Nichts wird hochgeladen.' },
+        { name: 'Bei Bedarf aufteilen', text: 'Ist eine Datei größer als 1 MB, unter „Exportieren & konvertieren“ einen kürzeren Zeitraum wählen oder in Teile unter 1 MB aufteilen lassen.' },
+        { name: 'Neue Kalender anlegen', text: 'In Google Kalender pro Apple-Kalender einen neuen, leeren Kalender anlegen. So bleiben Arbeit, Familie & Co. getrennt und jeder Import lässt sich wieder löschen.' },
+        { name: 'In Google importieren', text: 'Am Computer: Zahnrad → „Einstellungen“ → „Importieren & Exportieren“ → Datei auswählen, Ziel-Kalender wählen, einmal auf „Importieren“ klicken. Für jede Datei wiederholen.' }
+      ],
+      sections: [
+        { h2: 'ICS-Datei oder Kalender-Archiv?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Exportieren (.ics)</th><th>Kalender-Archiv (.icbu)</th></tr></thead><tbody><tr><td>Menü in Apple Kalender</td><td>„Ablage“ → „Exportieren“ → „Exportieren“</td><td>„Ablage“ → „Exportieren“ → „Kalender-Archiv“</td></tr><tr><td>Inhalt</td><td>ein Kalender</td><td>alle Kalender auf einmal</td></tr><tr><td>Wofür gedacht</td><td>teilen, in andere Kalender übertragen</td><td>Sicherung und Wiederherstellung am Mac</td></tr><tr><td>In Google Kalender importierbar</td><td>Ja</td><td>Nein – Google nimmt nur ICS und CSV</td></tr></tbody></table></div><p>Für den Umzug nach Google brauchst du also die einzelnen ICS-Dateien. Bei vielen Kalendern ist das etwas Klickarbeit, aber jeder Kalender landet sauber in einem eigenen Google-Kalender.</p>' },
+        { h2: 'iCloud-Kalender: erst wählen, dann exportieren', html: '<p>Laut Apple liegen Kalender eines Accounts wie iCloud oder Exchange ohnehin auf dem Server des Anbieters. Für den Export spielt das keine Rolle: Auch ein iCloud-Kalender wird in der App „Kalender“ ausgewählt und über „Ablage“ → „Exportieren“ als ICS-Datei gespeichert. Der Export ist eine Kopie – spätere Änderungen in Apple Kalender kommen nicht automatisch in Google an.</p>' },
+        { h2: 'Große Kalender und Fehler beim Import', html: '<ul><li><strong>Datei größer als 1 MB:</strong> Google meldet dann „Google Calendar is temporarily unavailable“. Im {tool|ICS Editor} teilst du sie {tooLarge|automatisch in Teile unter 1 MB}.</li><li><strong>Falsche Uhrzeiten:</strong> Google empfiehlt, die Zeitzone in Google Kalender mit der des Ursprungsprogramms abzugleichen und neu zu exportieren und zu importieren.</li><li><strong>Termine doppelt:</strong> {dupes|So findest und entfernst du Duplikate.}</li><li><strong>Import ging schief:</strong> den neuen Kalender löschen und neu beginnen – {undo|so geht das}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Kann ich alle Apple-Kalender auf einmal in Google importieren?', a: 'Nicht über das Kalender-Archiv: Es ist eine .icbu-Datei, Google importiert aber nur ICS und CSV. Exportiere jeden Kalender einzeln als ICS-Datei – im ICS Editor kannst du alle Dateien zusammen öffnen und prüfen.' },
+        { q: 'Werden Änderungen in Apple Kalender danach automatisch übernommen?', a: 'Nein. Ein Export ist eine Kopie zum Zeitpunkt des Exports. Spätere Änderungen erscheinen nicht automatisch in Google Kalender.' },
+        { q: 'Geht das auch am iPhone?', a: 'Den Import in Google Kalender gibt es nur am Computer. Die Export-Schritte von Apple beschreiben die App „Kalender“ auf dem Mac.' },
+        { q: 'Wird mein Kalender dabei hochgeladen?', a: 'Nicht zum ICS Editor: Er arbeitet ausschließlich in deinem Browser. Erst beim Import in Google Kalender geht die Datei an Google.' }
+      ],
+      cta: 'Apple-Kalender jetzt prüfen'
+    },
+    en: {
+      title: 'Import Apple Calendar (Mac) into Google Calendar',
+      description: 'Move Apple Calendar from your Mac to Google Calendar: export each calendar as ICS, check it, get it under 1 MB and import it. No upload.',
+      h1: 'Import Apple Calendar from your Mac into Google Calendar',
+      crumb: 'Apple → Google',
+      teaser: 'Export Mac calendars as ICS and import them',
+      answer: '<strong>In the Calendar app on your Mac, export each calendar separately via “File” → “Export” → “Export” as an ICS file and import it into Google Calendar on a computer.</strong> The “Calendar Archive” (.icbu) doesn’t work for this: Google only imports ICS and CSV files, each at most 1 MB.',
+      stepsTitle: 'Step by step: from your Mac to Google Calendar',
+      steps: [
+        { name: 'Select the calendar', text: 'Open the Calendar app on your Mac and click the calendar’s name in the calendar list. If the list is hidden: “View” → “Show Calendar List”.' },
+        { name: 'Export as ICS', text: 'Choose “File” → “Export” → “Export”, pick a location and click “Export”. According to Apple, this always creates a calendar (.ics) file – one per calendar.' },
+        { name: 'Check the files in the ICS Editor', text: 'Drop all ICS files into the ICS Editor together. You see each calendar with its events, date range and size. Nothing is uploaded.' },
+        { name: 'Split if needed', text: 'If a file is larger than 1 MB, choose a shorter date range under “Export & convert” or let the tool split it into parts under 1 MB.' },
+        { name: 'Create new calendars', text: 'In Google Calendar, create a new, empty calendar for each Apple calendar. That keeps work, family and so on separate, and every import can be deleted again.' },
+        { name: 'Import into Google', text: 'On a computer: gear icon → “Settings” → “Import & export” → select the file, choose the destination calendar, click “Import” once. Repeat for each file.' }
+      ],
+      sections: [
+        { h2: 'ICS file or Calendar Archive?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Export (.ics)</th><th>Calendar Archive (.icbu)</th></tr></thead><tbody><tr><td>Menu in Apple Calendar</td><td>“File” → “Export” → “Export”</td><td>“File” → “Export” → “Calendar Archive”</td></tr><tr><td>Contents</td><td>one calendar</td><td>all calendars at once</td></tr><tr><td>Meant for</td><td>sharing, moving to other calendars</td><td>backup and restore on the Mac</td></tr><tr><td>Importable into Google Calendar</td><td>Yes</td><td>No – Google only accepts ICS and CSV</td></tr></tbody></table></div><p>To move to Google, you need the individual ICS files. With many calendars that’s a few extra clicks, but every calendar ends up cleanly in its own Google calendar.</p>' },
+        { h2: 'iCloud calendars: select first, then export', html: '<p>According to Apple, calendars of an account such as iCloud or Exchange are stored on the provider’s servers anyway. For exporting, that makes no difference: an iCloud calendar is also selected in the Calendar app and saved as an ICS file via “File” → “Export”. The export is a copy – later changes in Apple Calendar don’t reach Google automatically.</p>' },
+        { h2: 'Large calendars and import errors', html: '<ul><li><strong>File larger than 1 MB:</strong> Google then reports “Google Calendar is temporarily unavailable”. In the {tool|ICS Editor} you {tooLarge|split it into parts under 1 MB automatically}.</li><li><strong>Wrong times:</strong> Google recommends matching the time zone in Google Calendar with the one in the original app, then exporting and importing again.</li><li><strong>Duplicate events:</strong> {dupes|here’s how to find and remove duplicates}.</li><li><strong>Import went wrong:</strong> delete the new calendar and start over – {undo|here’s how}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Can I import all Apple calendars into Google at once?', a: 'Not via the Calendar Archive: it’s an .icbu file, but Google only imports ICS and CSV. Export each calendar separately as an ICS file – in the ICS Editor you can open and check all files together.' },
+        { q: 'Are later changes in Apple Calendar synced automatically?', a: 'No. An export is a copy at the time of exporting. Later changes don’t appear in Google Calendar automatically.' },
+        { q: 'Does this work on an iPhone?', a: 'Importing into Google Calendar is only possible on a computer. Apple’s export steps describe the Calendar app on the Mac.' },
+        { q: 'Is my calendar uploaded?', a: 'Not to the ICS Editor: it works entirely in your browser. Only when you import into Google Calendar does the file go to Google.' }
+      ],
+      cta: 'Check your Apple calendars now'
+    }
+  },
+
   // ------------------------------------------------------------------ Grenzen
   limits: {
     type: 'article',
     published: '2026-10-08',
-    updated: '2026-10-13',
+    updated: '2026-10-26',
     figures: [{ name: 'overview', de: 'Die Datei-Info zeigt pro Kalender Termine, Zeitraum, Größe, Serien und Zeitzone – dazu die Termine pro Jahr.', en: 'File info shows events, date range, size, recurring events and time zone for each calendar – plus events per year.' }],
     sources: ['problems', 'import', 'limits', 'delete'],
     related: ['tooLarge', 'importFails', 'split', 'undo'],
@@ -142,11 +344,12 @@ export const GUIDES: Record<string, GuideDef> = {
           '<tr><td>Workspace: mehr als 100.000 neue Termine in kurzer Zeit</td><td>Für Stunden keine oder weniger neue Termine, kein Bearbeiten</td><td>Nur importieren, was gebraucht wird; Import über Tage verteilen</td></tr>' +
           '<tr><td>Workspace: mehr als 60 neue Kalender in kurzer Zeit</td><td>Für einige Stunden eingeschränkt</td><td>Beim Aufteilen nicht zu viele Ziel-Kalender auf einmal anlegen</td></tr>' +
           '</tbody></table></div>' },
-        { h2: 'Gibt es eine Höchstzahl an Terminen pro Import?', html: '<p>Google nennt keine Höchstzahl an Terminen pro Import-Datei. Maßgeblich ist die Dateigröße von 1 MB. Wie viele Termine in 1 MB passen, hängt davon ab, wie lang Titel und Beschreibungen sind – das Werkzeug rechnet es für deine Datei byte-genau aus.</p>' },
+        { h2: 'Gibt es eine Höchstzahl an Terminen pro Import?', html: '<p>Google nennt keine Höchstzahl an Terminen pro Import-Datei. Maßgeblich ist die Dateigröße von 1 MB. Wie viele Termine in 1 MB passen, hängt davon ab, wie lang Titel und Beschreibungen sind – das Werkzeug rechnet es für deine Datei byte-genau aus.</p><p><strong>Faustregel aus unserem Test:</strong> Ein echter Google-Export mit rund 27.000 Terminen war 9,6 MB groß – im Schnitt etwa 350 Byte pro Termin. Aufgeteilt in Dateien unter 950 KB waren das 11 Dateien, also rund 2.500 Termine pro Datei. Ohne Verwaltungsdaten reichten 9 Dateien (rund 3.000 Termine pro Datei). Lange Beschreibungen senken die Zahl, kurze Titel erhöhen sie. Wer zusätzlich {importParts|höchstens 999 Termine pro Datei} will, stellt das beim Export ein.</p>' },
         { h2: 'Nutzungslimit Google Kalender: was bei Workspace gilt', html: '<p>In der Hilfe für Workspace-Administratoren beschreibt Google Nutzungslimits, die Missbrauch verhindern sollen. Wer in kurzer Zeit <strong>mehr als 100.000 Termine</strong> anlegt, kann danach nur noch eingeschränkt Termine anlegen und für einige Stunden keine Termine bearbeiten. Für bestimmte Kontoarten – etwa Testkonten oder kostenlose Bildungs- und Gemeinnützigen-Pakete – nennt Google ausdrücklich keine genauen Grenzen. Für private Google-Konten nennt Google in dieser Hilfe keine Zahlen.</p><p>Wer einen großen Kalender {split|auf mehrere Konten aufteilt}, importiert die Teile am besten nicht alle auf einmal.</p>' },
         { h2: 'Und wenn der Import schiefgeht?', html: '<p>Einen „Rückgängig“-Knopf für Importe gibt es nicht. Einen eigens angelegten Kalender kannst du aber komplett löschen; im Hauptkalender ginge das nur, indem du alle Termine löschst. Details: {undo|Import rückgängig machen}.</p>' }
       ],
       faq: [
+        { q: 'Wie viele Termine passen in 1 MB?', a: 'Das hängt von der Länge von Titeln und Beschreibungen ab. In unserem Test mit einem echten Google-Export waren es im Schnitt etwa 350 Byte pro Termin – rund 2.500 Termine pro Datei unter 1 MB, ohne Verwaltungsdaten rund 3.000. Der ICS Editor rechnet es für deine Datei genau aus.' },
         { q: 'Was bedeutet „google calendar usage limits exceeded“?', a: 'Gemeint sind die Nutzungslimits, die Google gegen Missbrauch setzt. Für Workspace-Konten nennt Google zum Beispiel mehr als 100.000 neu angelegte Termine in kurzer Zeit; danach kann man für einige Stunden keine Termine bearbeiten.' },
         { q: 'Wie groß darf eine ICS-Datei für Google Kalender sein?', a: 'Höchstens 1 MB – dieselbe Grenze wie für CSV-Dateien.' },
         { q: 'Warum lehnt Google meine CSV mit Semikolon ab?', a: 'Google Kalender arbeitet nur mit Komma als Trennzeichen. Dateien mit Semikolon oder Doppelpunkt funktionieren nicht.' }
@@ -179,11 +382,12 @@ export const GUIDES: Record<string, GuideDef> = {
           '<tr><td>Workspace: more than 100,000 new events in a short period</td><td>Fewer or no new events and no editing for hours</td><td>Import only what you need; spread imports over several days</td></tr>' +
           '<tr><td>Workspace: more than 60 new calendars in a short period</td><td>Restricted for a few hours</td><td>Don’t create too many target calendars at once when splitting</td></tr>' +
           '</tbody></table></div>' },
-        { h2: 'Is there a maximum number of events per import?', html: '<p>Google doesn’t state a maximum number of events per import file. What counts is the 1 MB file size. How many events fit into 1 MB depends on how long your titles and descriptions are – the tool calculates it for your file, to the byte.</p>' },
+        { h2: 'Is there a maximum number of events per import?', html: '<p>Google doesn’t state a maximum number of events per import file. What counts is the 1 MB file size. How many events fit into 1 MB depends on how long your titles and descriptions are – the tool calculates it for your file, to the byte.</p><p><strong>Rule of thumb from our test:</strong> a real Google export with about 27,000 events was 9.6 MB – roughly 350 bytes per event on average. Split into files under 950 KB, that made 11 files, so about 2,500 events per file. Without housekeeping data, 9 files were enough (about 3,000 events per file). Long descriptions lower the number, short titles raise it. If you also want {importParts|at most 999 events per file}, set that on export.</p>' },
         { h2: 'Google Calendar usage limits exceeded: what applies to Workspace', html: '<p>In its help for Workspace administrators, Google describes usage limits designed to prevent abuse. Anyone who creates <strong>more than 100,000 events</strong> in a short period may have their ability to create events reduced and may not be able to edit events for a few hours. For certain account types – such as trial accounts or free education and nonprofit editions – Google explicitly doesn’t publish exact limits. For personal Google accounts, that help page gives no numbers.</p><p>If you {split|split a large calendar across several accounts}, don’t import all the parts at once.</p>' },
         { h2: 'And if the import goes wrong?', html: '<p>There is no undo button for imports. You can, however, delete a calendar you created specifically for the import; in your main calendar you could only delete all events. Details: {undo|undo a Google Calendar import}.</p>' }
       ],
       faq: [
+        { q: 'How many events fit into 1 MB?', a: 'That depends on the length of titles and descriptions. In our test with a real Google export it was about 350 bytes per event on average – roughly 2,500 events per file under 1 MB, about 3,000 without housekeeping data. The ICS Editor calculates it exactly for your file.' },
         { q: 'What does “Google Calendar usage limits exceeded” mean?', a: 'It refers to the limits Google sets against abuse. For Workspace accounts, Google mentions for example more than 100,000 events created in a short period; after that, you may not be able to edit events for a few hours.' },
         { q: 'How large can an ICS file for Google Calendar be?', a: 'At most 1 MB – the same limit as for CSV files.' },
         { q: 'Why does Google reject my semicolon CSV?', a: 'Google Calendar only works with commas as separators. Files that use semicolons or colons don’t work.' }
@@ -407,7 +611,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-10-13',
     figures: [{ name: 'editor', de: 'Eine ICS-Datei im ICS Editor: Kalender, Termine und das Bearbeitungsfeld für den gewählten Termin.', en: 'An ICS file in the ICS Editor: calendars, events and the editor for the selected event.' }, { name: 'month', de: 'In der Monatsansicht erscheinen Serientermine an jedem Tag, an dem sie stattfinden.', en: 'In the month view, recurring events appear on every day they occur.' }],
     sources: ['import', 'problems'],
-    related: ['tooLarge', 'split', 'convert', 'undo'],
+    related: ['outlook', 'tooLarge', 'split', 'convert'],
     de: {
       title: 'ICS-Datei in Google Kalender importieren – so geht’s',
       description: 'ICS-Datei in Google Kalender importieren: am Computer über Einstellungen → Importieren. Was bei Fehlern, ZIP-Dateien und Dateien über 1 MB hilft.',
@@ -425,8 +629,8 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Wenn der Import nicht klappt', html: '<div class="table-wrap"><table><thead><tr><th>Problem</th><th>Lösung</th></tr></thead><tbody><tr><td>Datei größer als 1 MB</td><td>{tooLarge|Datei verkleinern oder teilen}</td></tr><tr><td>ZIP-Datei aus dem Google-Export</td><td>entpacken und jede ICS-Datei einzeln importieren – oder das ZIP ins {tool|Werkzeug} ziehen</td></tr><tr><td>„Processed x of y events“</td><td>Einige Termine sind nicht lesbar; die Datei neu exportieren oder im Werkzeug prüfen</td></tr><tr><td>Termine zur falschen Uhrzeit</td><td>Zeitzone in Google Kalender und im Quellprogramm prüfen</td></tr><tr><td>Gäste fehlen</td><td>Gäste und Konferenzdaten übernimmt Google beim Import nicht</td></tr></tbody></table></div>' },
-        { h2: 'Wie eine gültige ICS-Datei aufgebaut ist', html: '<p>Laut Google beginnt eine ICS-Datei mit <code>BEGIN:VCALENDAR</code>, gefolgt von <code>VERSION:2.0</code> und <code>PRODID</code>, und endet mit <code>END:VCALENDAR</code>. Jeder Termin steht zwischen <code>BEGIN:VEVENT</code> und <code>END:VEVENT</code>. Das Werkzeug prüft und schreibt Dateien nach dem iCalendar-Standard RFC 5545.</p>' },
-        { h2: 'ICS-Datei vorher ansehen', html: '<p>Bevor du importierst, kannst du die Datei im Werkzeug öffnen: Es zeigt Zahl der Termine, Zeitraum, Serien, Zeitzonen und ob Telefonnummern oder E-Mail-Adressen darin stehen. Enthält die Datei mehrere Personen oder Themen, kannst du sie {split|auf mehrere Kalender aufteilen}.</p>' }
+        { h2: 'Wie eine gültige ICS-Datei aufgebaut ist', html: '<p>Laut Google beginnt eine ICS-Datei mit <code>BEGIN:VCALENDAR</code>, gefolgt von <code>VERSION:2.0</code> und <code>PRODID</code>, und endet mit <code>END:VCALENDAR</code>. Jeder Termin steht zwischen <code>BEGIN:VEVENT</code> und <code>END:VEVENT</code>. Das Werkzeug prüft und schreibt Dateien nach dem iCalendar-Standard RFC 5545. Was die einzelnen Zeilen bedeuten, erklärt das {glossary|ICS-Glossar}.</p>' },
+        { h2: 'ICS-Datei vorher ansehen', html: '<p>Bevor du importierst, kannst du die Datei im Werkzeug öffnen: Es zeigt Zahl der Termine, Zeitraum, Serien, Zeitzonen und ob Telefonnummern oder E-Mail-Adressen darin stehen. Enthält die Datei mehrere Personen oder Themen, kannst du sie {split|auf mehrere Kalender aufteilen}. Kommt die Datei aus Outlook, zeigt {outlook|Outlook-Kalender in Google importieren} den ganzen Weg.</p>' }
       ],
       faq: [
         { q: 'Warum kann ich keine ICS-Datei in den Google Kalender importieren?', a: 'Häufige Gründe: Die Datei ist größer als 1 MB, sie ist noch in einer ZIP-Datei verpackt, sie hat Formatfehler – oder du versuchst es am Handy. Der Import geht nur am Computer.' },
@@ -452,8 +656,8 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'If the import doesn’t work', html: '<div class="table-wrap"><table><thead><tr><th>Problem</th><th>Fix</th></tr></thead><tbody><tr><td>File larger than 1 MB</td><td>{tooLarge|Shrink or split the file}</td></tr><tr><td>ZIP file from Google’s export</td><td>Unzip it and import each ICS file separately – or drop the ZIP into the {tool|tool}</td></tr><tr><td>“Processed x of y events”</td><td>Some events can’t be read; export again or check the file in the tool</td></tr><tr><td>Events at the wrong time</td><td>Check the time zone in Google Calendar and in the source app</td></tr><tr><td>Guests are missing</td><td>Google doesn’t import guests and conference data</td></tr></tbody></table></div>' },
-        { h2: 'What a valid ICS file looks like', html: '<p>According to Google, an ICS file starts with <code>BEGIN:VCALENDAR</code>, followed by <code>VERSION:2.0</code> and <code>PRODID</code>, and ends with <code>END:VCALENDAR</code>. Each event sits between <code>BEGIN:VEVENT</code> and <code>END:VEVENT</code>. The tool checks and writes files according to the iCalendar standard RFC 5545.</p>' },
-        { h2: 'Look inside an ICS file first', html: '<p>Before importing, you can open the file in the tool: it shows the number of events, date range, recurring events, time zones and whether it contains phone numbers or email addresses. If it covers several people or topics, you can {split|split it into several calendars}.</p>' }
+        { h2: 'What a valid ICS file looks like', html: '<p>According to Google, an ICS file starts with <code>BEGIN:VCALENDAR</code>, followed by <code>VERSION:2.0</code> and <code>PRODID</code>, and ends with <code>END:VCALENDAR</code>. Each event sits between <code>BEGIN:VEVENT</code> and <code>END:VEVENT</code>. The tool checks and writes files according to the iCalendar standard RFC 5545. What each line means is explained in the {glossary|ICS glossary}.</p>' },
+        { h2: 'Look inside an ICS file first', html: '<p>Before importing, you can open the file in the tool: it shows the number of events, date range, recurring events, time zones and whether it contains phone numbers or email addresses. If it covers several people or topics, you can {split|split it into several calendars}. If the file comes from Outlook, {outlook|import an Outlook calendar into Google} covers the whole route.</p>' }
       ],
       faq: [
         { q: 'Why can’t I import an ICS file into Google Calendar?', a: 'Common reasons: the file is larger than 1 MB, it’s still packed in a ZIP file, it has formatting errors – or you’re trying on a phone. Import only works on a computer.' },
@@ -471,7 +675,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-10-14',
     figures: [{ name: 'parts', de: 'Nur der Kalender „Anna (A)“ angehakt und „Höchstens 999 Termine pro Datei“: Der ICS Editor teilt in vier Dateien und zeigt je Teil Zeitraum und Zahl der Termine (Beispieldaten).', en: 'Only the calendar “Anna (A)” ticked and “At most 999 events per file”: the ICS Editor splits into four files and lists each part’s date range and event count (example data).' }],
     sources: ['import', 'problems', 'create'],
-    related: ['tooLarge', 'split', 'ics', 'undo'],
+    related: ['tooLarge', 'split', 'dupes', 'undo'],
     de: {
       title: 'Große Kalenderdatei in Teilen importieren – mit Praxistest',
       description: 'Kalenderdatei zu groß für Google? In Teile unter 1 MB oder mit 999 Terminen teilen und nacheinander importieren – Schritt für Schritt, mit Praxistest.',
@@ -557,7 +761,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { name: '„ICS“ wählen und herunterladen', text: 'Zu große Ergebnisse werden in Teile unter 1 MB aufgeteilt.' }
       ],
       sections: [
-        { h2: 'Wann ICS besser ist als CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google-CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Serientermine</td><td>werden zu Einzelterminen</td><td>echte Wiederholung</td></tr><tr><td>Zeitzone</td><td>keine Angabe in der Datei</td><td>wird mitgespeichert</td></tr><tr><td>Andere Programme</td><td>vor allem Google</td><td>Google, Outlook, Apple und viele mehr</td></tr><tr><td>Bearbeiten in Excel</td><td>einfach</td><td>nicht vorgesehen</td></tr></tbody></table></div><p>Für Geburtstage und andere jährliche Termine ist ICS deshalb die richtige Wahl – siehe {excel|Excel-Geburtstagsliste importieren}.</p>' },
+        { h2: 'Wann ICS besser ist als CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google-CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Serientermine</td><td>werden zu Einzelterminen</td><td>echte Wiederholung</td></tr><tr><td>Zeitzone</td><td>keine Angabe in der Datei</td><td>wird mitgespeichert</td></tr><tr><td>Andere Programme</td><td>vor allem Google</td><td>Google, Outlook, Apple und viele mehr</td></tr><tr><td>Bearbeiten in Excel</td><td>einfach</td><td>nicht vorgesehen</td></tr></tbody></table></div><p>Für Geburtstage und andere jährliche Termine ist ICS deshalb die richtige Wahl – siehe {excel|Excel-Geburtstagsliste importieren}. Wie eine Wiederholung in der Datei steht (RRULE) und was die übrigen Zeilen bedeuten, erklärt das {glossary|ICS-Glossar}.</p>' },
         { h2: 'Ohne Upload umwandeln', html: '<p>Ein Konverter, der auf einem Server arbeitet, bekommt deine Datei zwangsläufig zu sehen. Bei Terminlisten mit Namen, Telefonnummern oder Patientendaten ist das heikel. Das Werkzeug arbeitet ausschließlich in deinem Browser; eine Sicherheitsregel verbietet der Seite Verbindungen zu fremden Servern. Erkannte persönliche Daten kannst du vor dem Export weglassen oder kürzen.</p>' }
       ],
       faq: [
@@ -582,7 +786,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { name: 'Choose “ICS” and download', text: 'Results that are too large are split into parts under 1 MB.' }
       ],
       sections: [
-        { h2: 'When ICS beats CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Recurring events</td><td>become single events</td><td>real recurrence</td></tr><tr><td>Time zone</td><td>not stored in the file</td><td>stored</td></tr><tr><td>Other apps</td><td>mainly Google</td><td>Google, Outlook, Apple and many more</td></tr><tr><td>Editing in Excel</td><td>easy</td><td>not intended</td></tr></tbody></table></div><p>For birthdays and other yearly events, ICS is the right choice – see {excel|Excel to Google Calendar}.</p>' },
+        { h2: 'When ICS beats CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Recurring events</td><td>become single events</td><td>real recurrence</td></tr><tr><td>Time zone</td><td>not stored in the file</td><td>stored</td></tr><tr><td>Other apps</td><td>mainly Google</td><td>Google, Outlook, Apple and many more</td></tr><tr><td>Editing in Excel</td><td>easy</td><td>not intended</td></tr></tbody></table></div><p>For birthdays and other yearly events, ICS is the right choice – see {excel|Excel to Google Calendar}. How a recurrence is written in the file (RRULE) and what the other lines mean is explained in the {glossary|ICS glossary}.</p>' },
         { h2: 'Convert without uploading', html: '<p>A converter that runs on a server inevitably gets to see your file. With event lists containing names, phone numbers or patient data, that’s risky. The tool works exclusively in your browser; a security policy forbids the page to connect to other servers. You can leave out or shorten detected personal data before exporting.</p>' }
       ],
       faq: [
@@ -601,7 +805,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-10-14',
     figures: [{ name: 'export', de: 'Im Export-Fenster steht die Anleitung zum Import – sie beginnt mit einem neuen, leeren Kalender.', en: 'The export window includes the import steps – starting with a new, empty calendar.' }],
     sources: ['delete', 'create', 'problems'],
-    related: ['importParts', 'ics', 'tooLarge', 'split'],
+    related: ['dupes', 'importParts', 'ics', 'tooLarge'],
     de: {
       title: 'Google Kalender Import rückgängig machen & Termine löschen',
       description: 'Einen Import rückgängig machen kann Google Kalender nicht. So löschst du importierte Termine trotzdem – und so planst du den nächsten Import richtig.',

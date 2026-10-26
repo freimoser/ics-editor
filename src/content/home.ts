@@ -22,7 +22,7 @@ export const HOME = {
       ['export', 'Exportieren: Zeitraum wählen, Ergebnis sehen, herunterladen. Zu große Dateien werden automatisch in Teile unter 1 MB geteilt.']
     ],
     faqTitle: 'Häufige Fragen',
-    guidesTitle: 'Ratgeber',
+    guidesTitle: 'Ratgeber zu Google Kalender und ICS',
     faq: [
       { q: 'Kann ich die Termine auch am Handy importieren?', a: 'Nein. Google Kalender erlaubt den Import nur am Computer, nicht am Handy oder Tablet. Bearbeiten und vorbereiten kannst du die Datei mit dem ICS Editor aber auch am Handy.' },
       { q: 'Wie kann ich eine ICS-Datei bearbeiten?', a: 'Öffne die Datei im ICS Editor. Du siehst alle Termine als Liste oder Monat, kannst Titel, Zeit, Ort und Beschreibung ändern, Termine löschen oder verschieben und lädst danach eine neue ICS-Datei herunter. Alles passiert in deinem Browser.' },
@@ -53,7 +53,7 @@ export const HOME = {
       ['export', 'Export: choose a date range, see the result, download. Files that are too large are split into parts under 1 MB automatically.']
     ],
     faqTitle: 'Frequently asked questions',
-    guidesTitle: 'Guides',
+    guidesTitle: 'Guides for Google Calendar and ICS',
     faq: [
       { q: 'Can I import the events on my phone?', a: 'No. Google Calendar only lets you import on a computer, not on a phone or tablet. You can still edit and prepare the file with the ICS Editor on your phone.' },
       { q: 'How do I edit an ICS file?', a: 'Open the file in the ICS Editor. You see all events as a list or month, can change title, time, location and description, delete or move events, and then download a new ICS file. Everything happens in your browser.' },

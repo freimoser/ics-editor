@@ -20,6 +20,20 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 </ul>
 <h2>Woher die Angaben stammen</h2>
 <p>Alle Aussagen über Google Kalender – etwa die Grenze von 1 MB pro Datei – stammen aus der offiziellen Hilfe von Google und sind auf jeder Seite mit Datum verlinkt. Eigene Messungen sind als solche gekennzeichnet. Der Quellcode ist öffentlich: <a href="${LEGAL.repo}" rel="noopener">github.com/freimoser/ics-editor</a>.</p>
+<h2>So entstehen die Ratgeber</h2>
+<ul>
+<li><strong>Nur Herstellerquellen für Fakten:</strong> Angaben zu Google Kalender stammen aus der Google-Hilfe, zu Outlook aus dem Microsoft Support, zu Apple Kalender aus dem Apple Support, zum Dateiformat aus dem Standard RFC 5545. Jede Seite nennt ihre Quellen und das Prüfdatum.</li>
+<li><strong>Erfahrungsberichte sind gekennzeichnet:</strong> Was nur in Foren steht, heißt auch so und ist als Nutzerbeitrag verlinkt – nie als Aussage des Herstellers.</li>
+<li><strong>Eigene Tests mit Datum:</strong> Zahlen wie „rund 350 Byte pro Termin“ stammen aus eigenen Messungen und stehen mit Monat dabei.</li>
+<li><strong>Datum je Seite:</strong> Jede Seite zeigt, wann sie zuletzt inhaltlich geändert wurde; dasselbe Datum steht in der Sitemap.</li>
+<li><strong>Korrekturen:</strong> Hinweise auf Fehler per E-Mail werden geprüft und mit neuem Datum eingearbeitet.</li>
+</ul>
+<h2>Zuletzt geändert</h2>
+<ul>
+<li><strong>26. Oktober 2026:</strong> neue Ratgeber zu {outlook|Outlook}, {apple|Apple Kalender} und {dupes|doppelten Terminen}, das {glossary|ICS-Glossar}, eine {guides|Ratgeber-Übersicht} und eine Faustregel in den {limits|Grenzen} (Termine pro 1 MB).</li>
+<li><strong>14. Oktober 2026:</strong> Praxistest „In Teilen importieren“ und Hilfe zu „Fehler beim Löschen des Kalenders“.</li>
+<li><strong>8. Oktober 2026:</strong> Start des ICS Editors mit den ersten Ratgebern.</li>
+</ul>
 <h2>Deine Daten</h2>
 <p>Deine Dateien verlassen dein Gerät nicht. Es gibt keinen Server, der Dateien annimmt, kein Tracking und keine Cookies. Details stehen in der <a href="../datenschutz/">Datenschutzerklärung</a>.</p>
 <h2>Kontakt</h2>
@@ -42,6 +56,20 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 </ul>
 <h2>Where the facts come from</h2>
 <p>Every statement about Google Calendar – such as the 1 MB limit per file – comes from Google’s official help and is linked with a date on each page. Own measurements are marked as such. The source code is public: <a href="${LEGAL.repo}" rel="noopener">github.com/freimoser/ics-editor</a>.</p>
+<h2>How the guides are made</h2>
+<ul>
+<li><strong>Vendor sources only for facts:</strong> statements about Google Calendar come from Google’s help, about Outlook from Microsoft Support, about Apple Calendar from Apple Support, about the file format from the RFC 5545 standard. Every page lists its sources and the date they were checked.</li>
+<li><strong>User reports are labelled:</strong> anything that only appears in forums is called that and linked as user content – never as a statement by the vendor.</li>
+<li><strong>Own tests with a date:</strong> numbers such as “about 350 bytes per event” come from our own measurements and carry the month.</li>
+<li><strong>Date per page:</strong> every page shows when its content last changed; the same date is in the sitemap.</li>
+<li><strong>Corrections:</strong> reports of errors by email are checked and worked in with a new date.</li>
+</ul>
+<h2>Recent changes</h2>
+<ul>
+<li><strong>26 October 2026:</strong> new guides on {outlook|Outlook}, {apple|Apple Calendar} and {dupes|duplicate events}, the {glossary|ICS glossary}, a {guides|guides overview} and a rule of thumb in the {limits|limits} (events per 1 MB).</li>
+<li><strong>14 October 2026:</strong> field test “import in parts” and help with “the calendar couldn’t be deleted”.</li>
+<li><strong>8 October 2026:</strong> launch of the ICS Editor with the first guides.</li>
+</ul>
 <h2>Your data</h2>
 <p>Your files never leave your device. There is no server that accepts files, no tracking and no cookies. Details are in the <a href="../privacy/">privacy policy</a>.</p>
 <h2>Contact</h2>

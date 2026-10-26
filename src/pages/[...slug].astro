@@ -2,9 +2,11 @@
 import Base from '../layouts/Base.astro';
 import { GUIDES as KEYS, INFO, LEGAL, ROUTES, SITE as SITE_URL, asset, path, url, type Lang, type PageKey } from '../i18n/routes';
 import { ABOUT } from '../content/about';
+import { HUB } from '../content/hub';
+import { GLOSSARY_PAGE, TERMS, TERM_EN } from '../content/glossary';
 import { GUIDES, PHONE_FAQ_DE, PHONE_FAQ_EN } from '../content/guides';
 import { LEGAL_PAGES } from '../content/legal';
-import { SRC, STAND, PAGE_UPDATED, day } from '../content/sources';
+import { SRC, STAND, PAGE_UPDATED, ENTITIES, day } from '../content/sources';
 import { linkify, strip } from '../content/links';
 import { LEGAL as OWNER } from '../config/legal';
 import Figure from '../components/Figure.astro';
@@ -21,37 +23,119 @@ export function getStaticPaths() {
 const { key, lang } = Astro.props as { key: PageKey; lang: Lang };
 const isLegal = (LEGAL as readonly string[]).includes(key);
 const isAbout = key === 'about';
+const isHub = key === 'guides';
+const isGlossary = key === 'glossary';
 const home = lang === 'de' ? 'Start' : 'Home';
 const guidesLabel = lang === 'de' ? 'Ratgeber' : 'Guides';
 const author = { '@type': 'Person', name: OWNER.operator, url: url('about', lang), sameAs: [OWNER.linkedin, OWNER.website] };
 
 let schema: object[] = [];
-const def = isLegal || isAbout ? null : GUIDES[key];
+const def = isLegal || isAbout || isHub || isGlossary ? null : GUIDES[key];
 const g = def ? def[lang] : null;
 const legal = isLegal ? LEGAL_PAGES[key as 'imprint' | 'privacy' | 'terms'][lang] : null;
 if (def && g) {
   const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: home, item: url('home', lang) },
-    { '@type': 'ListItem', position: 2, name: g.crumb, item: url(key, lang) }
+    { '@type': 'ListItem', position: 2, name: guidesLabel, item: url('guides', lang) },
+    { '@type': 'ListItem', position: 3, name: g.crumb, item: url(key, lang) }
   ] };
   const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: g.faq.filter((f) => f !== PHONE_FAQ_DE && f !== PHONE_FAQ_EN).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
   const citation = def.sources.map((s) => ({ '@type': 'CreativeWork', name: SRC[s][lang], url: SRC[s].url }));
   const images = def.figures.filter((f) => (IMG as Record<string, unknown>)[`${f.name}-${lang}`]).map((f) => ({ '@type': 'ImageObject', url: SITE_URL + asset(`img/${f.name}-${lang}.webp`), caption: f[lang] }));
   const main = def.type === 'article'
-    ? { '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: def.published, dateModified: def.updated, author, publisher: author, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images.map((i) => i.url)], citation }
-    : { '@context': 'https://schema.org', '@type': 'HowTo', name: g.h1, description: strip(g.answer), inLanguage: lang, datePublished: def.published, dateModified: def.updated, totalTime: 'PT10M', image: images[0], author, tool: [{ '@type': 'HowToTool', name: 'ICS Editor' }], step: g.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text })) };
+    ? { '@context': 'https://schema.org', '@type': 'Article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: def.published, dateModified: def.updated, about: [ENTITIES.gcal, ENTITIES.ical], author, publisher: author, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images.map((i) => i.url)], citation }
+    : { '@context': 'https://schema.org', '@type': 'HowTo', name: g.h1, description: strip(g.answer), inLanguage: lang, datePublished: def.published, dateModified: def.updated, about: [ENTITIES.gcal, ENTITIES.ical], totalTime: 'PT10M', image: images[0], author, tool: [{ '@type': 'HowToTool', name: 'ICS Editor' }], step: g.steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text })) };
   schema = [main, faq, crumbs];
 }
 const sourceLabel = lang === 'de' ? `Stand ${STAND.de} · Quelle:` : `As of ${STAND.en} · Source:`;
 const about = isAbout ? ABOUT[lang] : null;
 if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', name: about.h1, url: url('about', lang), inLanguage: lang, dateModified: PAGE_UPDATED.about, mainEntity: author }];
+const hub = isHub ? HUB[lang] : null;
+/** Sprungmarken für Überschriften: stabil, ohne Umlaute, für „Springe zu“-Links in der Suche und für Zitate */
+const anchor = (t: string) => t.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/<[^>]+>/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+const toc = g ? [{ id: 'schritte', label: g.stepsTitle }, ...g.sections.map((s) => ({ id: anchor(s.h2), label: s.h2 })), { id: 'faq', label: lang === 'de' ? 'Häufige Fragen' : 'Frequently asked questions' }] : [];
+if (hub) {
+  const all = hub.groups.flatMap((gr) => gr.keys);
+  schema = [
+    { '@context': 'https://schema.org', '@type': 'CollectionPage', name: hub.h1, about: [ENTITIES.gcal, ENTITIES.ical], description: hub.description, url: url('guides', lang), inLanguage: lang, dateModified: PAGE_UPDATED.guides, author,
+      mainEntity: { '@type': 'ItemList', numberOfItems: all.length, itemListElement: all.map((k, i) => ({ '@type': 'ListItem', position: i + 1, url: url(k, lang), name: GUIDES[k][lang].h1 })) } },
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: home, item: url('home', lang) },
+      { '@type': 'ListItem', position: 2, name: guidesLabel, item: url('guides', lang) }
+    ] }
+  ];
+}
+const gl = isGlossary ? GLOSSARY_PAGE[lang] : null;
+const termName = (x: { id: string; term: string }) => (lang === 'en' && TERM_EN[x.id]) || x.term;
+if (gl) {
+  schema = [
+    { '@context': 'https://schema.org', '@type': 'DefinedTermSet', name: gl.h1, about: ENTITIES.ical, description: gl.description, url: url('glossary', lang), inLanguage: lang, dateModified: PAGE_UPDATED.glossary, author,
+      hasDefinedTerm: TERMS.map((x) => ({ '@type': 'DefinedTerm', '@id': url('glossary', lang) + '#' + x.id, name: termName(x), description: strip(linkify(x[lang], lang)), url: url('glossary', lang) + '#' + x.id })) },
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: home, item: url('home', lang) },
+      { '@type': 'ListItem', position: 2, name: guidesLabel, item: url('guides', lang) },
+      { '@type': 'ListItem', position: 3, name: lang === 'de' ? 'ICS-Glossar' : 'ICS glossary', item: url('glossary', lang) }
+    ] }
+  ];
+}
 ---
+{gl && (
+  <Base lang={lang} page={key} title={gl.title} description={gl.description} schema={schema}>
+    <article class="prose">
+      <nav class="crumbs" aria-label={lang === 'de' ? 'Brotkrumen' : 'Breadcrumb'}><a href={path('home', lang)}>{home}</a> › <a href={path('guides', lang)}>{guidesLabel}</a> › <span aria-current="page">{lang === 'de' ? 'ICS-Glossar' : 'ICS glossary'}</span></nav>
+      <h1>{gl.h1}</h1>
+      <p class="answer">{gl.answer}</p>
+      <p class="byline">{lang === 'de' ? 'Von ' : 'By '}<a href={path('about', lang)} rel="author">{OWNER.operator}</a> · {lang === 'de' ? `aktualisiert am ${day(PAGE_UPDATED.glossary, 'de')}` : `updated ${day(PAGE_UPDATED.glossary, 'en')}`}</p>
+      <dl class="glossary">
+        {TERMS.map((x) => (
+          <>
+            <dt id={x.id}><dfn>{termName(x)}</dfn></dt>
+            <dd><Fragment set:html={linkify(x[lang], lang)} /> <a class="src" href={SRC[x.src].url} rel="noopener" title={SRC[x.src][lang]}>{lang === 'de' ? 'Quelle' : 'Source'}</a></dd>
+          </>
+        ))}
+      </dl>
+      <h2>{lang === 'de' ? 'Quellen' : 'Sources'}</h2>
+      <ul>{(['rfc5545', 'import', 'problems'] as const).map((s) => <li><a href={SRC[s].url} rel="noopener">{SRC[s][lang]}</a></li>)}</ul>
+    </article>
+  </Base>
+)}
+{hub && (
+  <Base lang={lang} page={key} title={hub.title} description={hub.description} schema={schema}>
+    <div class="prose">
+      <nav class="crumbs" aria-label={lang === 'de' ? 'Brotkrumen' : 'Breadcrumb'}><a href={path('home', lang)}>{home}</a> › <span aria-current="page">{guidesLabel}</span></nav>
+      <h1>{hub.h1}</h1>
+      <p class="answer">{hub.answer}</p>
+      <p class="byline">{lang === 'de' ? 'Von ' : 'By '}<a href={path('about', lang)} rel="author">{OWNER.operator}</a> · {lang === 'de' ? `Quellen geprüft am ${STAND.de}` : `sources checked ${STAND.en}`}</p>
+    </div>
+    {hub.groups.map((gr) => (
+      <section class="mt-xl" aria-label={gr.h2}>
+        <h2>{gr.h2}</h2>
+        <div class="guide-grid related">
+          {gr.keys.map((k) => <a href={path(k, lang)}><strong>{GUIDES[k][lang].h1}</strong><span>{GUIDES[k][lang].teaser}</span><span class="upd">{lang === 'de' ? `Aktualisiert am ${day(GUIDES[k].updated, 'de')}` : `Updated ${day(GUIDES[k].updated, 'en')}`}</span></a>)}
+        </div>
+      </section>
+    ))}
+    <section class="mt-xl" aria-label={lang === 'de' ? 'Nachschlagen' : 'Reference'}>
+      <h2>{lang === 'de' ? 'Nachschlagen' : 'Reference'}</h2>
+      <div class="guide-grid related">
+        <a href={path('glossary', lang)}><strong>{GLOSSARY_PAGE[lang].h1}</strong><span>VCALENDAR, VEVENT, UID, DTSTART, RRULE, VTIMEZONE …</span></a>
+      </div>
+    </section>
+    <div class="cta mt-xl">
+      <div class="cta-text">
+        <div class="cta-title">{lang === 'de' ? 'Datei direkt vorbereiten' : 'Prepare your file now'}</div>
+        <div>{lang === 'de' ? 'Läuft in deinem Browser. Nichts wird hochgeladen.' : 'Runs in your browser. Nothing is uploaded.'}</div>
+      </div>
+      <a class="btn btn-primary btn-xl" href={path('home', lang) + '#werkzeug'}>{lang === 'de' ? 'ICS Editor öffnen' : 'Open the ICS Editor'}</a>
+    </div>
+  </Base>
+)}
 {g && def && (
   <Base lang={lang} page={key} title={g.title} description={g.description} schema={schema}>
     <div class="article-grid">
       <article class="prose">
         <nav class="crumbs" aria-label={lang === 'de' ? 'Brotkrumen' : 'Breadcrumb'}>
-          <a href={path('home', lang)}>{home}</a> › <a href={path('home', lang) + '#ratgeber'}>{guidesLabel}</a> › <span aria-current="page">{g.crumb}</span>
+          <a href={path('home', lang)}>{home}</a> › <a href={path('guides', lang)}>{guidesLabel}</a> › <span aria-current="page">{g.crumb}</span>
         </nav>
         <h1>{g.h1}</h1>
         <p class="answer" set:html={g.answer} />
@@ -64,14 +148,20 @@ if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', n
           </div>
           <a class="btn btn-primary btn-xl" href={path('home', lang) + '#werkzeug'}>{lang === 'de' ? 'ICS Editor öffnen' : 'Open the ICS Editor'}</a>
         </div>
-        <h2>{g.stepsTitle}</h2>
+        {toc.length >= 4 && (
+          <nav class="toc" aria-label={lang === 'de' ? 'Inhalt' : 'Contents'}>
+            <strong>{lang === 'de' ? 'Inhalt' : 'Contents'}</strong>
+            <ol>{toc.map((x) => <li><a href={'#' + x.id}>{x.label}</a></li>)}</ol>
+          </nav>
+        )}
+        <h2 id="schritte">{g.stepsTitle}</h2>
         <ol class="how">
           {g.steps.map((s) => <li><div><strong>{s.name}</strong><br />{s.text}</div></li>)}
         </ol>
         {def.figures[0] && <Figure name={def.figures[0].name} lang={lang} caption={def.figures[0][lang]} />}
         {g.sections.map((s, i) => (
           <>
-            <h2>{s.h2}</h2>
+            <h2 id={anchor(s.h2)}>{s.h2}</h2>
             <Fragment set:html={linkify(s.html, lang)} />
             {i === 0 && def.figures[1] && <Figure name={def.figures[1].name} lang={lang} caption={def.figures[1][lang]} />}
           </>
