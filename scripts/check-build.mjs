@@ -73,6 +73,11 @@ for (const [route, h] of html) {
   }
   if (!h.includes(VERIFY)) fail(route, 'google-site-verification fehlt oder weicht ab');
   if ((h.match(/<h1[\s>]/g) || []).length !== 1) fail(route, 'nicht genau eine H1');
+  // Überschriften: keine übersprungenen Ebenen, keine doppelten Überschriften auf einer Seite
+  const hs = [...h.matchAll(/<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/g)].map((m) => [Number(m[1]), m[2].replace(/<[^>]+>/g, '').trim()]);
+  hs.reduce((prev, [lvl, txt]) => { if (lvl > prev + 1) fail(route, `Überschrift springt von h${prev} auf h${lvl}: ${txt.slice(0, 40)}`); return lvl; }, 1);
+  const seenH = new Set();
+  for (const [, txt] of hs) { if (seenH.has(txt)) fail(route, `Überschrift doppelt: ${txt}`); seenH.add(txt); }
   if (!/<html lang="(de|en)"/.test(h)) fail(route, 'lang-Attribut fehlt');
   const csp = get(h, /http-equiv="content-security-policy" content="([^"]*)"/) || '';
   const connect = (/connect-src ([^;]*)/.exec(csp) || [])[1]?.trim() || '';
