@@ -11,11 +11,11 @@ function images(p: PageKey, l: Lang): { name: string; caption: string }[] {
 }
 
 /** Letzte inhaltliche Änderung je Seite – nicht pauschal für alle Seiten */
-const lastmod = (p: PageKey) => (p === 'home' || p === 'about' || p === 'guides' ? PAGE_UPDATED[p] : CONTENT[p].updated);
+const lastmod = (p: PageKey) => (p === 'home' || p === 'about' || p === 'guides' || p === 'glossary' ? PAGE_UPDATED[p] : CONTENT[p].updated);
 
 // Nur indexierbare Seiten. Jede URL mit Schrägstrich am Ende und mit ihren Sprachversionen.
 export function GET() {
-  const pages: PageKey[] = ['home', 'guides', ...GUIDES, 'about'];
+  const pages: PageKey[] = ['home', 'guides', ...GUIDES, 'glossary', 'about'];
   const langs: Lang[] = ['de', 'en'];
   const rows = pages.flatMap((p) => langs.map((l) => `  <url>
     <loc>${url(p, l)}</loc>

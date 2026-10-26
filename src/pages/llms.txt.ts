@@ -16,6 +16,7 @@ Betrieben von ${LEGAL.operator} (München). Dateien werden ausschließlich im Br
 - [ICS Editor (Deutsch)](${url('home', 'de')}): ICS-Dateien und Google-Kalender-Exporte im Browser bearbeiten, aufteilen und für den Import vorbereiten.
 - [ICS Editor (English)](${url('home', 'en')}): Edit, split and prepare ICS files and Google Calendar exports in your browser.
 - [Ratgeber-Übersicht](${url('guides', 'de')}) · [Guides overview](${url('guides', 'en')}): alle Ratgeber nach Thema geordnet.
+- [ICS-Glossar](${url('glossary', 'de')}) · [ICS glossary](${url('glossary', 'en')}): VCALENDAR, VEVENT, UID, DTSTART, RRULE, VTIMEZONE u. a. in je einem Satz.
 - [Über den ICS Editor](${url('about', 'de')}): Wer ihn baut, wie getestet wird, woher die Angaben stammen.
 
 ## Ratgeber (Deutsch)

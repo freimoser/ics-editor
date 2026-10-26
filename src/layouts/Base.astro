@@ -109,6 +109,7 @@ const site = {
           <h2>{t('nav.guides')}</h2>
           <ul>
             <li><a href={path('guides', lang)}>{lang === 'de' ? 'Alle Ratgeber' : 'All guides'}</a></li>
+            <li><a href={path('glossary', lang)}>{lang === 'de' ? 'ICS-Glossar' : 'ICS glossary'}</a></li>
             {footerGuides.map((g) => <li><a href={g.href}>{g.label}</a></li>)}
           </ul>
         </nav>

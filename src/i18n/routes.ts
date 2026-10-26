@@ -17,6 +17,7 @@ export const ROUTES = {
   dupes: { de: 'google-kalender-doppelte-termine/', en: 'en/google-calendar-duplicate-events/' },
   undo: { de: 'google-kalender-import-rueckgaengig/', en: 'en/undo-google-calendar-import/' },
   guides: { de: 'ratgeber/', en: 'en/guides/' },
+  glossary: { de: 'ics-glossar/', en: 'en/ics-glossary/' },
   about: { de: 'ueber/', en: 'en/about/' },
   imprint: { de: 'impressum/', en: 'en/legal-notice/' },
   privacy: { de: 'datenschutz/', en: 'en/privacy/' },
@@ -28,7 +29,7 @@ export type PageKey = keyof typeof ROUTES;
 export const GUIDES: PageKey[] = ['tooLarge', 'importParts', 'importFails', 'split', 'limits', 'ics', 'excel', 'convert', 'undo', 'dupes'];
 export const LEGAL: PageKey[] = ['imprint', 'privacy', 'terms'];
 /** indexierbare Infoseiten außerhalb der Ratgeber */
-export const INFO: PageKey[] = ['guides', 'about'];
+export const INFO: PageKey[] = ['guides', 'glossary', 'about'];
 
 /** Pfad mit Basis, z. B. /ics-editor/en/ */
 export function path(key: PageKey, lang: Lang): string {

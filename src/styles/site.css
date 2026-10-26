@@ -446,3 +446,9 @@ dialog.dlg::backdrop { background: var(--scrim); }
 .toc ol { margin: 0; padding-left: 20px; columns: 2 260px; column-gap: 32px; }
 .toc li { font-size: 15px; margin: 3px 0; break-inside: avoid; }
 h2[id] { scroll-margin-top: calc(var(--hh, 56px) + 16px); }
+
+/* ICS-Glossar */
+.glossary dt { font-weight: 600; margin-top: 20px; scroll-margin-top: calc(var(--hh, 56px) + 16px); }
+.glossary dfn { font-style: normal; }
+.glossary dd { margin: 4px 0 0; }
+.glossary .src { font-size: 13px; color: var(--muted); }
