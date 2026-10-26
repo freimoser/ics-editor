@@ -2,7 +2,7 @@
 /** Datum, an dem die Google-Quellen geprüft wurden */
 export const STAND = { de: '7. Oktober 2026', en: '7 October 2026', iso: '2026-10-07' };
 /** Datum der letzten inhaltlichen Aktualisierung der Seiten */
-export const UPDATED = { de: '14. Oktober 2026', en: '14 October 2026', iso: '2026-10-14' }; // jüngste Änderung der Website (für llms.txt)
+export const UPDATED = { de: '26. Oktober 2026', en: '26 October 2026', iso: '2026-10-26' }; // jüngste Änderung der Website (für llms.txt)
 
 /** Eigener Test mit einem echten, anonymen Google-Kalender-Export (nur lokal ausgewertet, ohne Namen) */
 export const OWN_TEST = { date: { de: 'Oktober 2026', en: 'October 2026' } };
