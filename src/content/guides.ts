@@ -44,7 +44,7 @@ export const GUIDES: Record<string, GuideDef> = {
   tooLarge: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-13',
+    updated: '2026-11-04',
     figures: [{ name: 'export', de: 'Der ICS Editor teilt eine zu große Datei automatisch in Teile unter 1 MB – mit Zeitraum und Größe je Teil.', en: 'The ICS Editor automatically splits a file that is too large into parts under 1 MB – with date range and size for each part.' }, { name: 'clean', de: 'Verkleinern: nur die letzten Jahre exportieren oder unter „Mehr Optionen“ Zusatzdaten, Beschreibungen und abgesagte Termine weglassen – Größe und Dateianzahl ändern sich sofort.', en: 'Shrinking: export only recent years or, under “More options”, leave out extras, descriptions and cancelled events – size and file count update instantly.' }],
     sources: ['problems', 'import'],
     related: ['importParts', 'split', 'limits', 'undo'],
@@ -71,7 +71,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       faq: [
         { q: 'Gilt die 1-MB-Grenze auch für ICS-Dateien?', a: 'Ja. Google nennt die Grenze von 1 MB für CSV- und ICS-Dateien gleichermaßen.' },
-        { q: 'Wie viele Termine darf eine Datei haben?', a: 'Google nennt für den Import keine Höchstzahl an Terminen – entscheidend ist die Dateigröße. Für Workspace-Konten schreibt Google allerdings, dass man nach mehr als 100.000 neu angelegten Terminen in kurzer Zeit für einige Stunden keine Termine mehr anlegen oder bearbeiten kann.' },
+        { q: 'Wie viele Termine darf eine Datei haben?', a: 'Google nennt für den Import keine Höchstzahl an Terminen – entscheidend ist die Dateigröße. Für Workspace-Konten schreibt Google allerdings, dass man nach mehr als 100.000 neu angelegten Terminen in kurzer Zeit nur noch eingeschränkt Termine anlegen und für einige Stunden keine Termine bearbeiten kann. Bis sich dieses Limit wieder auffüllt, kann es laut Google mehrere Monate dauern.' },
         { q: 'Kann ich alle Teile als ZIP-Datei importieren?', a: 'Nein. Eine ZIP-Datei musst du zuerst entpacken und dann jede Datei einzeln importieren.' },
         { q: 'Wird meine Datei beim Aufteilen hochgeladen?', a: 'Nein. Das Werkzeug läuft vollständig in deinem Browser. Eine Sicherheitsregel verbietet der Seite Verbindungen zu fremden Servern; es gibt keinen Server, der Dateien annimmt.' }
       ],
@@ -100,7 +100,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       faq: [
         { q: 'Does the 1 MB limit apply to ICS files too?', a: 'Yes. Google states the 1 MB limit for both CSV and ICS files.' },
-        { q: 'How many events can a file contain?', a: 'Google doesn’t state a maximum number of events per import – what matters is the file size. For Workspace accounts, Google does say that creating more than 100,000 events in a short period can stop you from creating or editing events for a few hours.' },
+        { q: 'How many events can a file contain?', a: 'Google doesn’t state a maximum number of events per import – what matters is the file size. For Workspace accounts, Google does say that creating more than 100,000 events in a short period reduces how many events you can create and can stop you from editing events for a few hours. According to Google, this limit can take several months to replenish.' },
         { q: 'Can I import all parts as one ZIP file?', a: 'No. You need to unzip it first and import each file separately.' },
         { q: 'Is my file uploaded when I split it?', a: 'No. The tool runs entirely in your browser. A security policy forbids the page to connect to other servers, and there is no server that accepts files.' }
       ],
@@ -314,7 +314,7 @@ export const GUIDES: Record<string, GuideDef> = {
   limits: {
     type: 'article',
     published: '2026-10-08',
-    updated: '2026-10-26',
+    updated: '2026-11-04',
     figures: [{ name: 'overview', de: 'Die Datei-Info zeigt pro Kalender Termine, Zeitraum, Größe, Serien und Zeitzone – dazu die Termine pro Jahr.', en: 'File info shows events, date range, size, recurring events and time zone for each calendar – plus events per year.' }],
     sources: ['problems', 'import', 'limits', 'delete'],
     related: ['tooLarge', 'importFails', 'split', 'undo'],
@@ -341,11 +341,11 @@ export const GUIDES: Record<string, GuideDef> = {
           '<tr><td>Serientermine aus einer CSV werden zu Einzelterminen</td><td>Keine echte Wiederholung</td><td>ICS statt CSV verwenden – siehe {convert|CSV in ICS umwandeln}</td></tr>' +
           '<tr><td>Gäste und Konferenzdaten werden nicht importiert</td><td>Teilnehmer und Videolinks fehlen</td><td>Bei Bedarf vorher in die Beschreibung übernehmen</td></tr>' +
           '<tr><td>ZIP-Dateien müssen entpackt werden, jede ICS-Datei einzeln</td><td>ZIP lässt sich nicht direkt importieren</td><td>Entpacken oder das ZIP ins Werkzeug ziehen</td></tr>' +
-          '<tr><td>Workspace: mehr als 100.000 neue Termine in kurzer Zeit</td><td>Für Stunden keine oder weniger neue Termine, kein Bearbeiten</td><td>Nur importieren, was gebraucht wird; Import über Tage verteilen</td></tr>' +
+          '<tr><td>Workspace: mehr als 100.000 neue Termine in kurzer Zeit</td><td>Weniger neue Termine – laut Google möglicherweise für mehrere Monate; einige Stunden kein Bearbeiten</td><td>Nur importieren, was gebraucht wird; Import über Tage verteilen</td></tr>' +
           '<tr><td>Workspace: mehr als 60 neue Kalender in kurzer Zeit</td><td>Für einige Stunden eingeschränkt</td><td>Beim Aufteilen nicht zu viele Ziel-Kalender auf einmal anlegen</td></tr>' +
           '</tbody></table></div>' },
         { h2: 'Gibt es eine Höchstzahl an Terminen pro Import?', html: '<p>Google nennt keine Höchstzahl an Terminen pro Import-Datei. Maßgeblich ist die Dateigröße von 1 MB. Wie viele Termine in 1 MB passen, hängt davon ab, wie lang Titel und Beschreibungen sind – das Werkzeug rechnet es für deine Datei byte-genau aus.</p><p><strong>Faustregel aus unserem Test:</strong> Ein echter Google-Export mit rund 27.000 Terminen war 9,6 MB groß – im Schnitt etwa 350 Byte pro Termin. Aufgeteilt in Dateien unter 950 KB waren das 11 Dateien, also rund 2.500 Termine pro Datei. Ohne Verwaltungsdaten reichten 9 Dateien (rund 3.000 Termine pro Datei). Lange Beschreibungen senken die Zahl, kurze Titel erhöhen sie. Wer zusätzlich {importParts|höchstens 999 Termine pro Datei} will, stellt das beim Export ein.</p>' },
-        { h2: 'Nutzungslimit Google Kalender: was bei Workspace gilt', html: '<p>In der Hilfe für Workspace-Administratoren beschreibt Google Nutzungslimits, die Missbrauch verhindern sollen. Wer in kurzer Zeit <strong>mehr als 100.000 Termine</strong> anlegt, kann danach nur noch eingeschränkt Termine anlegen und für einige Stunden keine Termine bearbeiten. Für bestimmte Kontoarten – etwa Testkonten oder kostenlose Bildungs- und Gemeinnützigen-Pakete – nennt Google ausdrücklich keine genauen Grenzen. Für private Google-Konten nennt Google in dieser Hilfe keine Zahlen.</p><p>Wer einen großen Kalender {split|auf mehrere Konten aufteilt}, importiert die Teile am besten nicht alle auf einmal.</p>' },
+        { h2: 'Nutzungslimit Google Kalender: was bei Workspace gilt', html: '<p>In der Hilfe für Workspace-Administratoren beschreibt Google Nutzungslimits, die Missbrauch verhindern sollen. Wer in kurzer Zeit <strong>mehr als 100.000 Termine</strong> anlegt, kann danach nur noch eingeschränkt Termine anlegen und für einige Stunden keine Termine bearbeiten. Bis sich dieses Limit wieder auffüllt, kann es laut Google <strong>mehrere Monate</strong> dauern. Für bestimmte Kontoarten – etwa Testkonten oder kostenlose Bildungs- und Gemeinnützigen-Pakete – nennt Google ausdrücklich keine genauen Grenzen. Für private Google-Konten nennt Google in dieser Hilfe keine Zahlen.</p><p>Wer einen großen Kalender {split|auf mehrere Konten aufteilt}, importiert die Teile am besten nicht alle auf einmal.</p>' },
         { h2: 'Und wenn der Import schiefgeht?', html: '<p>Einen „Rückgängig“-Knopf für Importe gibt es nicht. Einen eigens angelegten Kalender kannst du aber komplett löschen; im Hauptkalender ginge das nur, indem du alle Termine löschst. Details: {undo|Import rückgängig machen}.</p>' }
       ],
       faq: [
@@ -379,11 +379,11 @@ export const GUIDES: Record<string, GuideDef> = {
           '<tr><td>Recurring events from a CSV become single events</td><td>No real recurrence</td><td>Use ICS instead – see {convert|CSV to ICS converter}</td></tr>' +
           '<tr><td>Guests and conference data are not imported</td><td>Attendees and video links are missing</td><td>If needed, copy them into the description first</td></tr>' +
           '<tr><td>ZIP files must be unzipped; import each ICS file separately</td><td>A ZIP can’t be imported directly</td><td>Unzip it, or drop the ZIP into the tool</td></tr>' +
-          '<tr><td>Workspace: more than 100,000 new events in a short period</td><td>Fewer or no new events and no editing for hours</td><td>Import only what you need; spread imports over several days</td></tr>' +
+          '<tr><td>Workspace: more than 100,000 new events in a short period</td><td>Fewer new events – according to Google possibly for several months; no editing for a few hours</td><td>Import only what you need; spread imports over several days</td></tr>' +
           '<tr><td>Workspace: more than 60 new calendars in a short period</td><td>Restricted for a few hours</td><td>Don’t create too many target calendars at once when splitting</td></tr>' +
           '</tbody></table></div>' },
         { h2: 'Is there a maximum number of events per import?', html: '<p>Google doesn’t state a maximum number of events per import file. What counts is the 1 MB file size. How many events fit into 1 MB depends on how long your titles and descriptions are – the tool calculates it for your file, to the byte.</p><p><strong>Rule of thumb from our test:</strong> a real Google export with about 27,000 events was 9.6 MB – roughly 350 bytes per event on average. Split into files under 950 KB, that made 11 files, so about 2,500 events per file. Without housekeeping data, 9 files were enough (about 3,000 events per file). Long descriptions lower the number, short titles raise it. If you also want {importParts|at most 999 events per file}, set that on export.</p>' },
-        { h2: 'Google Calendar usage limits exceeded: what applies to Workspace', html: '<p>In its help for Workspace administrators, Google describes usage limits designed to prevent abuse. Anyone who creates <strong>more than 100,000 events</strong> in a short period may have their ability to create events reduced and may not be able to edit events for a few hours. For certain account types – such as trial accounts or free education and nonprofit editions – Google explicitly doesn’t publish exact limits. For personal Google accounts, that help page gives no numbers.</p><p>If you {split|split a large calendar across several accounts}, don’t import all the parts at once.</p>' },
+        { h2: 'Google Calendar usage limits exceeded: what applies to Workspace', html: '<p>In its help for Workspace administrators, Google describes usage limits designed to prevent abuse. Anyone who creates <strong>more than 100,000 events</strong> in a short period may have their ability to create events reduced and may not be able to edit events for a few hours. According to Google, this limit can take <strong>several months</strong> to replenish. For certain account types – such as trial accounts or free education and nonprofit editions – Google explicitly doesn’t publish exact limits. For personal Google accounts, that help page gives no numbers.</p><p>If you {split|split a large calendar across several accounts}, don’t import all the parts at once.</p>' },
         { h2: 'And if the import goes wrong?', html: '<p>There is no undo button for imports. You can, however, delete a calendar you created specifically for the import; in your main calendar you could only delete all events. Details: {undo|undo a Google Calendar import}.</p>' }
       ],
       faq: [
@@ -802,7 +802,7 @@ export const GUIDES: Record<string, GuideDef> = {
   undo: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-14',
+    updated: '2026-11-04',
     figures: [{ name: 'export', de: 'Im Export-Fenster steht die Anleitung zum Import – sie beginnt mit einem neuen, leeren Kalender.', en: 'The export window includes the import steps – starting with a new, empty calendar.' }],
     sources: ['delete', 'create', 'problems'],
     related: ['dupes', 'importParts', 'ics', 'tooLarge'],
@@ -817,7 +817,7 @@ export const GUIDES: Record<string, GuideDef> = {
       steps: [
         { name: 'Einstellungen öffnen', text: 'Google Kalender am Computer öffnen, oben rechts auf das Zahnrad und „Einstellungen“ klicken.' },
         { name: 'Kalender auswählen', text: 'Links den Kalender suchen, in den du importiert hast, und auf seinen Namen klicken.' },
-        { name: 'Kalender löschen', text: 'Im Abschnitt „Kalender löschen“ auf „Löschen“ klicken. Google weist darauf hin: Alle Termine dieses Kalenders werden gelöscht – und Termine mit eingeladenen Gästen verschwinden auch aus deren Kalendern.' },
+        { name: 'Kalender löschen', text: 'Auf „Kalender entfernen“ und dann „Löschen“ klicken. Google weist darauf hin: Alle Termine dieses Kalenders werden gelöscht – und Termine mit eingeladenen Gästen verschwinden auch aus deren Kalendern.' },
         { name: 'Endgültig löschen bestätigen', text: 'Google fragt: „Sie sind dabei, alle Termine in [Kalendername] zu löschen. Diese Aktion kann nicht rückgängig gemacht werden.“ Mit „Endgültig löschen“ bestätigen.' },
         { name: 'Ergebnis prüfen', text: 'Unten erscheint „Wird gelöscht…“, danach ist der Kalender aus der Liste verschwunden. Ist er noch da, die Seite neu laden und noch einmal löschen.' }
       ],
@@ -846,7 +846,7 @@ export const GUIDES: Record<string, GuideDef> = {
       steps: [
         { name: 'Open Settings', text: 'Open Google Calendar on a computer, click the gear icon at the top right, then “Settings”.' },
         { name: 'Select the calendar', text: 'Find the calendar you imported into on the left and click its name.' },
-        { name: 'Delete the calendar', text: 'In the section for deleting the calendar, click “Delete”. Google points out that all events in this calendar will be deleted – and events with invited guests are also removed from the guests’ calendars.' },
+        { name: 'Delete the calendar', text: 'Click “Remove calendar”, then “Delete”. Google points out that all events in this calendar will be deleted – and events with invited guests are also removed from the guests’ calendars.' },
         { name: 'Confirm “Delete permanently”', text: 'Google asks whether you really want to delete all events in this calendar and warns that this can’t be undone. Confirm with “Delete permanently”.' },
         { name: 'Check the result', text: 'A “Deleting…” notice appears at the bottom; afterwards the calendar is gone from the list. If it’s still there, reload the page and delete it again.' }
       ],

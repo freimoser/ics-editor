@@ -30,6 +30,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 </ul>
 <h2>Zuletzt geändert</h2>
 <ul>
+<li><strong>4. November 2026:</strong> alle Google-Quellen erneut geprüft. Google nennt beim Workspace-Limit von 100.000 neuen Terminen jetzt eine Erholungszeit von möglicherweise mehreren Monaten – in {limits|Grenzen}, {tooLarge|Datei zu groß} ergänzt; der Löschweg in {undo|Import rückgängig} heißt jetzt „Kalender entfernen“ → „Löschen“.</li>
 <li><strong>26. Oktober 2026:</strong> neue Ratgeber zu {outlook|Outlook}, {apple|Apple Kalender} und {dupes|doppelten Terminen}, das {glossary|ICS-Glossar}, eine {guides|Ratgeber-Übersicht} und eine Faustregel in den {limits|Grenzen} (Termine pro 1 MB).</li>
 <li><strong>14. Oktober 2026:</strong> Praxistest „In Teilen importieren“ und Hilfe zu „Fehler beim Löschen des Kalenders“.</li>
 <li><strong>8. Oktober 2026:</strong> Start des ICS Editors mit den ersten Ratgebern.</li>
@@ -66,6 +67,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 </ul>
 <h2>Recent changes</h2>
 <ul>
+<li><strong>4 November 2026:</strong> all Google sources checked again. For the Workspace limit of 100,000 new events, Google now states a recovery time of possibly several months – added to {limits|limits} and {tooLarge|file too large}; the delete path in {undo|undo an import} is now “Remove calendar” → “Delete”.</li>
 <li><strong>26 October 2026:</strong> new guides on {outlook|Outlook}, {apple|Apple Calendar} and {dupes|duplicate events}, the {glossary|ICS glossary}, a {guides|guides overview} and a rule of thumb in the {limits|limits} (events per 1 MB).</li>
 <li><strong>14 October 2026:</strong> field test “import in parts” and help with “the calendar couldn’t be deleted”.</li>
 <li><strong>8 October 2026:</strong> launch of the ICS Editor with the first guides.</li>

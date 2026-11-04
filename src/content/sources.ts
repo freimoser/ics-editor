@@ -1,8 +1,8 @@
-// Belegte Quellen. Stand jeweils 7.10.2026 – nur diese Fakten werden auf der Website behauptet.
+// Belegte Quellen. Google-Quellen zuletzt live geprüft am 4.11.2026 – nur diese Fakten werden auf der Website behauptet.
 /** Datum, an dem die Google-Quellen geprüft wurden */
-export const STAND = { de: '7. Oktober 2026', en: '7 October 2026', iso: '2026-10-07' };
+export const STAND = { de: '4. November 2026', en: '4 November 2026', iso: '2026-11-04' };
 /** Datum der letzten inhaltlichen Aktualisierung der Seiten */
-export const UPDATED = { de: '26. Oktober 2026', en: '26 October 2026', iso: '2026-10-26' }; // jüngste Änderung der Website (für llms.txt)
+export const UPDATED = { de: '4. November 2026', en: '4 November 2026', iso: '2026-11-04' }; // jüngste Änderung der Website (für llms.txt)
 
 /** Eigener Test mit einem echten, anonymen Google-Kalender-Export (nur lokal ausgewertet, ohne Namen) */
 export const OWN_TEST = { date: { de: 'Oktober 2026', en: 'October 2026' } };
@@ -32,4 +32,4 @@ export function day(iso: string, lang: 'de' | 'en'): string {
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 /** Letzte inhaltliche Änderung von Startseite und Über-Seite */
-export const PAGE_UPDATED = { home: '2026-10-26', about: '2026-10-26', guides: '2026-10-26', glossary: '2026-10-26' };
+export const PAGE_UPDATED = { home: '2026-10-26', about: '2026-11-04', guides: '2026-10-26', glossary: '2026-10-26' };
