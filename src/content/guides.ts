@@ -73,7 +73,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { q: 'Gilt die 1-MB-Grenze auch für ICS-Dateien?', a: 'Ja. Google nennt die Grenze von 1 MB für CSV- und ICS-Dateien gleichermaßen.' },
         { q: 'Wie viele Termine darf eine Datei haben?', a: 'Google nennt für den Import keine Höchstzahl an Terminen – entscheidend ist die Dateigröße. Für Workspace-Konten schreibt Google allerdings, dass man nach mehr als 100.000 neu angelegten Terminen in kurzer Zeit nur noch eingeschränkt Termine anlegen und für einige Stunden keine Termine bearbeiten kann. Bis sich dieses Limit wieder auffüllt, kann es laut Google mehrere Monate dauern.' },
         { q: 'Kann ich alle Teile als ZIP-Datei importieren?', a: 'Nein. Eine ZIP-Datei musst du zuerst entpacken und dann jede Datei einzeln importieren.' },
-        { q: 'Wird meine Datei beim Aufteilen hochgeladen?', a: 'Nein. Das Werkzeug läuft vollständig in deinem Browser. Eine Sicherheitsregel verbietet der Seite Verbindungen zu fremden Servern; es gibt keinen Server, der Dateien annimmt.' }
+        { q: 'Wird meine Datei beim Aufteilen hochgeladen?', a: 'Nein. Das Werkzeug läuft vollständig in deinem Browser. Deine Datei wird nie übertragen – auch nicht an Google Analytics, das ohnehin nur mit deiner Einwilligung läuft; es gibt keinen Server, der Dateien annimmt.' }
       ],
       cta: 'Datei direkt hier verkleinern oder aufteilen'
     },
@@ -102,7 +102,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { q: 'Does the 1 MB limit apply to ICS files too?', a: 'Yes. Google states the 1 MB limit for both CSV and ICS files.' },
         { q: 'How many events can a file contain?', a: 'Google doesn’t state a maximum number of events per import – what matters is the file size. For Workspace accounts, Google does say that creating more than 100,000 events in a short period reduces how many events you can create and can stop you from editing events for a few hours. According to Google, this limit can take several months to replenish.' },
         { q: 'Can I import all parts as one ZIP file?', a: 'No. You need to unzip it first and import each file separately.' },
-        { q: 'Is my file uploaded when I split it?', a: 'No. The tool runs entirely in your browser. A security policy forbids the page to connect to other servers, and there is no server that accepts files.' }
+        { q: 'Is my file uploaded when I split it?', a: 'No. The tool runs entirely in your browser. Your file is never sent anywhere – not even to Google Analytics, which only runs with your consent; there is no server that accepts files.' }
       ],
       cta: 'Shrink or split your file right here'
     }
@@ -140,7 +140,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { q: 'Hat Google Kalender eine Funktion zum Entfernen doppelter Termine?', a: 'In der Google-Hilfe zum Import und zu Importproblemen ist keine solche Funktion beschrieben. Deshalb ist es am einfachsten, Duplikate vor dem Import aus der Datei zu entfernen.' },
         { q: 'Warum meldet Google beim zweiten Import „Processed zero events“?', a: 'Laut Google passiert das, wenn man mehr als einmal auf „Importieren“ klickt: Die Termine wurden beim ersten Klick schon importiert, beim zweiten gibt es nichts Neues. Prüfe deinen Kalender – die Termine sind meist schon da.' },
         { q: 'Werden beim Entfernen von Duplikaten auch Serientermine gelöscht?', a: 'Nein. Der ICS Editor vergleicht nur einzelne Termine. Serien bleiben mit allen Ausnahmen vollständig erhalten.' },
-        { q: 'Wird meine Datei dafür hochgeladen?', a: 'Nein. Der ICS Editor arbeitet ausschließlich in deinem Browser. Eine Sicherheitsregel verbietet der Seite Verbindungen zu fremden Servern.' }
+        { q: 'Wird meine Datei dafür hochgeladen?', a: 'Nein. Der ICS Editor arbeitet ausschließlich in deinem Browser. Deine Datei wird nie übertragen – auch nicht an Google Analytics, das ohnehin nur mit deiner Einwilligung läuft.' }
       ],
       cta: 'Doppelte Termine jetzt finden'
     },
@@ -168,7 +168,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { q: 'Does Google Calendar have a feature to remove duplicate events?', a: 'Google’s help pages on importing and on import problems don’t describe such a feature. That’s why it’s easiest to remove duplicates from the file before importing.' },
         { q: 'Why does Google say “Processed zero events” on a second import?', a: 'According to Google, this happens when you click “Import” more than once: the events were already imported with the first click, so there’s nothing new the second time. Check your calendar – the events are usually already there.' },
         { q: 'Are recurring events deleted when removing duplicates?', a: 'No. The ICS Editor only compares single events. Series stay complete with all their exceptions.' },
-        { q: 'Is my file uploaded for this?', a: 'No. The ICS Editor works entirely in your browser. A security policy forbids the page to connect to other servers.' }
+        { q: 'Is my file uploaded for this?', a: 'No. The ICS Editor works entirely in your browser. Your file is never sent anywhere – not even to Google Analytics, which only runs with your consent.' }
       ],
       cta: 'Find duplicate events now'
     }
@@ -762,7 +762,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Wann ICS besser ist als CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google-CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Serientermine</td><td>werden zu Einzelterminen</td><td>echte Wiederholung</td></tr><tr><td>Zeitzone</td><td>keine Angabe in der Datei</td><td>wird mitgespeichert</td></tr><tr><td>Andere Programme</td><td>vor allem Google</td><td>Google, Outlook, Apple und viele mehr</td></tr><tr><td>Bearbeiten in Excel</td><td>einfach</td><td>nicht vorgesehen</td></tr></tbody></table></div><p>Für Geburtstage und andere jährliche Termine ist ICS deshalb die richtige Wahl – siehe {excel|Excel-Geburtstagsliste importieren}. Wie eine Wiederholung in der Datei steht (RRULE) und was die übrigen Zeilen bedeuten, erklärt das {glossary|ICS-Glossar}.</p>' },
-        { h2: 'Ohne Upload umwandeln', html: '<p>Ein Konverter, der auf einem Server arbeitet, bekommt deine Datei zwangsläufig zu sehen. Bei Terminlisten mit Namen, Telefonnummern oder Patientendaten ist das heikel. Das Werkzeug arbeitet ausschließlich in deinem Browser; eine Sicherheitsregel verbietet der Seite Verbindungen zu fremden Servern. Erkannte persönliche Daten kannst du vor dem Export weglassen oder kürzen.</p>' }
+        { h2: 'Ohne Upload umwandeln', html: '<p>Ein Konverter, der auf einem Server arbeitet, bekommt deine Datei zwangsläufig zu sehen. Bei Terminlisten mit Namen, Telefonnummern oder Patientendaten ist das heikel. Das Werkzeug arbeitet ausschließlich in deinem Browser; deine Datei wird nie übertragen – auch nicht an Google Analytics, das ohnehin nur mit deiner Einwilligung läuft. Erkannte persönliche Daten kannst du vor dem Export weglassen oder kürzen.</p>' }
       ],
       faq: [
         { q: 'Kann ChatGPT eine ICS-Datei erstellen?', a: 'Ja, KI-Chatbots können den Text einer ICS-Datei erzeugen. Prüfe das Ergebnis aber: Der Rahmen muss stimmen (BEGIN:VCALENDAR, VERSION, PRODID, END:VCALENDAR), Google nimmt höchstens 1 MB – und wenn du eine Terminliste mit persönlichen Daten in einen Chat kopierst, verlässt sie dein Gerät. Mit dem Werkzeug wandelst du ohne Upload um.' },
@@ -787,7 +787,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'When ICS beats CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Recurring events</td><td>become single events</td><td>real recurrence</td></tr><tr><td>Time zone</td><td>not stored in the file</td><td>stored</td></tr><tr><td>Other apps</td><td>mainly Google</td><td>Google, Outlook, Apple and many more</td></tr><tr><td>Editing in Excel</td><td>easy</td><td>not intended</td></tr></tbody></table></div><p>For birthdays and other yearly events, ICS is the right choice – see {excel|Excel to Google Calendar}. How a recurrence is written in the file (RRULE) and what the other lines mean is explained in the {glossary|ICS glossary}.</p>' },
-        { h2: 'Convert without uploading', html: '<p>A converter that runs on a server inevitably gets to see your file. With event lists containing names, phone numbers or patient data, that’s risky. The tool works exclusively in your browser; a security policy forbids the page to connect to other servers. You can leave out or shorten detected personal data before exporting.</p>' }
+        { h2: 'Convert without uploading', html: '<p>A converter that runs on a server inevitably gets to see your file. With event lists containing names, phone numbers or patient data, that’s risky. The tool works exclusively in your browser; your file is never sent anywhere – not even to Google Analytics, which only runs with your consent. You can leave out or shorten detected personal data before exporting.</p>' }
       ],
       faq: [
         { q: 'Can ChatGPT make an ICS file?', a: 'Yes, AI chatbots can generate the text of an ICS file. Check the result, though: the frame must be right (BEGIN:VCALENDAR, VERSION, PRODID, END:VCALENDAR), Google accepts at most 1 MB – and if you paste an event list with personal data into a chat, it leaves your device. With the tool you convert without uploading.' },

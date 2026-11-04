@@ -10,6 +10,8 @@ import { ROUTES, GUIDES, path, url, asset, type Lang, type PageKey } from '../i1
 import { tr } from '../i18n/ui';
 import { GUIDES as CONTENT } from '../content/guides';
 import { LEGAL } from '../config/legal';
+import { GA4_ID } from '../config/analytics.mjs';
+import Consent from '../components/Consent.astro';
 
 interface Props {
   lang: Lang;
@@ -121,10 +123,12 @@ const site = {
             <li><a href={path('imprint', lang)}>{lang === 'de' ? 'Impressum' : 'Legal notice'}</a></li>
             <li><a href={path('privacy', lang)}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a></li>
             <li><a href={path('terms', lang)}>{lang === 'de' ? 'Nutzungsbedingungen' : 'Terms of use'}</a></li>
+            {GA4_ID && <li><button type="button" class="link" data-consent-reset>{lang === 'de' ? 'Cookie-Einstellungen' : 'Cookie settings'}</button></li>}
           </ul>
         </nav>
       </div>
     </footer>
+    <Consent lang={lang} />
     <script>
       // Offline-Betrieb: nach dem ersten Besuch läuft das Werkzeug auch ohne Internet.
       if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {

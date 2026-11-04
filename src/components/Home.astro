@@ -6,6 +6,7 @@ import { GUIDES } from '../content/guides';
 import { HOME } from '../content/home';
 import { SRC, STAND, PAGE_UPDATED } from '../content/sources';
 import { LEGAL } from '../config/legal';
+import { GA4_ID } from '../config/analytics.mjs';
 import { asset } from '../i18n/routes';
 import Figure from './Figure.astro';
 import IMG from '../content/images.json';
@@ -16,7 +17,7 @@ const c = HOME[lang];
 const other: Lang = lang === 'de' ? 'en' : 'de';
 const links = {
   home: path('home', lang), guides: path('home', lang) + '#ratgeber', help: path('ics', lang), lang: path('home', other), langCode: other,
-  langLabel: other === 'de' ? 'Deutsch' : 'English', imprint: path('imprint', lang), privacy: path('privacy', lang), about: path('about', lang)
+  langLabel: other === 'de' ? 'Deutsch' : 'English', imprint: path('imprint', lang), privacy: path('privacy', lang), about: path('about', lang), consent: !!GA4_ID
 };
 const schema = [
   {

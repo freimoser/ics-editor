@@ -14,7 +14,7 @@ import type { UiKey } from '../../i18n/ui';
 export type View = 'month' | 'list';
 export interface ViewCal { key: string; name: string; events: number }
 export interface Active { id: number; key: string }
-export interface Links { home: string; guides: string; help: string; lang: string; langLabel: string; langCode: string; imprint: string; privacy: string; about: string }
+export interface Links { home: string; guides: string; help: string; lang: string; langLabel: string; langCode: string; imprint: string; privacy: string; about: string; consent?: boolean }
 
 export interface StudioProps {
   loaded: Loaded; table: TableInfo | null; viewReq: PlanRequest; plan: PlanResult | null;
@@ -84,6 +84,7 @@ export function Sidebar(p: StudioProps & { links: Links; onSplit: () => void; on
         <nav class="links" aria-label={lang === 'de' ? 'Rechtliches' : 'Legal'}>
           <a href={p.links.imprint}>{lang === 'de' ? 'Impressum' : 'Legal notice'}</a>
           <a href={p.links.privacy}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a>
+          {p.links.consent && <button type="button" class="link" data-consent-reset>{lang === 'de' ? 'Cookie-Einstellungen' : 'Cookie settings'}</button>}
         </nav>
       </div>
     </>

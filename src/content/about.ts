@@ -36,7 +36,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 <li><strong>8. Oktober 2026:</strong> Start des ICS Editors mit den ersten Ratgebern.</li>
 </ul>
 <h2>Deine Daten</h2>
-<p>Deine Dateien verlassen dein Gerät nicht. Es gibt keinen Server, der Dateien annimmt, kein Tracking und keine Cookies. Details stehen in der <a href="../datenschutz/">Datenschutzerklärung</a>.</p>
+<p>Deine Dateien verlassen dein Gerät nicht. Es gibt keinen Server, der Dateien annimmt. Gemessen wird nur mit deiner Einwilligung (Google Analytics); deine Dateien werden auch dann nie übertragen. Details stehen in der <a href="../datenschutz/">Datenschutzerklärung</a>.</p>
 <h2>Kontakt</h2>
 <p>Fehler gefunden oder eine Idee? Schreib an ${LEGAL.emailDisplay} oder über <a href="${LEGAL.linkedin}" rel="noopener">LinkedIn</a>. Weitere Angaben im <a href="../impressum/">Impressum</a>.</p>`
   },
@@ -73,7 +73,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 <li><strong>8 October 2026:</strong> launch of the ICS Editor with the first guides.</li>
 </ul>
 <h2>Your data</h2>
-<p>Your files never leave your device. There is no server that accepts files, no tracking and no cookies. Details are in the <a href="../privacy/">privacy policy</a>.</p>
+<p>Your files never leave your device. There is no server that accepts files. Usage is only measured with your consent (Google Analytics); your files are never sent even then. Details are in the <a href="../privacy/">privacy policy</a>.</p>
 <h2>Contact</h2>
 <p>Found a bug or have an idea? Write to ${LEGAL.emailDisplay} or via <a href="${LEGAL.linkedin}" rel="noopener">LinkedIn</a>. More in the <a href="../legal-notice/">legal notice</a>.</p>`
   }

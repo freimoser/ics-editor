@@ -1,6 +1,6 @@
 // Verbindung zum Rechenkern im Web Worker.
 // "?worker&inline" erzeugt den Worker aus einer blob:-Adresse: Er erbt dadurch die
-// Content-Security-Policy der Seite (connect-src nur robots.txt) und kann nichts an fremde Server schicken.
+// Content-Security-Policy der Seite (connect-src: robots.txt, Google Analytics nach Einwilligung) und ruft selbst nie etwas ab.
 import EngineWorker from '../../lib/engine.worker.ts?worker&inline';
 import type { Request } from '../../lib/engine';
 

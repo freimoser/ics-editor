@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const SITE = 'https://freimoser.github.io';
 const BASE = '/ics-editor/';
+import { GA4_ID, GA_HOSTS } from '../src/config/analytics.mjs';
 const VERIFY = '<meta name="google-site-verification" content="6pYvtFCnU7UFcQFajtMSkQ7tYMy3Z_Bt7teKiT5yKNg">';
 const errors = [];
 const warn = [];
@@ -81,10 +82,18 @@ for (const [route, h] of html) {
   if (!/<html lang="(de|en)"/.test(h)) fail(route, 'lang-Attribut fehlt');
   const csp = get(h, /http-equiv="content-security-policy" content="([^"]*)"/) || '';
   const connect = (/connect-src ([^;]*)/.exec(csp) || [])[1]?.trim() || '';
-  if (!connect.split(/\s+/).every((s) => /^https:\/\/freimoser\.github\.io\/robots\.txt$|^http:\/\/localhost:\d+\/robots\.txt$/.test(s))) fail(route, `CSP connect-src erlaubt mehr als die robots.txt: ${connect}`);
+  const allowed = (s) => /^https:\/\/freimoser\.github\.io\/robots\.txt$|^http:\/\/localhost:\d+\/robots\.txt$/.test(s) || (GA4_ID && GA_HOSTS.connect.includes(s));
+  if (!connect.split(/\s+/).every(allowed)) fail(route, `CSP connect-src erlaubt mehr als robots.txt${GA4_ID ? ' und Google Analytics' : ''}: ${connect}`);
+  if (!GA4_ID && /google-analytics|googletagmanager/.test(csp)) fail(route, 'CSP erlaubt Google Analytics, obwohl keine Mess-ID gesetzt ist');
   if (/\sstyle="/.test(h)) fail(route, 'Inline-style-Attribut (wird von der CSP blockiert)');
   if (/<(script|link)[^>]+(src|href)="https?:\/\/(?!freimoser\.github\.io)[^"]*"[^>]*>/.test(h.replace(/<link rel="(canonical|alternate)"[^>]*>/g, '')) && /<script[^>]+src="https?:/.test(h)) fail(route, 'externes Skript');
-  if (/fonts\.googleapis|fonts\.gstatic|googletagmanager|google-analytics/.test(h)) fail(route, 'Ressource von Google eingebunden');
+  // Google: keine Schriften; Analytics nie fest eingebunden, sondern nur über das Banner nach Einwilligung nachgeladen
+  if (/fonts\.googleapis|fonts\.gstatic/.test(h)) fail(route, 'Schrift von Google eingebunden');
+  if (/<(script|link|img|iframe)[^>]+(src|href)="[^"]*(googletagmanager|google-analytics)/.test(h)) fail(route, 'Google Analytics fest eingebunden (muss auf Einwilligung warten)');
+  if (GA4_ID) {
+    if (!h.includes(`data-ga="${GA4_ID}"`)) fail(route, 'Einwilligungs-Banner fehlt');
+    if (!is404 && !h.includes('data-consent-reset')) fail(route, 'Widerruf (Cookie-Einstellungen) fehlt');
+  } else if (/id="consent"/.test(h)) fail(route, 'Banner ohne Mess-ID');
   if (!is404) {
     if (!canonical) fail(route, 'Canonical fehlt');
     else if (canonical !== SITE + route) fail(route, `Canonical ${canonical} ≠ ${SITE + route}`);
