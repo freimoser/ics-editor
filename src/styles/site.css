@@ -83,6 +83,8 @@ h3, .h3 { font-size: 18px; margin: 0 0 8px; }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; min-height: var(--hh); }
 .logo { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--text); font-weight: 600; font-size: 15px; }
 .logo-mark, .mark { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; background: var(--accent); color: var(--on-accent); flex: none; }
+/* Logo = Favicon: gleiche Form (Kalender mit Haken) und gleiches Markengrün in hell und dunkel */
+.logo-mark { background: #0e5a47; color: #fff; }
 .site-nav { display: flex; align-items: center; gap: 2px; }
 .site-nav a, .top-links a { color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 8px; font-size: 14px; }
 .site-nav a:hover, .top-links a:hover { color: var(--text); background: var(--soft); }

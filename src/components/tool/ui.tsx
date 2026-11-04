@@ -63,7 +63,7 @@ const ICONS: Record<string, ComponentChildren> = {
   pin: <><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></>,
   text: <path d="M4 6h16M4 12h16M4 18h10" />,
   repeat: <><path d="M17 2l4 4-4 4" /><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4" /><path d="M21 13v2a3 3 0 0 1-3 3H3" /></>,
-  mark: <><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4" /></>
+  mark: <><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4M9 15l2 2 4-4" /></>
 };
 
 export function Icon({ name, size = 24, class: cls }: { name: keyof typeof ICONS | string; size?: number; class?: string }) {
