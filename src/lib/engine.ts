@@ -1,6 +1,6 @@
 // Rechenkern des Werkzeugs. Läuft in einem Web Worker, damit auch 10-MB-Dateien die Seite nicht blockieren.
 // Der Worker wird als blob:-URL erzeugt und erbt damit die Content-Security-Policy der Seite:
-// connect-src erlaubt nur die öffentliche robots.txt, keine anderen Adressen.
+// connect-src erlaubt nur die öffentliche robots.txt (und Google Analytics nach Einwilligung); der Worker ruft nie etwas ab.
 
 import { zipSync } from 'fflate';
 import type { IcsCalendar, IcsEvent } from './ics';

@@ -1,0 +1,78 @@
+---
+// Einwilligungs-Banner für Google Analytics. Ohne Mess-ID wird nichts ausgegeben.
+// Google Analytics wird erst nach „Zustimmen“ nachgeladen – vorher keine Cookies, keine Verbindung zu Google.
+// „Ablehnen“ ist gleichwertig, die Entscheidung lässt sich über [data-consent-reset] jederzeit widerrufen.
+import { GA4_ID, CONSENT_KEY } from '../config/analytics.mjs';
+import { path, type Lang } from '../i18n/routes';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const de = lang === 'de';
+---
+{GA4_ID && (
+  <div id="consent" class="consent" role="region" aria-label={de ? 'Einwilligung zur Messung' : 'Consent to analytics'} hidden
+    data-ga={GA4_ID} data-key={CONSENT_KEY} data-base={import.meta.env.BASE_URL}>
+    <p class="m0">
+      {de
+        ? 'Darf ich mit Google Analytics messen, wie die Seite genutzt wird? Dafür werden Cookies gesetzt und Nutzungsdaten an Google (auch in die USA) übertragen. Deine Kalenderdateien werden nie übertragen. Du kannst die Einwilligung jederzeit widerrufen.'
+        : 'May I use Google Analytics to measure how this site is used? This sets cookies and sends usage data to Google (including to the USA). Your calendar files are never sent. You can withdraw consent at any time.'}
+      {' '}<a href={path('privacy', lang)}>{de ? 'Datenschutz' : 'Privacy'}</a>
+    </p>
+    <div class="consent-btns">
+      <button type="button" class="btn" data-consent="denied">{de ? 'Ablehnen' : 'Decline'}</button>
+      <button type="button" class="btn" data-consent="granted">{de ? 'Zustimmen' : 'Accept'}</button>
+    </div>
+  </div>
+)}
+
+<script>
+  const box = document.getElementById('consent');
+  if (box) {
+    const { ga, key, base } = box.dataset as { ga: string; key: string; base: string };
+    const read = (): string | null => { try { return JSON.parse(localStorage.getItem(key) || 'null')?.v ?? null; } catch { return null; } };
+    const write = (v: string) => { try { localStorage.setItem(key, JSON.stringify({ v, t: new Date().toISOString() })); } catch { /* privater Modus: Banner erscheint beim nächsten Mal wieder */ } };
+
+    const load = () => {
+      const w = window as unknown as { dataLayer: unknown[]; gtag: (...a: unknown[]) => void };
+      w.dataLayer = w.dataLayer || [];
+      w.gtag = function () { w.dataLayer.push(arguments); };
+      // Nur Statistik: keine Werbe-Speicherung, keine Google-Signale, keine Personalisierung.
+      w.gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+      w.gtag('js', new Date());
+      w.gtag('config', ga, {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+        cookie_path: base, // Cookies nur für /ics-editor/, nicht für andere Seiten auf freimoser.github.io
+        cookie_flags: 'SameSite=Lax;Secure',
+        cookie_expires: 60 * 60 * 24 * 365
+      });
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ga);
+      document.head.appendChild(s);
+    };
+
+    const choice = read();
+    if (choice === 'granted') load();
+    else if (choice !== 'denied') box.hidden = false;
+
+    box.addEventListener('click', (e) => {
+      const v = (e.target as HTMLElement).closest('button')?.dataset.consent;
+      if (!v) return;
+      write(v);
+      box.hidden = true;
+      if (v === 'granted') load();
+    });
+
+    // Widerruf: Entscheidung löschen, Analytics-Cookies entfernen, Seite neu laden (Banner erscheint wieder).
+    document.addEventListener('click', (e) => {
+      if (!(e.target as HTMLElement).closest('[data-consent-reset]')) return;
+      e.preventDefault();
+      try { localStorage.removeItem(key); } catch { /* nichts gespeichert */ }
+      const names = document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter((n) => n === '_ga' || n.startsWith('_ga_'));
+      for (const n of names) for (const p of [base, '/']) document.cookie = `${n}=; Max-Age=0; path=${p}`;
+      location.reload();
+    });
+  }
+</script>

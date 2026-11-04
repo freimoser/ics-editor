@@ -2,7 +2,8 @@
 import { GUIDES as KEYS, url, type Lang } from '../i18n/routes';
 import { GUIDES } from '../content/guides';
 import { SRC, STAND, UPDATED } from '../content/sources';
-import { strip } from '../content/links';
+import { linkify, strip } from '../content/links';
+import { GLOSSARY_PAGE, TERMS, TERM_EN } from '../content/glossary';
 
 const md = (html: string) => strip(html.replace(/<\/(p|li|tr|h\d)>/g, '\n').replace(/<td>/g, ' | ').replace(/<li>/g, '- ')).replace(/\n{3,}/g, '\n\n').trim();
 
@@ -14,6 +15,10 @@ export function GET() {
     for (const s of g.sections) out.push(`### ${s.h2}\n\n${md(s.html)}\n`);
     out.push(`### FAQ\n\n${g.faq.map((f) => `**${f.q}**\n${f.a}`).join('\n\n')}\n`);
     out.push(`### ${lang === 'de' ? 'Quellen' : 'Sources'}\n\n${def.sources.map((s) => `- ${SRC[s][lang]}: ${SRC[s].url}`).join('\n')}\n`);
+  }
+  for (const lang of ['de', 'en'] as Lang[]) {
+    out.push(`\n---\n\n## ${GLOSSARY_PAGE[lang].h1}\n\nURL: ${url('glossary', lang)}\n\n${GLOSSARY_PAGE[lang].answer}\n`);
+    out.push(TERMS.map((t) => `- **${(lang === 'en' && TERM_EN[t.id]) || t.term}** (${url('glossary', lang)}#${t.id}): ${strip(linkify(t[lang], lang))}`).join('\n') + '\n');
   }
   return new Response(out.join('\n'), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

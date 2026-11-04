@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const SITE = 'https://freimoser.github.io';
 const BASE = '/ics-editor/';
+import { GA4_ID, GA_HOSTS } from '../src/config/analytics.mjs';
 const VERIFY = '<meta name="google-site-verification" content="6pYvtFCnU7UFcQFajtMSkQ7tYMy3Z_Bt7teKiT5yKNg">';
 const errors = [];
 const warn = [];
@@ -34,6 +35,9 @@ const exists = (route) => {
 const idsOf = (h) => new Set([...h.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
 
 const titles = new Map();
+const descs = new Map();
+/** dateModified je Seite aus dem JSON-LD – muss zum lastmod der Sitemap passen */
+const modified = new Map();
 const faqSeen = new Map();
 const incoming = new Map();
 const indexable = new Set();
@@ -44,6 +48,10 @@ for (const [route, h] of html) {
   const desc = get(h, /<meta name="description" content="([^"]*)"/);
   const canonical = get(h, /<link rel="canonical" href="([^"]*)"/);
   const noindex = /<meta name="robots" content="noindex/.test(h);
+  // Sprungmarken: jede id nur einmal, jeder interne #-Link hat ein Ziel
+  const ids = [...h.matchAll(/ id="([^"]+)"/g)].map((m) => m[1]);
+  for (const id of new Set(ids.filter((x, i) => ids.indexOf(x) !== i))) fail(route, `id doppelt: ${id}`);
+  for (const m of h.matchAll(/href="#([^"]+)"/g)) if (!ids.includes(m[1])) fail(route, `Sprungmarke ohne Ziel: #${m[1]}`);
   if (!title) fail(route, 'Title fehlt');
   else {
     if (title.length > 60) fail(route, `Title zu lang (${title.length} > 60): ${title}`);
@@ -52,15 +60,40 @@ for (const [route, h] of html) {
   }
   if (!desc) fail(route, 'Meta-Description fehlt');
   else if (desc.length > 155) fail(route, `Description zu lang (${desc.length} > 155)`);
+  else if (!noindex && !is404) {
+    // Google nutzt sehr kurze Beschreibungen selten; doppelte machen Seiten austauschbar
+    if (desc.length < 70) fail(route, `Description zu kurz (${desc.length} < 70)`);
+    if (descs.has(desc)) fail(route, `Description doppelt (auch ${descs.get(desc)})`);
+    descs.set(desc, route);
+  }
+  // Bilder: Alternativtext und feste Maße (gegen Layoutsprünge, CLS)
+  for (const m of h.matchAll(/<img\b[^>]*>/g)) {
+    const tag = m[0];
+    if (!/\balt="[^"]+"/.test(tag) && !/aria-hidden="true"/.test(tag)) fail(route, `Bild ohne Alternativtext: ${tag.slice(0, 80)}`);
+    if (!/\bwidth="\d+"/.test(tag) || !/\bheight="\d+"/.test(tag)) fail(route, `Bild ohne width/height: ${tag.slice(0, 80)}`);
+  }
   if (!h.includes(VERIFY)) fail(route, 'google-site-verification fehlt oder weicht ab');
   if ((h.match(/<h1[\s>]/g) || []).length !== 1) fail(route, 'nicht genau eine H1');
+  // Überschriften: keine übersprungenen Ebenen, keine doppelten Überschriften auf einer Seite
+  const hs = [...h.matchAll(/<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/g)].map((m) => [Number(m[1]), m[2].replace(/<[^>]+>/g, '').trim()]);
+  hs.reduce((prev, [lvl, txt]) => { if (lvl > prev + 1) fail(route, `Überschrift springt von h${prev} auf h${lvl}: ${txt.slice(0, 40)}`); return lvl; }, 1);
+  const seenH = new Set();
+  for (const [, txt] of hs) { if (seenH.has(txt)) fail(route, `Überschrift doppelt: ${txt}`); seenH.add(txt); }
   if (!/<html lang="(de|en)"/.test(h)) fail(route, 'lang-Attribut fehlt');
   const csp = get(h, /http-equiv="content-security-policy" content="([^"]*)"/) || '';
   const connect = (/connect-src ([^;]*)/.exec(csp) || [])[1]?.trim() || '';
-  if (!connect.split(/\s+/).every((s) => /^https:\/\/freimoser\.github\.io\/robots\.txt$|^http:\/\/localhost:\d+\/robots\.txt$/.test(s))) fail(route, `CSP connect-src erlaubt mehr als die robots.txt: ${connect}`);
+  const allowed = (s) => /^https:\/\/freimoser\.github\.io\/robots\.txt$|^http:\/\/localhost:\d+\/robots\.txt$/.test(s) || (GA4_ID && GA_HOSTS.connect.includes(s));
+  if (!connect.split(/\s+/).every(allowed)) fail(route, `CSP connect-src erlaubt mehr als robots.txt${GA4_ID ? ' und Google Analytics' : ''}: ${connect}`);
+  if (!GA4_ID && /google-analytics|googletagmanager/.test(csp)) fail(route, 'CSP erlaubt Google Analytics, obwohl keine Mess-ID gesetzt ist');
   if (/\sstyle="/.test(h)) fail(route, 'Inline-style-Attribut (wird von der CSP blockiert)');
   if (/<(script|link)[^>]+(src|href)="https?:\/\/(?!freimoser\.github\.io)[^"]*"[^>]*>/.test(h.replace(/<link rel="(canonical|alternate)"[^>]*>/g, '')) && /<script[^>]+src="https?:/.test(h)) fail(route, 'externes Skript');
-  if (/fonts\.googleapis|fonts\.gstatic|googletagmanager|google-analytics/.test(h)) fail(route, 'Ressource von Google eingebunden');
+  // Google: keine Schriften; Analytics nie fest eingebunden, sondern nur über das Banner nach Einwilligung nachgeladen
+  if (/fonts\.googleapis|fonts\.gstatic/.test(h)) fail(route, 'Schrift von Google eingebunden');
+  if (/<(script|link|img|iframe)[^>]+(src|href)="[^"]*(googletagmanager|google-analytics)/.test(h)) fail(route, 'Google Analytics fest eingebunden (muss auf Einwilligung warten)');
+  if (GA4_ID) {
+    if (!h.includes(`data-ga="${GA4_ID}"`)) fail(route, 'Einwilligungs-Banner fehlt');
+    if (!is404 && !h.includes('data-consent-reset')) fail(route, 'Widerruf (Cookie-Einstellungen) fehlt');
+  } else if (/id="consent"/.test(h)) fail(route, 'Banner ohne Mess-ID');
   if (!is404) {
     if (!canonical) fail(route, 'Canonical fehlt');
     else if (canonical !== SITE + route) fail(route, `Canonical ${canonical} ≠ ${SITE + route}`);
@@ -77,6 +110,7 @@ for (const [route, h] of html) {
     if (data['@type'] === 'BreadcrumbList') for (const it of data.itemListElement) {
       if (!it.item || /#/.test(it.item) || !it.item.startsWith(SITE + BASE)) fail(route, `Brotkrumen-URL ungültig: ${it.item}`);
     }
+    if (data.dateModified && data['@type'] !== 'WebSite') modified.set(route, data.dateModified);
     if (data['@type'] === 'FAQPage') for (const q of data.mainEntity) {
       if (faqSeen.has(q.name)) fail(route, `FAQ-Frage auch auf ${faqSeen.get(q.name)} ausgezeichnet: ${q.name}`);
       else faqSeen.set(q.name, route);
@@ -117,6 +151,12 @@ for (const l of locs) {
 }
 for (const r of indexable) if (!locs.has(r)) fail('sitemap', `indexierbare Seite fehlt: ${r}`);
 if (!/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/.test(sm)) fail('sitemap', 'lastmod fehlt');
+// Frische-Signal einheitlich: lastmod der Sitemap = dateModified im Schema der Seite
+for (const m of sm.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)) {
+  const r = new URL(m[1]).pathname, d = modified.get(r);
+  if (!d) fail(r, 'dateModified fehlt im Schema');
+  else if (d !== m[2]) fail(r, `dateModified ${d} ≠ Sitemap-lastmod ${m[2]}`);
+}
 
 // interne Verlinkung: jede Ratgeberseite mindestens drei eingehende Links aus Inhalten
 for (const r of indexable) {
@@ -127,7 +167,17 @@ for (const r of indexable) {
 // llms.txt
 const llms = readFileSync(join(dist, 'llms.txt'), 'utf8');
 for (const m of llms.matchAll(/\]\((https:[^)]+)\)/g)) if (!exists(m[1].replace(SITE, ''))) fail('llms.txt', `Link ins Leere: ${m[1]}`);
-for (const f of ['favicon.svg', 'favicon-48.png', 'favicon-96.png', 'apple-touch-icon.png', 'manifest.webmanifest', 'sw.js']) if (!existsSync(join(dist, f))) fail('build', `${f} fehlt`);
+for (const f of ['favicon.svg', 'favicon-48.png', 'favicon-96.png', 'apple-touch-icon.png', 'manifest.webmanifest', 'sw.js', 'feed.xml', 'en/feed.xml']) if (!existsSync(join(dist, f))) fail('build', `${f} fehlt`);
+// Feeds: jede indexierbare Ratgeberseite steht drin, mit demselben Datum wie in der Sitemap
+for (const f of ['feed.xml', 'en/feed.xml']) {
+  if (!existsSync(join(dist, f))) continue;
+  const x = readFileSync(join(dist, f), 'utf8');
+  for (const m of x.matchAll(/<id>([^<]+\/)<\/id>[\s\S]*?<updated>(\d{4}-\d{2}-\d{2})T/g)) {
+    const r = new URL(m[1]).pathname;
+    if (!html.has(r)) fail(f, `Eintrag ohne Seite: ${r}`);
+    else if (modified.get(r) && modified.get(r) !== m[2]) fail(f, `Datum ${m[2]} ≠ dateModified ${modified.get(r)}: ${r}`);
+  }
+}
 if (existsSync(join(dist, 'robots.txt'))) warn.push('robots.txt im Projekt wirkt auf GitHub Pages nicht (liegt nicht im Wurzelverzeichnis).');
 
 for (const w of warn) console.log('Hinweis:', w);

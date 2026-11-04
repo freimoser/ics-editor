@@ -48,6 +48,6 @@ for (const lang of ['de', 'en']) {
   await og(`home-${lang}.png`, HOME[lang].h1, claim[lang]);
   for (const [k, g] of Object.entries(GUIDES)) await og(`${k}-${lang}.png`, g[lang].h1, claim[lang]);
 }
-const legal = { about: ['Über den ICS Editor', 'About the ICS Editor'], imprint: ['Impressum', 'Legal notice'], privacy: ['Datenschutz', 'Privacy policy'], terms: ['Nutzungsbedingungen', 'Terms of use'] };
+const legal = { glossary: ['ICS-Glossar', 'ICS glossary'], guides: ['Ratgeber zu Google Kalender', 'Google Calendar guides'], about: ['Über den ICS Editor', 'About the ICS Editor'], imprint: ['Impressum', 'Legal notice'], privacy: ['Datenschutz', 'Privacy policy'], terms: ['Nutzungsbedingungen', 'Terms of use'] };
 for (const [k, [de, en]] of Object.entries(legal)) { await og(`${k}-de.png`, de, claim.de); await og(`${k}-en.png`, en, claim.en); }
 console.log('Assets erzeugt.');

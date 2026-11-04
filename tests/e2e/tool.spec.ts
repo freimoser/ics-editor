@@ -315,7 +315,7 @@ test('Datei verlässt das Gerät nicht: keine Netzwerkanfragen beim Verarbeiten'
   await ex.getByRole('checkbox', { name: /Höchstens 999/ }).check();
   const [dl] = await Promise.all([page.waitForEvent('download'), ex.locator('.df .btn.primary').click()]);
   await dl.path();
-  const external = requests.filter((r) => !r.url().startsWith('http://localhost:4321/') && !r.url().startsWith('blob:') && !r.url().startsWith('data:'));
+  const external = requests.filter((r) => !r.url().startsWith(new URL(test.info().project.use.baseURL ?? '').origin + '/') && !r.url().startsWith('blob:') && !r.url().startsWith('data:'));
   expect(external.map((r) => r.url())).toEqual([]);
   expect(requests.filter((r) => r.method() !== 'GET').map((r) => r.url())).toEqual([]);
   // Erlaubt: nachgeladene eigene Schriftdateien (GET, gleiche Adresse) – sonst keine Anfrage

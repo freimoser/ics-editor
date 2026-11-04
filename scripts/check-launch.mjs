@@ -17,6 +17,16 @@ const start = read('index.html');
 const canonical = (/<link rel="canonical" href="([^"]+)"/.exec(start) || [])[1] || '';
 if (!canonical) blocker.push('Startseite hat kein Canonical.');
 else if (/localhost|127\.0\.0\.1|pages\.dev/.test(canonical)) blocker.push(`Canonical zeigt auf ${canonical}.`);
+// Datenschutzerklärung und Einbindung müssen zusammenpassen – in beide Richtungen.
+const { GA4_ID } = await import('../src/config/analytics.mjs');
+for (const [p, word] of [['datenschutz/index.html', 'Google Analytics'], ['en/privacy/index.html', 'Google Analytics']]) {
+  const html = read(p);
+  const says = html.includes(word + ' (nur mit Einwilligung)') || html.includes(word + ' (only with consent)');
+  if (GA4_ID && !says) blocker.push(`${p}: Google Analytics ist eingebunden, aber nicht in der Datenschutzerklärung beschrieben.`);
+  if (!GA4_ID && says) blocker.push(`${p}: beschreibt Google Analytics, obwohl keine Mess-ID gesetzt ist.`);
+  if (GA4_ID && !/data-consent-reset/.test(html)) blocker.push(`${p}: Widerrufsmöglichkeit fehlt.`);
+}
+if (GA4_ID && /G-E2ETEST|G-TEST|G-XXXX/i.test(GA4_ID)) blocker.push(`Test-Mess-ID im Build: ${GA4_ID}`);
 if (!existsSync(dist + 'favicon.ico')) hint.push('favicon.ico liegt im Projektordner; Browser fragen /favicon.ico im Wurzelverzeichnis von freimoser.github.io ab – dort gibt es keine Datei (kein Nutzer-Repository).');
 else hint.push('/favicon.ico im Wurzelverzeichnis von freimoser.github.io existiert nicht (kein Nutzer-Repository); die Seite verweist auf ihre eigenen Symbole.');
 
