@@ -35,4 +35,4 @@ export function day(iso: string, lang: 'de' | 'en'): string {
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 /** Letzte inhaltliche Änderung von Startseite und Über-Seite */
-export const PAGE_UPDATED = { home: '2026-10-26', about: '2026-11-04', guides: '2026-10-26', glossary: '2026-10-26' };
+export const PAGE_UPDATED = { home: '2026-11-05', about: '2026-11-05', guides: '2026-11-05', glossary: '2026-10-26' };
