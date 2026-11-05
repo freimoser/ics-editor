@@ -461,3 +461,5 @@ h2[id] { scroll-margin-top: calc(var(--hh, 56px) + 16px); }
 .consent p { flex: 1 1 320px; }
 .consent-btns { display: flex; gap: 8px; flex: 0 0 auto; }
 .consent-btns .btn { min-width: 110px; justify-content: center; }
+/* Widerruf-Knopf: mindestens 24 px Zielgröße (WCAG 2.5.8), sieht aus wie ein Link */
+[data-consent-reset] { min-height: 24px; padding: 3px 0; line-height: 18px; }
