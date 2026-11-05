@@ -15,6 +15,9 @@ export const SRC = {
   delete: { url: 'https://support.google.com/calendar/answer/37188', de: 'Google Kalender-Hilfe: Kalender löschen oder abbestellen', en: 'Google Calendar Help: Delete or unsubscribe from a calendar' },
   outlook: { url: 'https://support.microsoft.com/en-us/outlook/export-an-outlook-calendar-to-google-calendar', de: 'Microsoft Support: Outlook-Kalender nach Google Kalender exportieren', en: 'Microsoft Support: Export an Outlook calendar to Google Calendar' },
   apple: { url: 'https://support.apple.com/guide/calendar/icl1023/mac', de: 'Apple Support: Exportieren oder Importieren von Kalendern auf dem Mac', en: 'Apple Support: Import or export calendars on Mac' },
+  gexport: { url: 'https://support.google.com/calendar/answer/37111', de: 'Google Kalender-Hilfe: Termine aus Google Kalender exportieren', en: 'Google Calendar Help: Export events from Google Calendar' },
+  transfer: { url: 'https://support.google.com/calendar/answer/78739', de: 'Google Kalender-Hilfe: Kalender oder Termine übertragen', en: 'Google Calendar Help: Transfer calendars or events' },
+  excelCsv: { url: 'https://support.microsoft.com/de-de/excel/import-data-from-a-csv-html-or-text-file', de: 'Microsoft Support: Daten aus einer CSV-, HTML- oder Textdatei importieren', en: 'Microsoft Support: Import data from a CSV, HTML or text file' },
   rfc5545: { url: 'https://www.rfc-editor.org/rfc/rfc5545', de: 'RFC 5545: iCalendar-Format', en: 'RFC 5545: Internet Calendaring and Scheduling (iCalendar)' }
 } as const;
 
@@ -32,4 +35,4 @@ export function day(iso: string, lang: 'de' | 'en'): string {
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 /** Letzte inhaltliche Änderung von Startseite und Über-Seite */
-export const PAGE_UPDATED = { home: '2026-10-26', about: '2026-11-04', guides: '2026-10-26', glossary: '2026-10-26' };
+export const PAGE_UPDATED = { home: '2026-11-05', about: '2026-11-05', guides: '2026-11-05', glossary: '2026-10-26' };

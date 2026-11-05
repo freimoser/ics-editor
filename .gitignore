@@ -17,6 +17,8 @@ playwright-report/
 *.xls
 *.txt
 !public/llms.txt
+# IndexNow-Schlüssel (öffentlich, enthält nur den Schlüssel selbst)
+!public/a780ed1391e74ecc5f2ec4f55bd18766.txt
 !src/pages/*.txt.ts
 private-samples/
 tests/.generated/

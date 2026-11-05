@@ -9,8 +9,8 @@ export const HUB = {
     answer: 'Hier findest du alle Anleitungen des ICS Editors, nach Aufgabe geordnet. Jede beruht auf Googles eigener Hilfe, nennt ihre Quellen und zeigt die Schritte mit Bildern.',
     groups: [
       { h2: 'Datei zu groß oder zu viele Termine', keys: ['tooLarge', 'importParts', 'split', 'limits'] },
-      { h2: 'Formate: ICS, CSV und Excel', keys: ['ics', 'outlook', 'apple', 'importFails', 'convert', 'excel'] },
-      { h2: 'Aufräumen', keys: ['undo', 'dupes'] }
+      { h2: 'Formate: ICS, CSV und Excel', keys: ['open', 'ics', 'gexport', 'outlook', 'apple', 'importFails', 'convert', 'excel'] },
+      { h2: 'Aufräumen', keys: ['move', 'undo', 'dupes'] }
     ] as { h2: string; keys: PageKey[] }[]
   },
   en: {
@@ -20,8 +20,8 @@ export const HUB = {
     answer: 'All ICS Editor guides in one place, grouped by task. Each one is based on Google’s own help pages, lists its sources and shows the steps with screenshots.',
     groups: [
       { h2: 'File too large or too many events', keys: ['tooLarge', 'importParts', 'split', 'limits'] },
-      { h2: 'Formats: ICS, CSV and Excel', keys: ['ics', 'outlook', 'apple', 'importFails', 'convert', 'excel'] },
-      { h2: 'Cleaning up', keys: ['undo', 'dupes'] }
+      { h2: 'Formats: ICS, CSV and Excel', keys: ['open', 'ics', 'gexport', 'outlook', 'apple', 'importFails', 'convert', 'excel'] },
+      { h2: 'Cleaning up', keys: ['move', 'undo', 'dupes'] }
     ] as { h2: string; keys: PageKey[] }[]
   }
 };
