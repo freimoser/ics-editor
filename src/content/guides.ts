@@ -310,6 +310,202 @@ export const GUIDES: Record<string, GuideDef> = {
     }
   },
 
+  // ------------------------------------------------------------------ Google Kalender exportieren
+  gexport: {
+    type: 'howto',
+    published: '2026-11-05',
+    updated: '2026-11-05',
+    figures: [{ name: 'export', de: 'Im ICS Editor wählst du beim Export zwischen ICS und CSV für Excel – und siehst vorher, wie viele Termine und Dateien es werden.', en: 'In the ICS Editor you choose between ICS and CSV for Excel on export – and see beforehand how many events and files it will be.' }],
+    sources: ['gexport', 'import', 'excelCsv'],
+    related: ['open', 'split', 'importParts', 'move'],
+    de: {
+      title: 'Google Kalender exportieren – als ICS, CSV oder für Excel',
+      description: 'Google Kalender exportieren: alle Kalender als ZIP oder einen einzeln als ICS. Und so wird daraus eine CSV-Datei für Excel – ohne Upload.',
+      h1: 'Google Kalender exportieren: als ICS-Datei, CSV oder für Excel',
+      crumb: 'Exportieren',
+      teaser: 'ZIP, einzelne ICS-Datei oder Tabelle für Excel',
+      answer: '<strong>Google Kalender exportierst du am Computer über Einstellungen → „Importieren &amp; Exportieren“ → „Exportieren“.</strong> Du bekommst eine ZIP-Datei mit einer ICS-Datei pro Kalender; einen einzelnen Kalender exportierst du über „Einstellungen und Freigabe“ → „Kalender exportieren“. Eine Excel- oder CSV-Datei bietet Google nicht an – die erzeugst du aus der ICS-Datei im ICS Editor.',
+      stepsTitle: 'Schritt für Schritt: Google Kalender exportieren',
+      steps: [
+        { name: 'Google Kalender am Computer öffnen', text: 'Laut Google geht der Export nur in der Computer-Version, nicht in der App. Du brauchst außerdem die Berechtigung „Änderungen vornehmen und Freigabe verwalten“.' },
+        { name: 'Alle Kalender exportieren', text: 'Rechts oben auf das Zahnrad → „Einstellungen“ → links „Importieren & Exportieren“ → unter „Exportieren“ auf „Exportieren“ klicken. Es wird eine ZIP-Datei heruntergeladen.' },
+        { name: 'Oder einen Kalender einzeln', text: 'Links unter „Meine Kalender“ beim Kalender auf das Dreipunkt-Menü → „Einstellungen und Freigabe“ → „Kalender exportieren“. Du bekommst direkt eine ICS-Datei.' },
+        { name: 'Im ICS Editor ansehen', text: 'ZIP oder ICS-Datei in den ICS Editor ziehen – kein Entpacken nötig. Du siehst jeden Kalender mit Terminen, Zeitraum und Größe. Nichts wird hochgeladen.' },
+        { name: 'Als ICS oder CSV speichern', text: 'Unter „Exportieren & konvertieren“ Zeitraum und Kalender wählen und als ICS oder als „CSV für Excel“ herunterladen. Große Dateien werden automatisch in Teile unter 1 MB geteilt.' }
+      ],
+      sections: [
+        { h2: 'Welches Format wofür?', html: '<div class="table-wrap"><table><thead><tr><th>Ziel</th><th>Format</th><th>Hinweis</th></tr></thead><tbody><tr><td>Sicherung oder Umzug in ein anderes Google-Konto</td><td>ICS (aus dem Google-Export)</td><td>Jede Datei einzeln importieren, höchstens 1 MB pro Datei</td></tr><tr><td>Andere Kalender-App (Outlook, Apple Kalender)</td><td>ICS</td><td>Behält Serien und Zeitzonen</td></tr><tr><td>Liste in Excel oder Google Tabellen</td><td>CSV (über den ICS Editor)</td><td>Ohne Serientermine – die gehen nur als ICS</td></tr><tr><td>Nur ein Zeitraum, z. B. ein Jahr</td><td>ICS oder CSV (über den ICS Editor)</td><td>Zeitraum beim Export im Werkzeug wählen</td></tr></tbody></table></div>' },
+        { h2: 'Google Kalender als Excel-Tabelle', html: '<p>Google exportiert nur ICS-Dateien. Für eine Tabelle öffnest du die ICS-Datei oder das ZIP im {tool|ICS Editor} und wählst beim Export „CSV für Excel“. Die Datei hat die Spalten aus Googles Hilfe (Subject, Start Date, Start Time …) und Komma als Trennzeichen.</p><p>Zeigt ein deutsches Excel nach dem Doppelklick alles in einer Spalte, liest du die Datei über <strong>„Daten“ → „Aus Text/CSV“</strong> ein, so wie es Microsoft beschreibt, und wählst Komma als Trennzeichen. Serientermine stehen nicht in der CSV-Datei; für sie bleibt ICS das richtige Format.</p>' },
+        { h2: 'Wenn der Export nicht klappt', html: '<ul><li><strong>Kein „Exportieren“ in der App:</strong> Den Export gibt es laut Google nur am Computer.</li><li><strong>Ein freigegebener Kalender fehlt:</strong> Du brauchst dafür die Berechtigung „Änderungen vornehmen und Freigabe verwalten“.</li><li><strong>Arbeits- oder Schulkonto:</strong> Der Administrator kann den Export einschränken – dann hilft nur er weiter.</li><li><strong>Datei für den Re-Import zu groß:</strong> Google nimmt höchstens 1 MB pro Datei an – {tooLarge|so teilst du sie auf}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Kann ich Google Kalender am Handy exportieren?', a: 'Nein. Laut Google ist der Export über die Google Kalender App nicht möglich, nur über die Computer-Version im Browser.' },
+        { q: 'Kann ich Google Kalender direkt als Excel-Datei exportieren?', a: 'Nein, Google exportiert ICS-Dateien. Im ICS Editor machst du daraus eine CSV-Datei, die Excel öffnet – ohne Upload.' },
+        { q: 'Warum bekomme ich eine ZIP-Datei?', a: 'Beim Export aller Kalender packt Google eine ICS-Datei pro Kalender in eine ZIP-Datei. Der ICS Editor öffnet das ZIP direkt; für den Re-Import in Google musst du die ICS-Dateien einzeln importieren.' },
+        { q: 'Kann ich nur einen Zeitraum exportieren?', a: 'Google exportiert immer den ganzen Kalender. Einen Zeitraum, etwa nur 2026, wählst du danach beim Export im ICS Editor.' }
+      ],
+      cta: 'Google-Export jetzt öffnen'
+    },
+    en: {
+      title: 'Export Google Calendar – as ICS, CSV or for Excel',
+      description: 'Export Google Calendar: all calendars as a ZIP or one as an ICS file. And how to turn it into a CSV file for Excel – without uploading.',
+      h1: 'Export Google Calendar: as an ICS file, CSV or for Excel',
+      crumb: 'Export',
+      teaser: 'ZIP, single ICS file or a spreadsheet for Excel',
+      answer: '<strong>To export Google Calendar, go to Settings → “Import &amp; export” → “Export” on a computer.</strong> You get a ZIP file with one ICS file per calendar; to export a single calendar, use “Settings and sharing” → “Export calendar”. Google doesn’t offer an Excel or CSV file – you create one from the ICS file in the ICS Editor.',
+      stepsTitle: 'Step by step: export Google Calendar',
+      steps: [
+        { name: 'Open Google Calendar on a computer', text: 'According to Google, exporting only works in the computer version, not in the app. You also need the “Make changes and manage sharing” permission.' },
+        { name: 'Export all calendars', text: 'Gear icon at the top right → “Settings” → “Import & export” on the left → click “Export” under “Export”. A ZIP file is downloaded.' },
+        { name: 'Or export one calendar', text: 'Under “My calendars” on the left, open the three-dot menu of the calendar → “Settings and sharing” → “Export calendar”. You get an ICS file directly.' },
+        { name: 'View it in the ICS Editor', text: 'Drop the ZIP or ICS file into the ICS Editor – no unzipping needed. You see every calendar with its events, date range and size. Nothing is uploaded.' },
+        { name: 'Save as ICS or CSV', text: 'Under “Export & convert”, choose the date range and calendars and download as ICS or “CSV for Excel”. Large files are split into parts under 1 MB automatically.' }
+      ],
+      sections: [
+        { h2: 'Which format for what?', html: '<div class="table-wrap"><table><thead><tr><th>Goal</th><th>Format</th><th>Note</th></tr></thead><tbody><tr><td>Backup or moving to another Google account</td><td>ICS (from the Google export)</td><td>Import each file separately, at most 1 MB per file</td></tr><tr><td>Another calendar app (Outlook, Apple Calendar)</td><td>ICS</td><td>Keeps recurring events and time zones</td></tr><tr><td>List in Excel or Google Sheets</td><td>CSV (via the ICS Editor)</td><td>Without recurring events – those only work as ICS</td></tr><tr><td>Only one period, e.g. one year</td><td>ICS or CSV (via the ICS Editor)</td><td>Choose the date range when exporting in the tool</td></tr></tbody></table></div>' },
+        { h2: 'Google Calendar as an Excel spreadsheet', html: '<p>Google only exports ICS files. For a spreadsheet, open the ICS file or ZIP in the {tool|ICS Editor} and choose “CSV for Excel” on export. The file uses the columns from Google’s help (Subject, Start Date, Start Time …) and commas as separators.</p><p>If Excel shows everything in one column after a double-click, load the file via <strong>“Data” → “From Text/CSV”</strong>, as Microsoft describes, and choose comma as the delimiter. Recurring events are not included in the CSV file; ICS remains the right format for them.</p>' },
+        { h2: 'If the export doesn’t work', html: '<ul><li><strong>No “Export” in the app:</strong> according to Google, exporting is only available on a computer.</li><li><strong>A shared calendar is missing:</strong> you need the “Make changes and manage sharing” permission.</li><li><strong>Work or school account:</strong> the administrator can restrict exporting – only they can help.</li><li><strong>File too large for re-import:</strong> Google accepts at most 1 MB per file – {tooLarge|here’s how to split it}.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Can I export Google Calendar on my phone?', a: 'No. According to Google, exporting isn’t possible in the Google Calendar app, only in the computer version in a browser.' },
+        { q: 'Can I export Google Calendar directly as an Excel file?', a: 'No, Google exports ICS files. In the ICS Editor you turn them into a CSV file that Excel opens – without uploading.' },
+        { q: 'Why do I get a ZIP file?', a: 'When you export all calendars, Google packs one ICS file per calendar into a ZIP file. The ICS Editor opens the ZIP directly; to re-import into Google you have to import the ICS files one by one.' },
+        { q: 'Can I export only a certain period?', a: 'Google always exports the whole calendar. You choose a period, e.g. only 2026, afterwards when exporting in the ICS Editor.' }
+      ],
+      cta: 'Open your Google export now'
+    }
+  },
+
+  // ------------------------------------------------------------------ ICS-Datei öffnen
+  open: {
+    type: 'howto',
+    published: '2026-11-05',
+    updated: '2026-11-05',
+    figures: [{ name: 'editor', de: 'Eine geöffnete ICS-Datei im ICS Editor: links die Kalender, in der Mitte die Termine im Monat, rechts ein Termin mit allen Angaben.', en: 'An ICS file opened in the ICS Editor: calendars on the left, events in the month view in the middle, one event with all its details on the right.' }],
+    sources: ['rfc5545', 'apple', 'import'],
+    related: ['ics', 'gexport', 'apple', 'convert'],
+    de: {
+      title: 'ICS-Datei öffnen – online, ohne Outlook, auch am Handy',
+      description: 'ICS-Datei öffnen und lesen: im Browser ohne Outlook und ohne Upload, am Mac in Apple Kalender oder als Text. So siehst du alle Termine.',
+      h1: 'ICS-Datei öffnen: online, ohne Outlook und am Handy',
+      crumb: 'ICS öffnen',
+      teaser: 'Termine ansehen – im Browser, am Mac oder als Text',
+      answer: '<strong>Eine ICS-Datei öffnest du am einfachsten im Browser mit dem ICS Editor: Datei hineinziehen, und du siehst alle Kalender und Termine – ohne Outlook, ohne Anmeldung und ohne Upload.</strong> Das klappt am Computer und am Handy. Weil ICS reiner Text ist (Standard RFC 5545), kannst du die Datei zur Not auch in jedem Texteditor lesen.',
+      stepsTitle: 'Schritt für Schritt: ICS-Datei im Browser öffnen',
+      steps: [
+        { name: 'ICS Editor öffnen', text: 'Die Startseite des ICS Editors in einem aktuellen Browser aufrufen – am PC, Mac, Android-Handy oder iPhone.' },
+        { name: 'Datei auswählen', text: 'Die ICS-Datei auf das Feld ziehen oder auf „Datei öffnen“ tippen und sie auswählen. Auch ZIP-Exporte von Google Kalender und mehrere ICS-Dateien zugleich gehen.' },
+        { name: 'Termine ansehen', text: 'Links stehen die Kalender der Datei, in der Mitte die Termine als Monat oder Liste. Ein Klick auf einen Termin zeigt Zeit, Ort, Beschreibung und Wiederholung.' },
+        { name: 'Bei Bedarf weiterverarbeiten', text: 'Termine bearbeiten, durchsuchen oder als neue ICS- oder CSV-Datei speichern. Die Datei verlässt dein Gerät dabei nicht.' }
+      ],
+      sections: [
+        { h2: 'Welche Wege es gibt', html: '<div class="table-wrap"><table><thead><tr><th>Weg</th><th>Geht auf</th><th>Gut für</th></tr></thead><tbody><tr><td>{tool|ICS Editor} im Browser</td><td>PC, Mac, Android, iPhone</td><td>Alle Termine ansehen, durchsuchen, bearbeiten – ohne Installation</td></tr><tr><td>Apple Kalender („Ablage“ → „Importieren“)</td><td>Mac</td><td>Termine dauerhaft in einen Mac-Kalender übernehmen</td></tr><tr><td>Google Kalender (Import)</td><td>nur am Computer</td><td>Termine in Google übernehmen – {ics|so geht der Import}</td></tr><tr><td>Texteditor</td><td>überall</td><td>Kurzer Blick in den Rohtext</td></tr></tbody></table></div><p>Wichtig: Beim Import in einen Kalender werden die Termine dort angelegt. Willst du sie nur ansehen, ist der ICS Editor der sichere Weg – er verändert keinen Kalender.</p>' },
+        { h2: 'Was in einer ICS-Datei steht', html: '<p>Eine ICS-Datei beginnt mit <code>BEGIN:VCALENDAR</code> und enthält jeden Termin zwischen <code>BEGIN:VEVENT</code> und <code>END:VEVENT</code> – mit Titel (<code>SUMMARY</code>), Beginn (<code>DTSTART</code>), Ende und oft einer Wiederholungsregel (<code>RRULE</code>). Was jede Zeile bedeutet, erklärt das {glossary|ICS-Glossar}. Im Texteditor sind lange Dateien mit Tausenden Terminen kaum lesbar – im ICS Editor siehst du sie als Kalender.</p>' },
+        { h2: 'ICS-Datei am Handy öffnen', html: '<p>Am Android-Handy oder iPhone öffnest du den ICS Editor im Browser und wählst die Datei über „Datei öffnen“ aus, etwa aus den Downloads oder der Dateien-App. So siehst du alle Termine, ohne sie in einen Kalender zu übernehmen. Willst du die Termine in Google Kalender importieren, geht das laut Google nur am Computer – {importParts|bei großen Dateien in Teilen}.</p>' }
+      ],
+      faq: [
+        { q: 'Wie öffne ich eine ICS-Datei ohne Outlook?', a: 'Im Browser mit dem ICS Editor: Datei hineinziehen, und du siehst alle Kalender und Termine. Es braucht weder Outlook noch eine Anmeldung, und die Datei wird nicht hochgeladen.' },
+        { q: 'Kann ich eine ICS-Datei online öffnen, ohne sie hochzuladen?', a: 'Ja. Der ICS Editor läuft zwar im Browser, verarbeitet die Datei aber nur auf deinem Gerät. Ein automatischer Test prüft, dass beim Verarbeiten keine Netzwerkanfrage entsteht.' },
+        { q: 'Warum zeigt der Texteditor nur kryptische Zeilen?', a: 'ICS ist ein Textformat für Programme: Jede Zeile ist eine Angabe wie DTSTART oder RRULE. Das ICS-Glossar erklärt die Begriffe; übersichtlicher ist die Ansicht im ICS Editor.' },
+        { q: 'Kann ich eine ICS-Datei am iPhone ansehen, ohne sie zu importieren?', a: 'Ja, im ICS Editor im Browser. Die Termine werden nur angezeigt und nicht in einen Kalender übernommen.' }
+      ],
+      cta: 'ICS-Datei jetzt öffnen'
+    },
+    en: {
+      title: 'Open an ICS File – Online, Without Outlook, on Your Phone',
+      description: 'Open and read an ICS file: in your browser without Outlook and without uploading, in Apple Calendar on a Mac, or as text. See every event.',
+      h1: 'Open an ICS file: online, without Outlook and on your phone',
+      crumb: 'Open ICS',
+      teaser: 'View events – in a browser, on a Mac or as text',
+      answer: '<strong>The easiest way to open an ICS file is in your browser with the ICS Editor: drop the file in and you see every calendar and event – no Outlook, no sign-in and no upload.</strong> It works on computers and phones. Because ICS is plain text (standard RFC 5545), you can also read the file in any text editor if needed.',
+      stepsTitle: 'Step by step: open an ICS file in your browser',
+      steps: [
+        { name: 'Open the ICS Editor', text: 'Go to the ICS Editor home page in an up-to-date browser – on a PC, Mac, Android phone or iPhone.' },
+        { name: 'Choose the file', text: 'Drop the ICS file onto the box or tap “Open file” and select it. Google Calendar ZIP exports and several ICS files at once work too.' },
+        { name: 'View the events', text: 'The calendars in the file are on the left, the events in the middle as a month or list. Click an event to see its time, location, description and recurrence.' },
+        { name: 'Process further if needed', text: 'Edit or search events, or save them as a new ICS or CSV file. The file never leaves your device.' }
+      ],
+      sections: [
+        { h2: 'Your options', html: '<div class="table-wrap"><table><thead><tr><th>Option</th><th>Works on</th><th>Good for</th></tr></thead><tbody><tr><td>{tool|ICS Editor} in the browser</td><td>PC, Mac, Android, iPhone</td><td>Viewing, searching and editing all events – no installation</td></tr><tr><td>Apple Calendar (“File” → “Import”)</td><td>Mac</td><td>Adding the events to a Mac calendar permanently</td></tr><tr><td>Google Calendar (import)</td><td>computer only</td><td>Adding events to Google – {ics|how to import}</td></tr><tr><td>Text editor</td><td>everywhere</td><td>A quick look at the raw text</td></tr></tbody></table></div><p>Note: importing creates the events in that calendar. If you only want to look at them, the ICS Editor is the safe option – it doesn’t change any calendar.</p>' },
+        { h2: 'What’s inside an ICS file', html: '<p>An ICS file starts with <code>BEGIN:VCALENDAR</code> and contains every event between <code>BEGIN:VEVENT</code> and <code>END:VEVENT</code> – with a title (<code>SUMMARY</code>), start (<code>DTSTART</code>), end and often a recurrence rule (<code>RRULE</code>). The {glossary|ICS glossary} explains every line. In a text editor, long files with thousands of events are hard to read – in the ICS Editor you see them as a calendar.</p>' },
+        { h2: 'Open an ICS file on your phone', html: '<p>On an Android phone or iPhone, open the ICS Editor in your browser and pick the file via “Open file”, for example from Downloads or the Files app. You see all events without adding them to a calendar. Importing into Google Calendar, according to Google, only works on a computer – {importParts|large files in parts}.</p>' }
+      ],
+      faq: [
+        { q: 'How do I open an ICS file without Outlook?', a: 'In your browser with the ICS Editor: drop the file in and you see every calendar and event. No Outlook, no sign-in, and the file isn’t uploaded.' },
+        { q: 'Can I open an ICS file online without uploading it?', a: 'Yes. The ICS Editor runs in your browser but processes the file only on your device. An automated test checks that processing causes no network request.' },
+        { q: 'Why does a text editor only show cryptic lines?', a: 'ICS is a text format for programs: every line is a field such as DTSTART or RRULE. The ICS glossary explains the terms; the ICS Editor view is easier to read.' },
+        { q: 'Can I view an ICS file on an iPhone without importing it?', a: 'Yes, in the ICS Editor in your browser. The events are only shown, not added to a calendar.' }
+      ],
+      cta: 'Open your ICS file now'
+    }
+  },
+
+  // ------------------------------------------------------------------ Termine verschieben
+  move: {
+    type: 'howto',
+    published: '2026-11-05',
+    updated: '2026-11-05',
+    figures: [{ name: 'month', de: 'Im ICS Editor bekommt jeder Ziel-Kalender eine Farbe – so siehst du vor dem Export, welcher Termin wohin wandert.', en: 'In the ICS Editor every target calendar gets a colour – so you see before exporting which event goes where.' }],
+    sources: ['transfer', 'gexport', 'import', 'delete'],
+    related: ['split', 'gexport', 'dupes', 'undo'],
+    de: {
+      title: 'Mehrere Termine in einen anderen Google Kalender verschieben',
+      description: 'Google Kalender verschiebt Termine nur einzeln. So bringst du viele oder alle Termine auf einmal in einen anderen Kalender – über Export und Import.',
+      h1: 'Mehrere Termine in einen anderen Google Kalender verschieben',
+      crumb: 'Termine verschieben',
+      teaser: 'Viele Termine auf einmal in einen anderen Kalender',
+      answer: '<strong>Google Kalender verschiebt Termine laut seiner Hilfe einzeln: Termin öffnen, bearbeiten, bei „Kalender“ den Ziel-Kalender wählen, speichern.</strong> Für viele Termine auf einmal gehst du über Export und Import: Kalender exportieren, die gewünschten Termine im ICS Editor auswählen und einem neuen Kalender zuweisen, diese Datei in den Ziel-Kalender importieren.',
+      stepsTitle: 'Schritt für Schritt: viele Termine auf einmal verschieben',
+      steps: [
+        { name: 'Kalender exportieren', text: 'Am Computer in Google Kalender: Einstellungen → „Importieren & Exportieren“ → „Exportieren“. Du erhältst eine ZIP-Datei.' },
+        { name: 'Termine auswählen', text: 'Das ZIP in den ICS Editor ziehen, zur Liste wechseln und suchen – etwa nach einem Kürzel oder Stichwort. Dann „Alle auswählen“.' },
+        { name: 'Neuem Kalender zuweisen', text: '„Anderem Kalender zuweisen …“ → „Neuer Kalender“ wählen und benennen. Die Termine bekommen eine eigene Farbe.' },
+        { name: 'Nur diesen Kalender exportieren', text: 'Unter „Exportieren & konvertieren“ nur den neuen Kalender anhaken und herunterladen. Über 1 MB wird automatisch geteilt.' },
+        { name: 'In den Ziel-Kalender importieren', text: 'In Google Kalender: „Importieren & Exportieren“ → Datei auswählen → Ziel-Kalender wählen → einmal „Importieren“.' }
+      ],
+      sections: [
+        { h2: 'Einzeln oder alle auf einmal?', html: '<div class="table-wrap"><table><thead><tr><th>Lage</th><th>Weg</th></tr></thead><tbody><tr><td>Wenige Termine</td><td>In Google einzeln: Termin bearbeiten → „Kalender“ ändern → „Speichern“</td></tr><tr><td>Viele Termine nach Stichwort, Person oder Zeitraum</td><td>Export → im ICS Editor auswählen und zuweisen → Import</td></tr><tr><td>Alle Termine eines Kalenders</td><td>Export → Import in den Ziel-Kalender → alten Kalender löschen (geht nicht beim Hauptkalender)</td></tr><tr><td>Termine auf mehrere Personen verteilen</td><td>{split|Kalender aufteilen} – nach Kürzeln oder Kategorien</td></tr></tbody></table></div>' },
+        { h2: 'Was mit den Originalen passiert', html: '<p>Ein Import legt die Termine im Ziel-Kalender <strong>zusätzlich</strong> an; im alten Kalender bleiben sie stehen. Hast du alle Termine verschoben, löschst du den alten Kalender – das geht laut Google bei jedem selbst angelegten Kalender, nicht aber beim Hauptkalender ({undo|so geht das}). Hast du nur einen Teil verschoben, musst du die Originale im alten Kalender einzeln löschen oder den alten Kalender ebenfalls neu aufbauen.</p><p>Tipp: Unter „Mehr Optionen“ beim Export „Neue Termin-Kennungen vergeben“ wählen – dann sind die Termine im Ziel-Kalender eigenständige Kopien. Taucht danach etwas doppelt auf, hilft {dupes|Doppelte Termine entfernen}.</p>' },
+        { h2: 'Grenzen von Google beim Verschieben', html: '<ul><li>Termine mit mehr als 200 Gästen lassen sich laut Google nicht in einen anderen Kalender übertragen.</li><li>Gäste und Konferenzdaten werden beim Import nicht übernommen – Termine mit Einladungen verschiebst du besser einzeln in Google.</li><li>Pro Import-Datei nimmt Google höchstens 1 MB an; der ICS Editor teilt größere Dateien automatisch.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Kann ich in Google Kalender mehrere Termine gleichzeitig verschieben?', a: 'Nicht direkt: Google beschreibt nur das Verschieben einzelner Termine über „Bearbeiten“ und das Feld „Kalender“. Für viele Termine gehst du über Export, Auswahl im ICS Editor und Import.' },
+        { q: 'Wie verschiebe ich alle Termine in einen anderen Kalender?', a: 'Kalender exportieren, die ICS-Datei in den Ziel-Kalender importieren und danach den alten Kalender löschen. Beim Hauptkalender geht das Löschen nicht – dort lassen sich nur alle Termine auf einmal löschen.' },
+        { q: 'Bleiben Serientermine beim Verschieben erhalten?', a: 'Ja, wenn du als ICS exportierst und importierst. Der ICS Editor hält Serien mit ihren Ausnahmen zusammen.' },
+        { q: 'Gehen beim Verschieben über Export und Import Gäste verloren?', a: 'Ja. Laut Google werden Gäste und Konferenzdaten beim Import nicht übernommen. Termine mit Einladungen verschiebst du deshalb besser einzeln in Google.' }
+      ],
+      cta: 'Termine jetzt auswählen'
+    },
+    en: {
+      title: 'Move Multiple Events to Another Google Calendar',
+      description: 'Google Calendar moves events one at a time. Here’s how to move many or all events to another calendar at once – via export and import.',
+      h1: 'Move multiple events to another Google calendar',
+      crumb: 'Move events',
+      teaser: 'Many events into another calendar at once',
+      answer: '<strong>According to its help, Google Calendar moves events one at a time: open the event, edit it, choose the target calendar under “Calendar”, save.</strong> For many events at once, use export and import: export the calendar, select the events you want in the ICS Editor and assign them to a new calendar, then import that file into the target calendar.',
+      stepsTitle: 'Step by step: move many events at once',
+      steps: [
+        { name: 'Export the calendar', text: 'In Google Calendar on a computer: Settings → “Import & export” → “Export”. You get a ZIP file.' },
+        { name: 'Select the events', text: 'Drop the ZIP into the ICS Editor, switch to the list and search – for example for initials or a keyword. Then “Select all”.' },
+        { name: 'Assign to a new calendar', text: '“Move to calendar …” → “New calendar”, then name it. The events get their own colour.' },
+        { name: 'Export only that calendar', text: 'Under “Export & convert”, tick only the new calendar and download it. Anything over 1 MB is split automatically.' },
+        { name: 'Import into the target calendar', text: 'In Google Calendar: “Import & export” → select the file → choose the target calendar → click “Import” once.' }
+      ],
+      sections: [
+        { h2: 'One by one or all at once?', html: '<div class="table-wrap"><table><thead><tr><th>Situation</th><th>Way</th></tr></thead><tbody><tr><td>A few events</td><td>One by one in Google: edit the event → change “Calendar” → “Save”</td></tr><tr><td>Many events by keyword, person or period</td><td>Export → select and assign in the ICS Editor → import</td></tr><tr><td>All events of a calendar</td><td>Export → import into the target calendar → delete the old calendar (not possible for the primary calendar)</td></tr><tr><td>Spreading events across several people</td><td>{split|Split a calendar} – by initials or categories</td></tr></tbody></table></div>' },
+        { h2: 'What happens to the originals', html: '<p>An import creates the events in the target calendar <strong>in addition</strong>; they stay in the old calendar. If you moved all events, delete the old calendar – according to Google this works for every calendar you created, but not for your primary calendar ({undo|here’s how}). If you moved only some, delete the originals in the old calendar one by one or rebuild the old calendar too.</p><p>Tip: under “More options” on export, choose “Assign new event IDs” – then the events in the target calendar are independent copies. If something shows up twice afterwards, see {dupes|remove duplicate events}.</p>' },
+        { h2: 'Google’s limits when moving', html: '<ul><li>According to Google, events with more than 200 guests can’t be transferred to another calendar.</li><li>Guests and conference data aren’t imported – move events with invitations one by one in Google instead.</li><li>Google accepts at most 1 MB per import file; the ICS Editor splits larger files automatically.</li></ul>' }
+      ],
+      faq: [
+        { q: 'Can I move several events at once in Google Calendar?', a: 'Not directly: Google only describes moving single events via “Edit” and the “Calendar” field. For many events, use export, selection in the ICS Editor and import.' },
+        { q: 'How do I move all events to another calendar?', a: 'Export the calendar, import the ICS file into the target calendar and then delete the old calendar. The primary calendar can’t be deleted – there you can only delete all events at once.' },
+        { q: 'Do recurring events survive the move?', a: 'Yes, if you export and import as ICS. The ICS Editor keeps series together with their exceptions.' },
+        { q: 'Are guests lost when moving via export and import?', a: 'Yes. According to Google, guests and conference data aren’t imported. That’s why it’s better to move events with invitations one by one in Google.' }
+      ],
+      cta: 'Select your events now'
+    }
+  },
+
   // ------------------------------------------------------------------ Grenzen
   limits: {
     type: 'article',
