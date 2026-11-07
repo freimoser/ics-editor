@@ -17,7 +17,8 @@ const pages = [];
   for (const f of readdirSync(d)) {
     const p = join(d, f);
     if (statSync(p).isDirectory()) walk(p);
-    else if (f.endsWith('.html')) pages.push(p);
+    // Bestätigungsdateien der Search Console (googleXXXX.html) sind keine Seiten – Inhalt wird unten geprüft
+    else if (f.endsWith('.html') && !/^google[0-9a-f]+\.html$/.test(f)) pages.push(p);
   }
 })(dist);
 
@@ -168,6 +169,10 @@ for (const r of indexable) {
 const llms = readFileSync(join(dist, 'llms.txt'), 'utf8');
 for (const m of llms.matchAll(/\]\((https:[^)]+)\)/g)) if (!exists(m[1].replace(SITE, ''))) fail('llms.txt', `Link ins Leere: ${m[1]}`);
 for (const f of ['favicon.svg', 'favicon-48.png', 'favicon-96.png', 'apple-touch-icon.png', 'manifest.webmanifest', 'sw.js', 'feed.xml', 'en/feed.xml']) if (!existsSync(join(dist, f))) fail('build', `${f} fehlt`);
+// Search-Console-Bestätigungsdateien: Inhalt muss exakt dem Dateinamen entsprechen, sonst schlägt die Bestätigung fehl
+for (const f of readdirSync(dist).filter((x) => /^google[0-9a-f]+\.html$/.test(x))) {
+  if (readFileSync(join(dist, f), 'utf8').trim() !== `google-site-verification: ${f}`) fail(f, 'Inhalt der Google-Bestätigungsdatei verändert');
+}
 // Feeds: jede indexierbare Ratgeberseite steht drin, mit demselben Datum wie in der Sitemap
 for (const f of ['feed.xml', 'en/feed.xml']) {
   if (!existsSync(join(dist, f))) continue;
