@@ -139,7 +139,7 @@ main.bare { padding: 0; }
 .plain { list-style: none; margin: 0; padding: 0; }
 .shot { margin: 24px 0; }
 .shot img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0, 0, 0, .08); background: var(--bg); }
-.shot figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.shot figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
 .figure-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
 .figure-grid .shot { margin: 0; }
 .home-content { padding-top: 56px; padding-bottom: 72px; }
@@ -481,3 +481,7 @@ h2[id] { scroll-margin-top: calc(var(--hh, 56px) + 16px); }
   .consent-btns { flex: 1 1 100%; }
   .consent-btns .btn { flex: 1; min-width: 0; }
 }
+
+/* Hochformat-Bildschirmfotos (Handy): nicht über die volle Spaltenbreite ziehen */
+.shot.portrait img { max-width: 320px; margin-inline: auto; display: block; }
+.shot.portrait figcaption { text-align: center; }

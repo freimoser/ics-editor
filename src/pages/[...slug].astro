@@ -12,6 +12,7 @@ import { LEGAL as OWNER } from '../config/legal';
 import { IDS, PERSON_REF } from '../config/schema';
 import Figure from '../components/Figure.astro';
 import IMG from '../content/images.json';
+import { IMG_ALT } from '../content/image-alt';
 
 export function getStaticPaths() {
   const out: { params: { slug: string }; props: { key: PageKey; lang: Lang } }[] = [];
@@ -45,9 +46,9 @@ if (def && g) {
   ] };
   const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: g.faq.filter((f) => f !== PHONE_FAQ_DE && f !== PHONE_FAQ_EN).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
   const citation = def.sources.map((s) => ({ '@type': 'CreativeWork', name: SRC[s][lang], url: SRC[s].url }));
-  const images = def.figures.filter((f) => (IMG as Record<string, unknown>)[`${f.name}-${lang}`]).map((f) => ({ '@type': 'ImageObject', url: SITE_URL + asset(`img/${f.name}-${lang}.webp`), caption: f[lang] }));
+  const images = def.figures.filter((f) => (IMG as Record<string, unknown>)[`${f.name}-${lang}`]).map((f) => { const m = (IMG as Record<string, { w: number; h: number }>)[`${f.name}-${lang}`]; return { '@type': 'ImageObject', contentUrl: SITE_URL + asset(`img/${f.name}-${lang}.webp`), url: SITE_URL + asset(`img/${f.name}-${lang}.webp`), width: m.w, height: m.h, caption: f[lang], description: IMG_ALT[f.name]?.[lang] }; });
   // Alle Ratgeber als Article: HowTo-Ergebnisse zeigt Google seit 2023 nicht mehr, die Schritte stehen sichtbar im Text.
-  const main = { '@context': 'https://schema.org', '@type': 'Article', '@id': url(key, lang) + '#article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: def.published, dateModified: def.updated, about: [ENTITIES.gcal, ENTITIES.ical], author, publisher: author, isPartOf: { '@id': IDS.website }, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images.map((i) => i.url)], citation };
+  const main = { '@context': 'https://schema.org', '@type': 'Article', '@id': url(key, lang) + '#article', headline: g.h1, description: g.description, inLanguage: lang, datePublished: def.published, dateModified: def.updated, about: [ENTITIES.gcal, ENTITIES.ical], author, publisher: author, isPartOf: { '@id': IDS.website }, mainEntityOfPage: url(key, lang), image: [SITE_URL + asset(`og/${key}-${lang}.png`), ...images], citation };
   schema = [main, faq, crumbs];
 }
 const checked = def ? checkedOf(key) : STAND.iso;
@@ -169,6 +170,7 @@ if (gl) {
             <h2 id={anchor(s.h2)}>{s.h2}</h2>
             <Fragment set:html={linkify(s.html, lang)} />
             {i === 0 && def.figures[1] && <Figure name={def.figures[1].name} lang={lang} caption={def.figures[1][lang]} />}
+            {i === 1 && def.figures[2] && <Figure name={def.figures[2].name} lang={lang} caption={def.figures[2][lang]} />}
           </>
         ))}
         <section class="faq" aria-labelledby="faq">

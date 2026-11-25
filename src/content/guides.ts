@@ -48,7 +48,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-08',
     updated: '2026-11-25',
-    figures: [{ name: 'export', de: 'Der ICS Editor teilt eine zu große Datei automatisch in Teile unter 1 MB – mit Zeitraum und Größe je Teil.', en: 'The ICS Editor automatically splits a file that is too large into parts under 1 MB – with date range and size for each part.' }, { name: 'clean', de: 'Verkleinern: nur die letzten Jahre exportieren oder unter „Mehr Optionen“ Zusatzdaten, Beschreibungen und abgesagte Termine weglassen – Größe und Dateianzahl ändern sich sofort.', en: 'Shrinking: export only recent years or, under “More options”, leave out extras, descriptions and cancelled events – size and file count update instantly.' }],
+    figures: [{ name: 'range', de: 'Erst verkleinern: Mit dem Zeitraum „Ab 2024“ schrumpft der Beispielkalender auf 5.806 Termine – das Fenster zeigt sofort, wie viele Dateien unter 1 MB es werden.', en: 'Shrink first: with the date range starting in 2024, the example calendar drops to 5,806 events – the window shows straight away how many files under 1 MB that makes.' }, { name: 'clean', de: 'Noch kleiner: Unter „Mehr Optionen“ lässt du technische Zusatzdaten, abgesagte Termine oder Beschreibungen weg – Größe und Dateianzahl ändern sich sofort.', en: 'Even smaller: under “More options” you leave out technical extras, cancelled events or descriptions – size and file count update instantly.' }, { name: 'export', de: 'Dann aufteilen: Jede Datei bleibt unter 1 MB und zeigt ihren Zeitraum – so weißt du beim Import, welcher Teil schon drin ist.', en: 'Then split: every file stays under 1 MB and shows its date range – so while importing you know which part is already in.' }],
     sources: ['problems', 'import'],
     related: ['importParts', 'split', 'limits', 'undo'],
     de: {
@@ -117,7 +117,7 @@ export const GUIDES: Record<string, GuideDef> = {
     published: '2026-10-26',
     updated: '2026-11-25',
     checked: '2026-11-25',
-    figures: [{ name: 'export', de: 'Im Export-Fenster unter „Mehr Optionen“ → „Weglassen“ steht „Doppelte Termine“ mit der Anzahl, die das Werkzeug gefunden hat.', en: 'In the export window under “More options” → “Leave out” you’ll find “Duplicate events” with the number the tool found.' }],
+    figures: [{ name: 'dupes', de: 'Duplikate beim Export weglassen: Das Werkzeug zählt Termine mit gleichem Titel, Beginn und Ende – hier 11 in einer Beispieldatei – und behält von jedem genau einen.', en: 'Leave duplicates out on export: the tool counts events with the same title, start and end – 11 in this example file – and keeps exactly one of each.' }, { name: 'overview', de: 'Schon vor dem Export sichtbar: Die Datei-Info nennt je Kalender, wie viele Termine doppelt sind.', en: 'Visible before you export: file info shows how many events are duplicated in each calendar.' }],
     sources: ['problems', 'gexport', 'import', 'delete', 'subscribe'],
     related: ['undo', 'gexport', 'importParts', 'outlook'],
     de: {
@@ -188,7 +188,7 @@ export const GUIDES: Record<string, GuideDef> = {
     published: '2026-10-26',
     updated: '2026-11-25',
     checked: '2026-11-25',
-    figures: [{ name: 'editor', de: 'Die aus Outlook gespeicherte ICS-Datei im ICS Editor: links der Kalender mit Zeitraum und Größe, in der Mitte die Termine.', en: 'The ICS file saved from Outlook in the ICS Editor: the calendar with date range and size on the left, the events in the middle.' }],
+    figures: [{ name: 'editor', de: 'So sieht eine geöffnete Kalenderdatei im ICS Editor aus: Bevor du sie in Google importierst, prüfst du Termine, Zeitraum und Größe (Beispieldaten).', en: 'This is what an opened calendar file looks like in the ICS Editor: before importing it into Google, you check events, date range and size (example data).' }, { name: 'range', de: 'Ein großer Outlook-Kalender passt nicht in eine Datei? Ein kürzerer Zeitraum und das automatische Aufteilen bringen jeden Teil unter 1 MB.', en: 'A large Outlook calendar won’t fit in one file? A shorter date range and automatic splitting get every part under 1 MB.' }],
     sources: ['outlook', 'outlookPublish', 'subscribe', 'import', 'problems'],
     related: ['ics', 'tooLarge', 'importParts', 'dupes'],
     de: {
@@ -261,7 +261,7 @@ export const GUIDES: Record<string, GuideDef> = {
     published: '2026-10-26',
     updated: '2026-11-25',
     checked: '2026-11-25',
-    figures: [{ name: 'editor', de: 'Mehrere aus Apple Kalender exportierte ICS-Dateien im ICS Editor: links jeder Kalender mit Zeitraum und Größe.', en: 'Several ICS files exported from Apple Calendar in the ICS Editor: each calendar on the left with its date range and size.' }],
+    figures: [{ name: 'editor', de: 'Alle exportierten Apple-Kalender zusammen prüfen: Links steht jeder Kalender mit seiner Terminzahl, in der Mitte der Monat (Beispieldaten).', en: 'Check all exported Apple calendars together: each calendar is listed on the left with its event count, the month in the middle (example data).' }, { name: 'overview', de: 'Vor dem Import Uhrzeiten absichern: Die Datei-Info zeigt je Kalender die Zeitzone, den Zeitraum und die Größe.', en: 'Rule out wrong times before importing: file info shows the time zone, date range and size of each calendar.' }],
     sources: ['apple', 'icloudShare', 'subscribe', 'import', 'problems'],
     related: ['outlook', 'ics', 'importParts', 'dupes'],
     de: {
@@ -331,7 +331,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-11-05',
     updated: '2026-11-05',
-    figures: [{ name: 'export', de: 'Im ICS Editor wählst du beim Export zwischen ICS und CSV für Excel – und siehst vorher, wie viele Termine und Dateien es werden.', en: 'In the ICS Editor you choose between ICS and CSV for Excel on export – and see beforehand how many events and files it will be.' }],
+    figures: [{ name: 'overview', de: 'Was im Google-Export steckt: Die Datei-Info zeigt jeden Kalender aus dem ZIP mit Terminen, Zeitraum und Größe.', en: 'What’s inside the Google export: file info shows every calendar from the ZIP with events, date range and size.' }, { name: 'csv', de: 'Für Excel: Beim Export „CSV für Excel“ wählen – Spaltennamen und Trennzeichen entsprechen dem Format aus Googles Hilfe.', en: 'For Excel: choose “CSV for Excel” on export – column names and separator match the format in Google’s help.' }],
     sources: ['gexport', 'import', 'excelCsv'],
     related: ['open', 'split', 'importParts', 'move'],
     de: {
@@ -398,7 +398,7 @@ export const GUIDES: Record<string, GuideDef> = {
     published: '2026-11-05',
     updated: '2026-11-25',
     checked: '2026-11-25',
-    figures: [{ name: 'editor', de: 'Eine geöffnete ICS-Datei im ICS Editor: links die Kalender, in der Mitte die Termine im Monat, rechts ein Termin mit allen Angaben.', en: 'An ICS file opened in the ICS Editor: calendars on the left, events in the month view in the middle, one event with all its details on the right.' }],
+    figures: [{ name: 'start', de: 'Datei auf das Feld ziehen oder „Datei auswählen“ – die Datei wird im Browser gelesen und nicht hochgeladen.', en: 'Drop the file onto the box or click “Choose file” – the file is read in your browser and not uploaded.' }, { name: 'editor', de: 'Die geöffnete Datei: links die Kalender, in der Mitte die Termine im Monat, rechts ein Termin mit allen Angaben (Beispieldaten).', en: 'The opened file: calendars on the left, the events in the month in the middle, one event with all its details on the right (example data).' }, { name: 'mobile', de: 'Am Handy: Die Termine erscheinen als Liste mit Uhrzeit und Titel – angesehen, ohne sie in einen Kalender zu übernehmen (Beispieldaten).', en: 'On a phone: the events appear as a list with time and title – viewed without adding them to a calendar (example data).' }],
     sources: ['rfc5545', 'windowsMail', 'outlookImport', 'apple', 'import'],
     related: ['ics', 'gexport', 'apple', 'convert'],
     de: {
@@ -466,7 +466,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-11-05',
     updated: '2026-11-05',
-    figures: [{ name: 'month', de: 'Im ICS Editor bekommt jeder Ziel-Kalender eine Farbe – so siehst du vor dem Export, welcher Termin wohin wandert.', en: 'In the ICS Editor every target calendar gets a colour – so you see before exporting which event goes where.' }],
+    figures: [{ name: 'split', de: 'Ziel-Kalender anlegen: „Aufteilen“ macht aus jedem Kürzel am Titelanfang einen eigenen Kalender, dem du einen Namen gibst.', en: 'Create target calendars: “Split” turns each set of initials at the start of a title into its own calendar, which you can name.' }, { name: 'month', de: 'Vor dem Export kontrollieren: Jeder Ziel-Kalender hat eine eigene Farbe – so siehst du, welcher Termin wohin wandert.', en: 'Check before exporting: every target calendar has its own colour – so you see which event goes where.' }],
     sources: ['transfer', 'gexport', 'import', 'delete'],
     related: ['split', 'gexport', 'dupes', 'undo'],
     de: {
@@ -532,7 +532,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'article',
     published: '2026-10-08',
     updated: '2026-11-25',
-    figures: [{ name: 'overview', de: 'Die Datei-Info zeigt pro Kalender Termine, Zeitraum, Größe, Serien und Zeitzone – dazu die Termine pro Jahr.', en: 'File info shows events, date range, size, recurring events and time zone for each calendar – plus events per year.' }],
+    figures: [{ name: 'overview', de: 'Alle Kennzahlen zu einer Datei: Termine, Zeitraum, Größe, Serien und Zeitzone je Kalender – dazu die Termine pro Jahr.', en: 'All key figures for a file: events, date range, size, recurring events and time zone per calendar – plus events per year.' }, { name: 'parts', de: 'Zwei Grenzen auf einmal: höchstens 1 MB und auf Wunsch höchstens 999 Termine pro Datei – das Werkzeug zeigt Zeitraum und Terminzahl jedes Teils.', en: 'Two limits at once: at most 1 MB and, if you want, at most 999 events per file – the tool shows each part’s date range and event count.' }],
     sources: ['problems', 'import', 'limits', 'delete'],
     related: ['tooLarge', 'importFails', 'split', 'undo'],
     de: {
@@ -616,7 +616,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-08',
     updated: '2026-10-13',
-    figures: [{ name: 'check', de: '„Spalten und Probleme“: Problemzeilen in einfacher Sprache mit Zeilennummer und Vorschlag zur Korrektur.', en: '“Columns and problems”: problem rows in plain language with row number and a suggested fix.' }],
+    figures: [{ name: 'check', de: 'Statt einer Fehlermeldung von Google: „Spalten und Probleme“ nennt jede Problemzeile mit Nummer und einem Vorschlag zur Korrektur (Beispieldaten).', en: 'Instead of an error from Google: “Columns and problems” lists every problem row with its number and a suggested fix (example data).' }, { name: 'csv', de: 'Danach als Google-CSV speichern: englische Spaltennamen und Komma als Trennzeichen, so wie Google es verlangt.', en: 'Then save as Google CSV: English column names and commas as separators, exactly as Google requires.' }],
     sources: ['import', 'problems'],
     related: ['tooLarge', 'limits', 'convert', 'excel'],
     de: {
@@ -694,7 +694,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-08',
     updated: '2026-10-14',
-    figures: [{ name: 'editor', de: 'Links die Kalender der Datei und erkannte Kürzel, in der Mitte die Termine, rechts der gewählte Termin zum Bearbeiten.', en: 'On the left the calendars in the file and detected initials, in the middle the events, on the right the selected event for editing.' }, { name: 'split', de: 'Ein Klick auf „Aufteilen“ macht aus jedem Kürzel einen eigenen Kalender – mit Namen, Farbe und Anzahl der Termine.', en: 'One click on “Split” turns each set of initials into its own calendar – with a name, a colour and its event count.' }],
+    figures: [{ name: 'editor', de: 'Erkannte Kürzel: Links unter den Kalendern stehen die Kürzel, die das Werkzeug am Titelanfang gefunden hat, etwa RÖ, BB, NK (Beispieldaten).', en: 'Detected initials: below the calendars on the left are the initials the tool found at the start of titles, e.g. RÖ, BB, NK (example data).' }, { name: 'split', de: 'Ein Klick auf „Aufteilen“ macht aus jedem Kürzel einen eigenen Kalender – mit Namen, Farbe und Anzahl der Termine.', en: 'One click on “Split” turns each set of initials into its own calendar – with a name, a colour and its event count.' }, { name: 'month', de: 'Das Ergebnis: Jeder neue Kalender hat seine Farbe und kann einzeln exportiert und in Google importiert werden.', en: 'The result: every new calendar has its own colour and can be exported and imported into Google separately.' }],
     sources: ['import', 'create', 'limits', 'problems'],
     related: ['tooLarge', 'importParts', 'ics', 'undo'],
     de: {
@@ -760,7 +760,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-08',
     updated: '2026-10-13',
-    figures: [{ name: 'birthdays', de: 'Aus einer Geburtstagsliste werden jährliche, ganztägige Termine – in der Liste mit Wiederholungs-Symbol.', en: 'A birthday list becomes yearly all-day events – shown with a repeat icon in the list.' }],
+    figures: [{ name: 'birthdays', de: 'Aus einer Geburtstagsliste werden jährliche, ganztägige Termine – in der Liste mit Wiederholungs-Symbol (Beispieldaten).', en: 'A birthday list becomes yearly all-day events – shown with a repeat icon in the list (example data).' }, { name: 'privacy', de: 'Bevor etwas in Google landet: Spalten mit Telefonnummern oder Geburtsdaten lassen sich weglassen oder kürzen.', en: 'Before anything reaches Google: columns with phone numbers or dates of birth can be left out or shortened.' }],
     sources: ['import', 'problems'],
     related: ['convert', 'importFails', 'ics', 'undo'],
     de: {
@@ -824,7 +824,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-08',
     updated: '2026-10-13',
-    figures: [{ name: 'editor', de: 'Eine ICS-Datei im ICS Editor: Kalender, Termine und das Bearbeitungsfeld für den gewählten Termin.', en: 'An ICS file in the ICS Editor: calendars, events and the editor for the selected event.' }, { name: 'month', de: 'In der Monatsansicht erscheinen Serientermine an jedem Tag, an dem sie stattfinden.', en: 'In the month view, recurring events appear on every day they occur.' }],
+    figures: [{ name: 'editor', de: 'Vor dem Import ansehen: Kalender, Termine und das Bearbeitungsfeld für den gewählten Termin (Beispieldaten).', en: 'Look before importing: calendars, events and the editor for the selected event (example data).' }, { name: 'range', de: 'Größe prüfen: Das Exportfenster zeigt, ob alles in eine Datei unter 1 MB passt oder in wie viele Teile geteilt wird.', en: 'Check the size: the export window shows whether everything fits into one file under 1 MB or how many parts it needs.' }],
     sources: ['import', 'problems'],
     related: ['outlook', 'tooLarge', 'split', 'convert'],
     de: {
@@ -888,7 +888,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-14',
     updated: '2026-10-14',
-    figures: [{ name: 'parts', de: 'Nur der Kalender „Anna (A)“ angehakt und „Höchstens 999 Termine pro Datei“: Der ICS Editor teilt in vier Dateien und zeigt je Teil Zeitraum und Zahl der Termine (Beispieldaten).', en: 'Only the calendar “Anna (A)” ticked and “At most 999 events per file”: the ICS Editor splits into four files and lists each part’s date range and event count (example data).' }],
+    figures: [{ name: 'parts', de: 'Nur der Kalender „Anna (A)“ angehakt und „Höchstens 999 Termine pro Datei“: Der ICS Editor teilt in vier Dateien und zeigt je Teil Zeitraum und Zahl der Termine (Beispieldaten).', en: 'Only the calendar “Anna (A)” ticked and “At most 999 events per file”: the ICS Editor splits into four files and lists each part’s date range and event count (example data).' }, { name: 'export', de: 'Die Dateinamen enthalten den Zeitraum – so hakst du beim Import der Reihe nach ab, welcher Teil schon in Google ist.', en: 'The file names include the date range – so you tick off one by one which part is already in Google.' }],
     sources: ['import', 'problems', 'create'],
     related: ['tooLarge', 'split', 'dupes', 'undo'],
     de: {
@@ -958,7 +958,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-08',
     updated: '2026-10-13',
-    figures: [{ name: 'export', de: 'Beim Export wählst du zwischen ICS (mit Serien und Zeitzone) und Google-CSV.', en: 'When exporting you choose between ICS (with recurrence and time zone) and Google CSV.' }, { name: 'privacy', de: 'Vor dem Umwandeln lassen sich Spalten mit Namen, Telefonnummern oder Geburtsdaten weglassen oder kürzen.', en: 'Before converting, columns with names, phone numbers or birth dates can be left out or shortened.' }],
+    figures: [{ name: 'check', de: 'Erst prüfen: Ungültige Daten, fehlende Titel oder vertauschte Uhrzeiten zeigt das Werkzeug mit Zeilennummer und Vorschlag.', en: 'Check first: invalid dates, missing titles or swapped times are shown with row number and a suggestion.' }, { name: 'privacy', de: 'Vor dem Umwandeln lassen sich Spalten mit Namen, Telefonnummern oder Geburtsdaten weglassen oder kürzen; darunter ordnest du jede Spalte einem Google-Feld zu.', en: 'Before converting, columns with names, phone numbers or dates of birth can be left out or shortened; below that you map each column to a Google field.' }, { name: 'csv', de: 'Dann als ICS (mit Serien und Zeitzone) oder als Google-CSV speichern.', en: 'Then save as ICS (with recurrence and time zone) or as Google CSV.' }],
     sources: ['import', 'rfc5545'],
     related: ['excel', 'ics', 'importFails', 'tooLarge'],
     de: {
@@ -1018,7 +1018,7 @@ export const GUIDES: Record<string, GuideDef> = {
     type: 'howto',
     published: '2026-10-08',
     updated: '2026-11-04',
-    figures: [{ name: 'export', de: 'Im Export-Fenster steht die Anleitung zum Import – sie beginnt mit einem neuen, leeren Kalender.', en: 'The export window includes the import steps – starting with a new, empty calendar.' }],
+    figures: [{ name: 'parts', de: 'Beim nächsten Versuch: Große Dateien in Teilen importieren, jeden Teil mit Zeitraum – so lässt sich ein Fehler leichter eingrenzen.', en: 'On your next attempt: import large files in parts, each with its date range – that makes an error easier to narrow down.' }],
     sources: ['delete', 'create', 'problems'],
     related: ['dupes', 'importParts', 'ics', 'tooLarge'],
     de: {
