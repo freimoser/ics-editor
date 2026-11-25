@@ -4,6 +4,7 @@
 // Fakten nur aus src/content/sources.ts (Stand 7.10.2026).
 
 import type { SourceKey } from './sources';
+import { PAGE_UPDATED, STAND } from './sources';
 
 export interface Faq { q: string; a: string }
 export interface Step { name: string; text: string }
@@ -27,6 +28,8 @@ export interface GuideDef {
   /** Erstveröffentlichung und letzte inhaltliche Änderung dieser Seite (ISO-Datum) – nur ändern, wenn sich hier wirklich etwas geändert hat */
   published: string;
   updated: string;
+  /** Datum, an dem die Quellen dieser Seite zuletzt geprüft wurden – ohne Angabe gilt das spätere von STAND und published */
+  checked?: string;
   /** Bildschirmfotos aus public/img (Name ohne Sprache), mit Bildunterschrift je Sprache */
   figures: FigureDef[];
   sources: SourceKey[];
@@ -44,7 +47,7 @@ export const GUIDES: Record<string, GuideDef> = {
   tooLarge: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-11-04',
+    updated: '2026-11-25',
     figures: [{ name: 'export', de: 'Der ICS Editor teilt eine zu große Datei automatisch in Teile unter 1 MB – mit Zeitraum und Größe je Teil.', en: 'The ICS Editor automatically splits a file that is too large into parts under 1 MB – with date range and size for each part.' }, { name: 'clean', de: 'Verkleinern: nur die letzten Jahre exportieren oder unter „Mehr Optionen“ Zusatzdaten, Beschreibungen und abgesagte Termine weglassen – Größe und Dateianzahl ändern sich sofort.', en: 'Shrinking: export only recent years or, under “More options”, leave out extras, descriptions and cancelled events – size and file count update instantly.' }],
     sources: ['problems', 'import'],
     related: ['importParts', 'split', 'limits', 'undo'],
@@ -61,7 +64,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { name: 'Verkleinern', text: 'Hake nur die Jahre an, die du wirklich brauchst – zum Beispiel 2024 bis 2026. Abgesagte Termine, Beschreibungen und reine Verwaltungsdaten kannst du weglassen.' },
         { name: 'Auf die Ampel schauen', text: 'Sie zeigt bei jeder Änderung byte-genau, ob alles in eine Datei passt oder in wie viele Teile aufgeteilt wird.' },
         { name: 'Teile herunterladen', text: 'Jeder Teil ist kleiner als 950 KB und für sich vollständig importierbar. Serientermine bleiben dabei mit ihren Ausnahmen zusammen.' },
-        { name: 'Am Computer importieren', text: 'In Google Kalender zuerst einen neuen Kalender anlegen, dann jeden Teil einzeln importieren: Einstellungen → Importieren & Exportieren.' }
+        { name: 'Am Computer importieren', text: 'In Google Kalender zuerst einen neuen Kalender anlegen, dann jeden Teil einzeln importieren: Einstellungen → Importieren & Exportieren. Wie du die Teile nacheinander importierst und das Ergebnis prüfst, zeigt der Ratgeber „Kalender in Teilen importieren“.' }
       ],
       sections: [
         { h2: 'Was die Meldung „Google Calendar is temporarily unavailable“ bedeutet', html: '<p>Laut Google tritt diese Meldung beim Import meist auf, wenn die Datei zu groß ist. Google Kalender verarbeitet Dateien bis 1 MB. Als Lösung nennt Google, einen kürzeren Zeitraum aus dem ursprünglichen Programm zu exportieren oder die Datei in kleinere Dateien aufzuteilen – wobei Google dafür das Bearbeiten des CSV- oder ICS-Codes von Hand voraussetzt.</p><p>Genau diesen Teil übernimmt das {tool|Werkzeug zum Aufteilen}: Es filtert, teilt und prüft, ohne dass du eine Zeile Code anfassen musst. Welche weiteren Grenzen es gibt, steht in der Übersicht {limits|Google Kalender Limits}.</p>' },
@@ -70,8 +73,8 @@ export const GUIDES: Record<string, GuideDef> = {
         { h2: 'Warum Teile unter 950 KB und nicht genau 1 MB?', html: '<p>„1 MB“ kann 1.000.000 oder 1.048.576 Byte bedeuten. Mit 950.000 Byte bleibt jeder Teil in beiden Fällen sicher darunter. Die angezeigte Größe ist byte-genau die Größe der Datei, die du herunterlädst.</p>' }
       ],
       faq: [
-        { q: 'Gilt die 1-MB-Grenze auch für ICS-Dateien?', a: 'Ja. Google nennt die Grenze von 1 MB für CSV- und ICS-Dateien gleichermaßen.' },
-        { q: 'Wie viele Termine darf eine Datei haben?', a: 'Google nennt für den Import keine Höchstzahl an Terminen – entscheidend ist die Dateigröße. Für Workspace-Konten schreibt Google allerdings, dass man nach mehr als 100.000 neu angelegten Terminen in kurzer Zeit nur noch eingeschränkt Termine anlegen und für einige Stunden keine Termine bearbeiten kann. Bis sich dieses Limit wieder auffüllt, kann es laut Google mehrere Monate dauern.' },
+        { q: 'In welcher Reihenfolge importiere ich die Teile?', a: 'Die Reihenfolge ist egal: Jeder Teil ist für sich vollständig, Serien liegen mit ihren Ausnahmen immer im selben Teil. Das Werkzeug nummeriert die Teile chronologisch – hake sie beim Import der Reihe nach ab, damit kein Teil doppelt importiert wird.' },
+        { q: 'Welche Grenzen gibt es außer der Dateigröße?', a: 'Formatregeln für CSV, den Import nur am Computer und Nutzungslimits für sehr viele neue Termine. Alle Grenzen stehen in der Übersicht „Google Kalender Limits“.' },
         { q: 'Kann ich alle Teile als ZIP-Datei importieren?', a: 'Nein. Eine ZIP-Datei musst du zuerst entpacken und dann jede Datei einzeln importieren.' },
         { q: 'Wird meine Datei beim Aufteilen hochgeladen?', a: 'Nein. Das Werkzeug läuft vollständig in deinem Browser. Deine Datei wird nie übertragen – auch nicht an Google Analytics, das ohnehin nur mit deiner Einwilligung läuft; es gibt keinen Server, der Dateien annimmt.' }
       ],
@@ -90,7 +93,7 @@ export const GUIDES: Record<string, GuideDef> = {
         { name: 'Shrink it', text: 'Tick only the years you really need – for example 2024 to 2026. You can leave out cancelled events, descriptions and pure housekeeping data.' },
         { name: 'Check the traffic light', text: 'With every change it shows, to the byte, whether everything fits in one file or how many parts are needed.' },
         { name: 'Download the parts', text: 'Each part is smaller than 950 KB and can be imported on its own. Recurring events stay together with their exceptions.' },
-        { name: 'Import on a computer', text: 'In Google Calendar, create a new calendar first, then import each part separately: Settings → Import & export.' }
+        { name: 'Import on a computer', text: 'In Google Calendar, create a new calendar first, then import each part separately: Settings → Import & export. How to import the parts one after another and check the result is shown in the guide “Import a calendar in parts”.' }
       ],
       sections: [
         { h2: 'What “Google Calendar is temporarily unavailable” means', html: '<p>According to Google, this message usually appears when the import file is too large. Google Calendar works with files of 1 MB or smaller. Google suggests exporting a shorter date range from the original application or splitting the file into smaller files – which, in Google’s words, requires manually editing the CSV or ICS code.</p><p>That is exactly the part the {tool|calendar splitting tool} does for you: it filters, splits and checks without you touching any code. For all other limits, see {limits|Google Calendar limits}.</p>' },
@@ -99,8 +102,8 @@ export const GUIDES: Record<string, GuideDef> = {
         { h2: 'Why parts under 950 KB and not exactly 1 MB?', html: '<p>“1 MB” can mean 1,000,000 or 1,048,576 bytes. At 950,000 bytes every part stays safely below either. The size shown is exactly the size of the file you download.</p>' }
       ],
       faq: [
-        { q: 'Does the 1 MB limit apply to ICS files too?', a: 'Yes. Google states the 1 MB limit for both CSV and ICS files.' },
-        { q: 'How many events can a file contain?', a: 'Google doesn’t state a maximum number of events per import – what matters is the file size. For Workspace accounts, Google does say that creating more than 100,000 events in a short period reduces how many events you can create and can stop you from editing events for a few hours. According to Google, this limit can take several months to replenish.' },
+        { q: 'In which order do I import the parts?', a: 'The order doesn’t matter: every part is complete on its own, and series always stay in the same part as their exceptions. The tool numbers the parts chronologically – tick them off as you import so no part is imported twice.' },
+        { q: 'Which limits are there besides file size?', a: 'Format rules for CSV, import on a computer only, and usage limits for very many new events. All limits are listed in the “Google Calendar limits” overview.' },
         { q: 'Can I import all parts as one ZIP file?', a: 'No. You need to unzip it first and import each file separately.' },
         { q: 'Is my file uploaded when I split it?', a: 'No. The tool runs entirely in your browser. Your file is never sent anywhere – not even to Google Analytics, which only runs with your consent; there is no server that accepts files.' }
       ],
@@ -112,60 +115,65 @@ export const GUIDES: Record<string, GuideDef> = {
   dupes: {
     type: 'howto',
     published: '2026-10-26',
-    updated: '2026-10-26',
+    updated: '2026-11-25',
+    checked: '2026-11-25',
     figures: [{ name: 'export', de: 'Im Export-Fenster unter „Mehr Optionen“ → „Weglassen“ steht „Doppelte Termine“ mit der Anzahl, die das Werkzeug gefunden hat.', en: 'In the export window under “More options” → “Leave out” you’ll find “Duplicate events” with the number the tool found.' }],
-    sources: ['problems', 'import', 'create', 'delete'],
-    related: ['undo', 'importParts', 'ics', 'tooLarge'],
+    sources: ['problems', 'gexport', 'import', 'delete', 'subscribe'],
+    related: ['undo', 'gexport', 'importParts', 'outlook'],
     de: {
-      title: 'Doppelte Termine in Google Kalender: entfernen & vermeiden',
-      description: 'Termine nach dem Import doppelt? So entfernst du doppelte Termine aus der Datei, bevor sie in Google Kalender landen – und räumst einen Kalender neu auf.',
-      h1: 'Doppelte Termine in Google Kalender entfernen und vermeiden',
+      title: 'Doppelte Termine in Google Kalender löschen und vermeiden',
+      description: 'Doppelte Termine in Google Kalender löschen: Ursache finden, Kalender exportieren, Duplikate automatisch entfernen und sauber neu importieren.',
+      h1: 'Doppelte Termine in Google Kalender löschen und vermeiden',
       crumb: 'Doppelte Termine',
-      teaser: 'Duplikate vor dem Import herausfiltern',
-      answer: '<strong>Am einfachsten entfernst du doppelte Termine, bevor du importierst:</strong> Der ICS Editor zählt Termine mit gleichem Titel, gleichem Beginn und gleichem Ende im selben Kalender und lässt sie beim Export auf Wunsch weg. Sind die Duplikate schon in Google Kalender, exportierst du den Kalender, bereinigst die Datei und importierst sie in einen neuen, leeren Kalender.',
-      stepsTitle: 'Schritt für Schritt: Duplikate vor dem Import entfernen',
+      teaser: 'Ursache finden und Duplikate entfernen',
+      answer: '<strong>Prüfe zuerst, ob die Termine wirklich doppelt im selben Kalender stehen – oft ist derselbe Kalender nur zweimal eingebunden, dann reicht es, einen auszublenden.</strong> Stehen sie doppelt im selben Kalender, exportierst du ihn, entfernst die Duplikate im ICS Editor und importierst die bereinigte Datei in einen neuen, leeren Kalender. Google Kalender selbst hat laut seiner Hilfe keine Funktion zum Entfernen von Duplikaten.',
+      stepsTitle: 'Schritt für Schritt: Duplikate aus einem Google-Kalender entfernen',
       steps: [
-        { name: 'Datei öffnen', text: 'ICS-Datei, ZIP-Export von Google Kalender oder CSV-Datei in den ICS Editor ziehen. Die Datei bleibt auf deinem Gerät.' },
-        { name: 'Duplikate ansehen', text: 'In der Datei-Info steht unter „Doppelt“, wie viele Termine mehrfach vorkommen. Gezählt werden einzelne Termine mit gleichem Titel, Beginn und Ende; Serien zählen nicht dazu.' },
-        { name: 'Beim Export weglassen', text: '„Exportieren & konvertieren“ öffnen, unter „Mehr Optionen“ → „Weglassen“ den Haken bei „Doppelte Termine“ setzen. Von jedem Duplikat bleibt genau ein Termin übrig.' },
-        { name: 'Neuen Kalender anlegen', text: 'In Google Kalender einen neuen, leeren Kalender anlegen. So kannst du ihn komplett löschen, falls etwas nicht passt.' },
-        { name: 'Einmal importieren', text: 'Jede Datei in den neuen Kalender importieren und nur einmal auf „Importieren“ klicken.' }
+        { name: 'Kalender exportieren', text: 'In Google Kalender am Computer: Zahnrad → „Einstellungen“ → „Importieren & Exportieren“ → „Exportieren“. Du erhältst eine ZIP-Datei mit einer ICS-Datei pro Kalender.' },
+        { name: 'ZIP im ICS Editor öffnen', text: 'Die ZIP-Datei in den ICS Editor ziehen. In der Datei-Info steht unter „Doppelt“, wie viele Termine mehrfach vorkommen. Die Datei bleibt auf deinem Gerät.' },
+        { name: 'Duplikate beim Export weglassen', text: '„Exportieren & konvertieren“ öffnen, unter „Mehr Optionen“ → „Weglassen“ den Haken bei „Doppelte Termine“ setzen. Von jedem Duplikat bleibt genau ein Termin übrig.' },
+        { name: 'In neuen Kalender importieren', text: 'In Google Kalender einen neuen, leeren Kalender anlegen und die bereinigte Datei dort einmal importieren – Dateien über 1 MB in Teilen.' },
+        { name: 'Alten Kalender löschen', text: 'Passt das Ergebnis, den alten Kalender löschen. Beim Hauptkalender geht das nicht – dort lassen sich nur alle Termine auf einmal löschen.' }
       ],
       sections: [
-        { h2: 'Woher doppelte Termine kommen', html: '<ul><li><strong>Die Datei enthält sie schon:</strong> etwa wenn mehrere Exporte zusammengeführt oder Termine von Hand kopiert wurden. Das zeigt der ICS Editor vor dem Import.</li><li><strong>Dieselben Termine in zwei Kalendern:</strong> Wer einen Export in den Hauptkalender und zusätzlich in einen neuen Kalender importiert, sieht jeden Termin zweimal – einmal pro Kalender. Hier hilft es, einen der beiden Kalender auszublenden oder zu löschen.</li><li><strong>Zweimal auf „Importieren“ geklickt:</strong> Laut Google meldet der zweite Klick „Processed zero events“, weil die Termine schon beim ersten Klick angekommen sind. Prüfe deinen Kalender, bevor du es noch einmal versuchst.</li></ul>' },
-        { h2: 'Duplikate sind schon in Google Kalender: so räumst du auf', html: '<ol><li>Den betroffenen Kalender in Google Kalender exportieren (Einstellungen → Importieren &amp; Exportieren → Exportieren). Du erhältst eine ZIP-Datei.</li><li>Das ZIP in den {tool|ICS Editor} ziehen und beim Export „Doppelte Termine“ weglassen.</li><li>Einen neuen, leeren Kalender anlegen und die bereinigte Datei dort importieren – große Dateien {importParts|in Teilen}.</li><li>Ergebnis prüfen. Passt alles, den alten Kalender löschen ({undo|so geht das}).</li></ol><p>Im Hauptkalender klappt der letzte Schritt nicht: Den kannst du nicht löschen, nur alle seine Termine auf einmal.</p>' },
+        { h2: 'Erst die Ursache prüfen: wirklich doppelt?', html: '<div class="table-wrap"><table><thead><tr><th>Was du siehst</th><th>Wahrscheinliche Ursache</th><th>Was hilft</th></tr></thead><tbody><tr><td>Jeder Termin zweimal, in zwei Farben</td><td>Dieselben Termine liegen in zwei Kalendern – etwa einmal importiert und zusätzlich {outlook|per Link abonniert}</td><td>Einen der beiden Kalender links ausblenden oder löschen</td></tr><tr><td>Doppelt nur am Handy, am Computer nicht</td><td>Das Konto ist am Handy zweimal eingerichtet oder zusätzlich über eine Sync-App verbunden</td><td>In den Kalender-Einstellungen des Handys einen der Einträge abschalten</td></tr><tr><td>Doppelt in derselben Farbe, im selben Kalender</td><td>Die importierte Datei enthielt Duplikate, oder zwei Dateien mit denselben Terminen wurden importiert</td><td>Aufräumen wie oben in den Schritten</td></tr><tr><td>„Processed zero events“ beim zweiten Versuch</td><td>Laut Google wurde mehr als einmal auf „Importieren“ geklickt – die Termine sind schon da</td><td>Kalender prüfen, nicht erneut importieren</td></tr></tbody></table></div><p>Am Computer siehst du links unter „Meine Kalender“ und „Weitere Kalender“, wie viele Kalender eingebunden sind. Ein Haken weniger zeigt sofort, ob die Duplikate aus einem zweiten Kalender kommen.</p>' },
+        { h2: 'Duplikate vor dem Import vermeiden', html: '<ol><li>Jede Datei vor dem Import im {tool|ICS Editor} öffnen. Steht bei „Doppelt“ eine Zahl über null, beim Export „Doppelte Termine“ weglassen.</li><li>Immer in einen neuen, leeren Kalender importieren. Geht etwas schief, löschst du ihn komplett ({undo|so geht das}).</li><li>Nur einmal auf „Importieren“ klicken und große Dateien {importParts|in Teilen} der Reihe nach importieren – mit einer Liste, welche Teile schon drin sind.</li><li>Nicht denselben Kalender importieren und zusätzlich abonnieren.</li></ol>' },
+        { h2: 'Einzelne Duplikate von Hand löschen', html: '<p>Sind es nur wenige, geht es ohne Export: In Google Kalender oben über die Suche den Titel des Termins suchen, das Duplikat öffnen und über den Papierkorb löschen. Bei Serien fragt Google, ob nur dieser oder alle Termine gelöscht werden sollen. Ab einigen Dutzend Duplikaten ist der Weg über Export und ICS Editor schneller.</p>' },
         { h2: 'Was als doppelt gilt – und was nicht', html: '<div class="table-wrap"><table><thead><tr><th>Fall</th><th>Gilt als doppelt?</th></tr></thead><tbody><tr><td>Gleicher Titel, gleicher Beginn, gleiches Ende im selben Kalender</td><td>Ja – einer bleibt</td></tr><tr><td>Gleicher Termin in zwei verschiedenen Kalendern</td><td>Nein – jeder Kalender behält seinen</td></tr><tr><td>Gleicher Titel, aber andere Uhrzeit</td><td>Nein</td></tr><tr><td>Serientermine und ihre Ausnahmen</td><td>Nein – Serien bleiben vollständig</td></tr></tbody></table></div><p>So verschwinden keine Termine, die nur ähnlich aussehen. Ob du doppelte Termine weglässt, entscheidest du beim Export – ohne Haken bleibt die Datei unverändert.</p>' }
       ],
       faq: [
-        { q: 'Hat Google Kalender eine Funktion zum Entfernen doppelter Termine?', a: 'In der Google-Hilfe zum Import und zu Importproblemen ist keine solche Funktion beschrieben. Deshalb ist es am einfachsten, Duplikate vor dem Import aus der Datei zu entfernen.' },
+        { q: 'Hat Google Kalender eine Funktion zum Entfernen doppelter Termine?', a: 'In der Google-Hilfe zum Import und zu Importproblemen ist keine solche Funktion beschrieben. Du kannst Duplikate einzeln löschen oder den Kalender exportieren, im ICS Editor bereinigen und neu importieren.' },
+        { q: 'Warum sind meine Termine nur am Handy doppelt?', a: 'Meist ist dasselbe Konto am Handy zweimal eingebunden oder zusätzlich über eine Sync-App verbunden. Die Termine stehen dann nur einmal in Google Kalender, werden aber zweimal angezeigt. Schalte in den Kalender-Einstellungen des Handys einen der Einträge ab.' },
         { q: 'Warum meldet Google beim zweiten Import „Processed zero events“?', a: 'Laut Google passiert das, wenn man mehr als einmal auf „Importieren“ klickt: Die Termine wurden beim ersten Klick schon importiert, beim zweiten gibt es nichts Neues. Prüfe deinen Kalender – die Termine sind meist schon da.' },
         { q: 'Werden beim Entfernen von Duplikaten auch Serientermine gelöscht?', a: 'Nein. Der ICS Editor vergleicht nur einzelne Termine. Serien bleiben mit allen Ausnahmen vollständig erhalten.' },
         { q: 'Wird meine Datei dafür hochgeladen?', a: 'Nein. Der ICS Editor arbeitet ausschließlich in deinem Browser. Deine Datei wird nie übertragen – auch nicht an Google Analytics, das ohnehin nur mit deiner Einwilligung läuft.' }
       ],
-      cta: 'Doppelte Termine jetzt finden'
+      cta: 'Duplikate jetzt finden und entfernen'
     },
     en: {
-      title: 'Duplicate Events in Google Calendar: Remove & Prevent',
-      description: 'Events duplicated after an import? Remove duplicate events from the file before they reach Google Calendar – and clean up a calendar that already has them.',
-      h1: 'Remove and prevent duplicate events in Google Calendar',
+      title: 'Delete Duplicate Events in Google Calendar (and Prevent)',
+      description: 'Delete duplicate events in Google Calendar: find the cause, export the calendar, remove duplicates automatically and re-import cleanly.',
+      h1: 'Delete and prevent duplicate events in Google Calendar',
       crumb: 'Duplicate events',
-      teaser: 'Filter out duplicates before importing',
-      answer: '<strong>The easiest way to get rid of duplicate events is before you import:</strong> the ICS Editor counts events with the same title, start and end in the same calendar and leaves them out on export if you want. If the duplicates are already in Google Calendar, export the calendar, clean the file and import it into a new, empty calendar.',
-      stepsTitle: 'Step by step: remove duplicates before importing',
+      teaser: 'Find the cause and remove duplicates',
+      answer: '<strong>First check whether the events are really duplicated in the same calendar – often the same calendar is simply added twice, and hiding one is enough.</strong> If they are duplicated in the same calendar, export it, remove the duplicates in the ICS Editor and import the cleaned file into a new, empty calendar. According to its help pages, Google Calendar itself has no feature for removing duplicates.',
+      stepsTitle: 'Step by step: remove duplicates from a Google calendar',
       steps: [
-        { name: 'Open the file', text: 'Drop an ICS file, Google Calendar’s ZIP export or a CSV file into the ICS Editor. The file stays on your device.' },
-        { name: 'Check the duplicates', text: 'The file info shows under “Duplicates” how many events appear more than once. Single events with the same title, start and end are counted; recurring events are not.' },
-        { name: 'Leave them out on export', text: 'Open “Export & convert”, then under “More options” → “Leave out” tick “Duplicate events”. Exactly one event of each duplicate remains.' },
-        { name: 'Create a new calendar', text: 'Create a new, empty calendar in Google Calendar. That way you can delete it completely if something isn’t right.' },
-        { name: 'Import once', text: 'Import every file into the new calendar and click “Import” only once.' }
+        { name: 'Export the calendar', text: 'In Google Calendar on a computer: gear icon → “Settings” → “Import & export” → “Export”. You get a ZIP file with one ICS file per calendar.' },
+        { name: 'Open the ZIP in the ICS Editor', text: 'Drop the ZIP file into the ICS Editor. The file info shows under “Duplicates” how many events appear more than once. The file stays on your device.' },
+        { name: 'Leave duplicates out on export', text: 'Open “Export & convert”, then under “More options” → “Leave out” tick “Duplicate events”. Exactly one event of each duplicate remains.' },
+        { name: 'Import into a new calendar', text: 'Create a new, empty calendar in Google Calendar and import the cleaned file into it once – files over 1 MB in parts.' },
+        { name: 'Delete the old calendar', text: 'If the result looks right, delete the old calendar. This doesn’t work for the primary calendar – there you can only delete all events at once.' }
       ],
       sections: [
-        { h2: 'Where duplicate events come from', html: '<ul><li><strong>The file already contains them:</strong> for example when several exports were merged or events were copied by hand. The ICS Editor shows this before you import.</li><li><strong>The same events in two calendars:</strong> if you import an export into your primary calendar and also into a new calendar, you see every event twice – once per calendar. Hiding or deleting one of the two calendars helps.</li><li><strong>Import clicked twice:</strong> according to Google, the second click reports “Processed zero events”, because the events already arrived with the first click. Check your calendar before trying again.</li></ul>' },
-        { h2: 'Duplicates are already in Google Calendar: how to clean up', html: '<ol><li>Export the affected calendar from Google Calendar (Settings → Import &amp; export → Export). You get a ZIP file.</li><li>Drop the ZIP into the {tool|ICS Editor} and leave out “Duplicate events” on export.</li><li>Create a new, empty calendar and import the cleaned file there – large files {importParts|in parts}.</li><li>Check the result. If everything is fine, delete the old calendar ({undo|here’s how}).</li></ol><p>This last step doesn’t work for your primary calendar: it can’t be deleted, you can only delete all of its events at once.</p>' },
+        { h2: 'Check the cause first: really duplicated?', html: '<div class="table-wrap"><table><thead><tr><th>What you see</th><th>Likely cause</th><th>What helps</th></tr></thead><tbody><tr><td>Every event twice, in two colours</td><td>The same events are in two calendars – e.g. imported once and also {outlook|subscribed by link}</td><td>Hide or delete one of the two calendars on the left</td></tr><tr><td>Duplicated only on the phone, not on the computer</td><td>The account is set up twice on the phone or also connected via a sync app</td><td>Turn off one of the entries in the phone’s calendar settings</td></tr><tr><td>Duplicated in the same colour, same calendar</td><td>The imported file contained duplicates, or two files with the same events were imported</td><td>Clean up as in the steps above</td></tr><tr><td>“Processed zero events” on the second try</td><td>According to Google, “Import” was clicked more than once – the events are already there</td><td>Check the calendar, don’t import again</td></tr></tbody></table></div><p>On a computer, the left side lists your calendars under “My calendars” and “Other calendars”. Unticking one shows straight away whether the duplicates come from a second calendar.</p>' },
+        { h2: 'Prevent duplicates before importing', html: '<ol><li>Open every file in the {tool|ICS Editor} before importing. If “Duplicates” shows more than zero, leave out “Duplicate events” on export.</li><li>Always import into a new, empty calendar. If something goes wrong, delete it completely ({undo|here’s how}).</li><li>Click “Import” only once and import large files {importParts|in parts} one after another – keeping a list of the parts already done.</li><li>Don’t import a calendar and subscribe to it as well.</li></ol>' },
+        { h2: 'Delete single duplicates by hand', html: '<p>If there are only a few, you don’t need an export: search for the event title with the search at the top of Google Calendar, open the duplicate and delete it with the bin icon. For recurring events, Google asks whether to delete only this one or all events. From a few dozen duplicates on, export and the ICS Editor are faster.</p>' },
         { h2: 'What counts as a duplicate – and what doesn’t', html: '<div class="table-wrap"><table><thead><tr><th>Case</th><th>Duplicate?</th></tr></thead><tbody><tr><td>Same title, same start, same end in the same calendar</td><td>Yes – one remains</td></tr><tr><td>Same event in two different calendars</td><td>No – each calendar keeps its own</td></tr><tr><td>Same title, but a different time</td><td>No</td></tr><tr><td>Recurring events and their exceptions</td><td>No – series stay complete</td></tr></tbody></table></div><p>So no events disappear just because they look similar. You decide on export whether to leave out duplicates – without the tick, the file stays unchanged.</p>' }
       ],
       faq: [
-        { q: 'Does Google Calendar have a feature to remove duplicate events?', a: 'Google’s help pages on importing and on import problems don’t describe such a feature. That’s why it’s easiest to remove duplicates from the file before importing.' },
+        { q: 'Does Google Calendar have a feature to remove duplicate events?', a: 'Google’s help pages on importing and on import problems don’t describe such a feature. You can delete duplicates one by one, or export the calendar, clean it in the ICS Editor and import it again.' },
+        { q: 'Why are my events duplicated only on my phone?', a: 'Usually the same account is added twice on the phone or also connected via a sync app. The events are in Google Calendar only once but are shown twice. Turn off one of the entries in the phone’s calendar settings.' },
         { q: 'Why does Google say “Processed zero events” on a second import?', a: 'According to Google, this happens when you click “Import” more than once: the events were already imported with the first click, so there’s nothing new the second time. Check your calendar – the events are usually already there.' },
         { q: 'Are recurring events deleted when removing duplicates?', a: 'No. The ICS Editor only compares single events. Series stay complete with all their exceptions.' },
         { q: 'Is my file uploaded for this?', a: 'No. The ICS Editor works entirely in your browser. Your file is never sent anywhere – not even to Google Analytics, which only runs with your consent.' }
@@ -178,33 +186,36 @@ export const GUIDES: Record<string, GuideDef> = {
   outlook: {
     type: 'howto',
     published: '2026-10-26',
-    updated: '2026-10-26',
+    updated: '2026-11-25',
+    checked: '2026-11-25',
     figures: [{ name: 'editor', de: 'Die aus Outlook gespeicherte ICS-Datei im ICS Editor: links der Kalender mit Zeitraum und Größe, in der Mitte die Termine.', en: 'The ICS file saved from Outlook in the ICS Editor: the calendar with date range and size on the left, the events in the middle.' }],
-    sources: ['outlook', 'import', 'problems', 'create'],
+    sources: ['outlook', 'outlookPublish', 'subscribe', 'import', 'problems'],
     related: ['ics', 'tooLarge', 'importParts', 'dupes'],
     de: {
-      title: 'Outlook-Kalender in Google Kalender importieren (ICS)',
-      description: 'So kommt dein Outlook-Kalender in Google Kalender: als ICS-Datei speichern, prüfen, bei Bedarf unter 1 MB aufteilen und importieren. Ohne Upload.',
-      h1: 'Outlook-Kalender in Google Kalender importieren',
+      title: 'Outlook-Kalender in Google Kalender: Import oder Abo',
+      description: 'Outlook-Kalender in Google Kalender: einmal als ICS importieren oder per ICS-Link dauerhaft abonnieren – klassisches und neues Outlook, Outlook.com.',
+      h1: 'Outlook-Kalender in Google Kalender importieren oder abonnieren',
       crumb: 'Outlook → Google',
-      teaser: 'Kalender als ICS speichern und importieren',
-      answer: '<strong>Speichere den Kalender in Outlook als ICS-Datei („Datei“ → „Kalender speichern“) und importiere sie in Google Kalender am Computer.</strong> Laut Microsoft ist das eine Momentaufnahme: Spätere Änderungen in Outlook landen nicht automatisch in Google. Ist die Datei größer als 1 MB, nimmt Google sie nicht an – dann teilst du sie vorher auf.',
-      stepsTitle: 'Schritt für Schritt: von Outlook nach Google Kalender',
+      teaser: 'Einmal umziehen oder dauerhaft verbinden',
+      answer: '<strong>Für einen Umzug importierst du eine ICS-Datei, zum Weiternutzen beider Kalender abonnierst du einen ICS-Link.</strong> Die Datei speicherst du im klassischen Outlook über „Datei“ → „Kalender speichern“; laut Microsoft ist sie eine Momentaufnahme und darf für Google höchstens 1 MB groß sein. Den Link erzeugst du im neuen Outlook oder in Outlook.com über „Kalender veröffentlichen“ und fügst ihn in Google unter „Weitere Kalender“ → „Per URL“ hinzu – spätere Änderungen kommen dann von selbst an.',
+      stepsTitle: 'Schritt für Schritt: einmaliger Umzug aus dem klassischen Outlook',
       steps: [
         { name: 'Kalender in Outlook speichern', text: 'Im klassischen Outlook (Microsoft 365, 2024, 2021) den Kalender öffnen und auswählen, dann „Datei“ → „Kalender speichern“.' },
         { name: 'Zeitraum und Details wählen', text: 'Über „Weitere Optionen“ den Datumsbereich festlegen – oder den gesamten Kalender – und die Detailstufe wählen. Microsoft weist darauf hin, dass ein großer Zeitraum eine große Datei erzeugt.' },
         { name: 'Datei im ICS Editor prüfen', text: 'Die ICS-Datei in den ICS Editor ziehen. Du siehst Termine, Zeitraum und Größe – und ob die Datei unter 1 MB bleibt. Nichts wird hochgeladen.' },
         { name: 'Bei Bedarf aufteilen', text: 'Ist sie größer, unter „Exportieren & konvertieren“ einen kürzeren Zeitraum wählen oder automatisch in Teile unter 1 MB aufteilen lassen.' },
-        { name: 'Neuen Kalender anlegen', text: 'In Google Kalender einen neuen, leeren Kalender anlegen, etwa „Outlook“. So lässt sich der Import bei Bedarf komplett rückgängig machen.' },
-        { name: 'In Google importieren', text: 'Am Computer: Zahnrad → „Einstellungen“ → „Importieren & Exportieren“ → Datei auswählen, den neuen Kalender als Ziel wählen und einmal auf „Importieren“ klicken.' }
+        { name: 'In Google importieren', text: 'In Google Kalender einen neuen, leeren Kalender anlegen (etwa „Outlook“) und die Datei am Computer dort importieren. Wie das im Einzelnen geht, zeigt der Ratgeber zum ICS-Import.' }
       ],
       sections: [
-        { h2: 'Was beim Umzug von Outlook mitkommt – und was nicht', html: '<div class="table-wrap"><table><thead><tr><th>Inhalt</th><th>Kommt mit?</th></tr></thead><tbody><tr><td>Termine mit Titel, Zeit, Ort und Beschreibung</td><td>Ja – je nach gewählter Detailstufe in Outlook</td></tr><tr><td>Serientermine</td><td>Ja, so wie Outlook sie speichert – laut Google exportieren manche Programme Serien als Einzeltermine, die dann auch so ankommen</td></tr><tr><td>Gäste und Konferenzdaten</td><td>Nein – Google importiert sie laut seiner Hilfe nicht</td></tr><tr><td>Spätere Änderungen in Outlook</td><td>Nein – der Export ist laut Microsoft eine Momentaufnahme</td></tr></tbody></table></div><p>Wer dauerhaft beide Kalender nutzen will, braucht ein Abo oder eine Synchronisation statt eines einmaligen Imports. Für den Umzug reicht der Import.</p>' },
+        { h2: 'Import oder Abo: was passt zu dir?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Einmal importieren</th><th>Per ICS-Link abonnieren</th></tr></thead><tbody><tr><td>Wofür</td><td>Umzug: Outlook wird danach nicht mehr genutzt</td><td>Beide Kalender bleiben in Gebrauch</td></tr><tr><td>Spätere Änderungen in Outlook</td><td>kommen nicht an – laut Microsoft eine Momentaufnahme</td><td>kommen an – laut Microsoft erhalten Abonnenten Änderungen automatisch, aber nicht sofort</td></tr><tr><td>In Google bearbeitbar</td><td>ja, die Termine gehören dann dir</td><td>nein – laut Microsoft sind veröffentlichte Kalender schreibgeschützt</td></tr><tr><td>Größenlimit</td><td>1 MB pro Import-Datei, sonst {tooLarge|aufteilen}</td><td>keines aus der Google-Hilfe bekannt</td></tr><tr><td>Geht mit</td><td>klassischem Outlook (Microsoft 365, 2024, 2021)</td><td>neuem Outlook, Outlook im Web, Outlook.com</td></tr></tbody></table></div><p>Faustregel: Ziehst du um, importierst du. Arbeitest du weiter in Outlook und willst die Termine nur in Google sehen, abonnierst du.</p>' },
+        { h2: 'Neues Outlook und Outlook.com: Kalender per Link abonnieren', html: '<ol><li><strong>In Outlook veröffentlichen:</strong> Laut Microsoft unter „Einstellungen“ → „Kalender“ → „Freigegebene Kalender“ → „Kalender veröffentlichen“ den Kalender und die Detailstufe wählen und auf „Veröffentlichen“ klicken.</li><li><strong>ICS-Link kopieren:</strong> Outlook zeigt danach einen HTML- und einen ICS-Link. Für Google brauchst du den ICS-Link; der HTML-Link öffnet den Kalender nur im Browser.</li><li><strong>In Google abonnieren:</strong> Laut Google am Computer links neben „Weitere Kalender“ auf das Plus → „Per URL“ klicken, den Link einfügen und „Kalender hinzufügen“ wählen. In der Google-Kalender-App am Handy geht das nicht.</li><li><strong>Später beenden:</strong> In Outlook unter „Kalender veröffentlichen“ auf „Veröffentlichung aufheben“ klicken; danach kommen keine Änderungen mehr an.</li></ol><p>Wichtig: Wer den ICS-Link kennt, kann den Kalender lesen. Wähle deshalb nur die Detailstufe, die du wirklich teilen willst – etwa „Kann sehen, wann ich beschäftigt bin“ statt aller Details.</p>' },
+        { h2: 'Was beim Umzug von Outlook mitkommt – und was nicht', html: '<div class="table-wrap"><table><thead><tr><th>Inhalt</th><th>Kommt mit?</th></tr></thead><tbody><tr><td>Termine mit Titel, Zeit, Ort und Beschreibung</td><td>Ja – je nach gewählter Detailstufe in Outlook</td></tr><tr><td>Serientermine</td><td>Ja, so wie Outlook sie speichert – laut Google exportieren manche Programme Serien als Einzeltermine, die dann auch so ankommen</td></tr><tr><td>Gäste und Konferenzdaten</td><td>Nein – Google importiert sie laut seiner Hilfe nicht</td></tr><tr><td>Spätere Änderungen in Outlook</td><td>Nein – der Export ist laut Microsoft eine Momentaufnahme</td></tr></tbody></table></div><p>Gäste und Teilnehmerantworten bleiben also in Outlook. Prüfe vor dem Löschen des Outlook-Kalenders, ob in Google alle Termine angekommen sind.</p>' },
         { h2: 'Große Outlook-Kalender: unter 1 MB bringen', html: '<p>Google Kalender nimmt pro Import-Datei höchstens 1 MB an. Ein Outlook-Kalender mit vielen Jahren und Beschreibungen ist schnell größer. Zwei Wege helfen:</p><ol><li><strong>Schon in Outlook</strong> einen kürzeren Datumsbereich wählen, etwa nur die letzten zwei Jahre und die Zukunft.</li><li><strong>Im {tool|ICS Editor}</strong> die ganze Datei öffnen und {tooLarge|automatisch in Teile unter 1 MB aufteilen}. Serien bleiben dabei mit ihren Ausnahmen zusammen. Wie das Importieren der Teile in der Praxis aussieht, zeigt {importParts|Kalender in Teilen importieren}.</li></ol>' },
         { h2: 'Wenn nach dem Import etwas nicht stimmt', html: '<ul><li><strong>Termine zur falschen Uhrzeit:</strong> Google empfiehlt, die Zeitzone in Google Kalender mit der in Outlook abzugleichen und neu zu exportieren und zu importieren.</li><li><strong>Termine doppelt:</strong> Meist wurde zweimal importiert. Mehr dazu: {dupes|doppelte Termine entfernen}.</li><li><strong>Alles falsch:</strong> Den neu angelegten Kalender löschen und von vorn beginnen – {undo|so geht das}.</li></ul>' }
       ],
       faq: [
-        { q: 'Werden Änderungen in Outlook automatisch in Google Kalender übernommen?', a: 'Nein. Laut Microsoft ist der Export eine Momentaufnahme. Änderungen, die du danach in Outlook machst, erscheinen nicht automatisch in Google Kalender.' },
+        { q: 'Werden Änderungen in Outlook automatisch in Google Kalender übernommen?', a: 'Beim Import nicht: Laut Microsoft ist der Export eine Momentaufnahme. Willst du Änderungen übernehmen, veröffentliche den Kalender in Outlook als ICS-Link und abonniere ihn in Google Kalender. Änderungen erscheinen dann automatisch, aber mit Verzögerung.' },
+        { q: 'Wo finde ich „Kalender speichern“ im neuen Outlook?', a: 'Die Microsoft-Anleitung für „Datei“ → „Kalender speichern“ gilt für das klassische Outlook (Microsoft 365, 2024, 2021). Im neuen Outlook und in Outlook.com ist der von Microsoft beschriebene Weg nach Google das Veröffentlichen als ICS-Link.' },
         { q: 'Warum lässt sich meine Outlook-Datei nicht in Google importieren?', a: 'Häufigster Grund ist die Größe: Google nimmt höchstens 1 MB pro Datei an und meldet sonst „Google Calendar is temporarily unavailable“. Wähle in Outlook einen kürzeren Zeitraum oder teile die Datei im ICS Editor auf.' },
         { q: 'Kann ich den Outlook-Kalender am Handy in Google importieren?', a: 'Nein. Google Kalender erlaubt den Import nur am Computer. Vorbereiten kannst du die Datei aber auch am Handy.' },
         { q: 'Wird meine Outlook-Datei dabei hochgeladen?', a: 'Nicht zum ICS Editor: Er arbeitet ausschließlich in deinem Browser. Erst beim Import in Google Kalender geht die Datei an Google.' }
@@ -212,28 +223,30 @@ export const GUIDES: Record<string, GuideDef> = {
       cta: 'Outlook-Datei jetzt prüfen'
     },
     en: {
-      title: 'Import an Outlook Calendar into Google Calendar (ICS)',
-      description: 'Move your Outlook calendar to Google Calendar: save it as an ICS file, check it, split it under 1 MB if needed, and import it. No upload.',
-      h1: 'Import an Outlook calendar into Google Calendar',
+      title: 'Outlook Calendar to Google Calendar: Import or Subscribe',
+      description: 'Get an Outlook calendar into Google Calendar: import it once as ICS or subscribe via an ICS link – classic Outlook, new Outlook and Outlook.com.',
+      h1: 'Import or subscribe to an Outlook calendar in Google Calendar',
       crumb: 'Outlook → Google',
-      teaser: 'Save the calendar as ICS and import it',
-      answer: '<strong>Save the calendar in Outlook as an ICS file (“File” → “Save Calendar”) and import it into Google Calendar on a computer.</strong> According to Microsoft, this is a snapshot: later changes in Outlook don’t reach Google automatically. If the file is larger than 1 MB, Google won’t accept it – so split it first.',
-      stepsTitle: 'Step by step: from Outlook to Google Calendar',
+      teaser: 'Move once or stay connected',
+      answer: '<strong>To move over, import an ICS file; to keep using both calendars, subscribe to an ICS link.</strong> You save the file in classic Outlook via “File” → “Save Calendar”; according to Microsoft it is a snapshot, and for Google it can be at most 1 MB. You create the link in new Outlook or Outlook.com via “Publish a calendar” and add it in Google under “Other calendars” → “From URL” – later changes then arrive by themselves.',
+      stepsTitle: 'Step by step: a one-off move from classic Outlook',
       steps: [
         { name: 'Save the calendar in Outlook', text: 'In classic Outlook (Microsoft 365, 2024, 2021), open and select the calendar, then choose “File” → “Save Calendar”.' },
         { name: 'Choose date range and detail', text: 'Under “More Options”, set the date range – or the whole calendar – and the level of detail. Microsoft notes that a large date range creates a large file.' },
         { name: 'Check the file in the ICS Editor', text: 'Drop the ICS file into the ICS Editor. You see the events, date range and size – and whether the file stays under 1 MB. Nothing is uploaded.' },
         { name: 'Split if needed', text: 'If it’s larger, choose a shorter date range under “Export & convert” or let the tool split it into parts under 1 MB automatically.' },
-        { name: 'Create a new calendar', text: 'Create a new, empty calendar in Google Calendar, e.g. “Outlook”. That way you can undo the whole import if needed.' },
-        { name: 'Import into Google', text: 'On a computer: gear icon → “Settings” → “Import & export” → select the file, choose the new calendar as the destination and click “Import” once.' }
+        { name: 'Import into Google', text: 'Create a new, empty calendar in Google Calendar (e.g. “Outlook”) and import the file into it on a computer. The ICS import guide shows each click.' }
       ],
       sections: [
-        { h2: 'What moves from Outlook – and what doesn’t', html: '<div class="table-wrap"><table><thead><tr><th>Content</th><th>Included?</th></tr></thead><tbody><tr><td>Events with title, time, location and description</td><td>Yes – depending on the detail level chosen in Outlook</td></tr><tr><td>Recurring events</td><td>Yes, as Outlook saves them – according to Google, some apps export series as single events, which then arrive that way</td></tr><tr><td>Guests and conference data</td><td>No – according to Google’s help, they aren’t imported</td></tr><tr><td>Later changes in Outlook</td><td>No – according to Microsoft, the export is a snapshot</td></tr></tbody></table></div><p>If you want to keep using both calendars, you need a subscription or sync instead of a one-off import. For moving over, the import is enough.</p>' },
+        { h2: 'Import or subscribe: which fits?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Import once</th><th>Subscribe via ICS link</th></tr></thead><tbody><tr><td>For</td><td>Moving: you stop using Outlook</td><td>Both calendars stay in use</td></tr><tr><td>Later changes in Outlook</td><td>don’t arrive – according to Microsoft a snapshot</td><td>arrive – according to Microsoft subscribers get updates automatically, but not instantly</td></tr><tr><td>Editable in Google</td><td>yes, the events are yours</td><td>no – according to Microsoft published calendars are read-only</td></tr><tr><td>Size limit</td><td>1 MB per import file, otherwise {tooLarge|split it}</td><td>none stated in Google’s help</td></tr><tr><td>Works with</td><td>classic Outlook (Microsoft 365, 2024, 2021)</td><td>new Outlook, Outlook on the web, Outlook.com</td></tr></tbody></table></div><p>Rule of thumb: moving over? Import. Still working in Outlook and just want to see the events in Google? Subscribe.</p>' },
+        { h2: 'New Outlook and Outlook.com: subscribe via link', html: '<ol><li><strong>Publish in Outlook:</strong> according to Microsoft, go to “Settings” → “Calendar” → “Shared calendars” → “Publish a calendar”, choose the calendar and the level of detail, and select “Publish”.</li><li><strong>Copy the ICS link:</strong> Outlook then shows an HTML and an ICS link. Google needs the ICS link; the HTML link only opens the calendar in a browser.</li><li><strong>Subscribe in Google:</strong> according to Google, on a computer click the plus next to “Other calendars” → “From URL”, paste the link and select “Add calendar”. This doesn’t work in the Google Calendar phone app.</li><li><strong>Stop later:</strong> in Outlook, select “Unpublish” under “Publish a calendar”; after that, no more changes arrive.</li></ol><p>Note: anyone who knows the ICS link can read the calendar. Only choose the level of detail you really want to share – such as “Can view when I’m busy” rather than all details.</p>' },
+        { h2: 'What moves from Outlook – and what doesn’t', html: '<div class="table-wrap"><table><thead><tr><th>Content</th><th>Included?</th></tr></thead><tbody><tr><td>Events with title, time, location and description</td><td>Yes – depending on the detail level chosen in Outlook</td></tr><tr><td>Recurring events</td><td>Yes, as Outlook saves them – according to Google, some apps export series as single events, which then arrive that way</td></tr><tr><td>Guests and conference data</td><td>No – according to Google’s help, they aren’t imported</td></tr><tr><td>Later changes in Outlook</td><td>No – according to Microsoft, the export is a snapshot</td></tr></tbody></table></div><p>So guests and responses stay in Outlook. Before deleting the Outlook calendar, check that every event arrived in Google.</p>' },
         { h2: 'Large Outlook calendars: get under 1 MB', html: '<p>Google Calendar accepts at most 1 MB per import file. An Outlook calendar with many years and descriptions quickly exceeds that. Two ways help:</p><ol><li><strong>In Outlook already</strong>, choose a shorter date range, such as the last two years plus the future.</li><li><strong>In the {tool|ICS Editor}</strong>, open the whole file and {tooLarge|split it into parts under 1 MB automatically}. Recurring events stay together with their exceptions. What importing the parts looks like in practice is shown in {importParts|import a calendar in parts}.</li></ol>' },
         { h2: 'If something is wrong after the import', html: '<ul><li><strong>Events at the wrong time:</strong> Google recommends matching the time zone in Google Calendar with the one in Outlook, then exporting and importing again.</li><li><strong>Duplicate events:</strong> usually the file was imported twice. More: {dupes|remove duplicate events}.</li><li><strong>Everything is wrong:</strong> delete the newly created calendar and start over – {undo|here’s how}.</li></ul>' }
       ],
       faq: [
-        { q: 'Are changes in Outlook synced to Google Calendar automatically?', a: 'No. According to Microsoft, the export is a snapshot. Changes you make in Outlook afterwards don’t appear in Google Calendar automatically.' },
+        { q: 'Are changes in Outlook synced to Google Calendar automatically?', a: 'Not with an import: according to Microsoft, the export is a snapshot. To pick up changes, publish the calendar in Outlook as an ICS link and subscribe to it in Google Calendar. Changes then appear automatically, but with a delay.' },
+        { q: 'Where is “Save Calendar” in new Outlook?', a: 'Microsoft’s “File” → “Save Calendar” steps apply to classic Outlook (Microsoft 365, 2024, 2021). In new Outlook and Outlook.com, the way to Google that Microsoft describes is publishing an ICS link.' },
         { q: 'Why won’t my Outlook file import into Google Calendar?', a: 'The most common reason is size: Google accepts at most 1 MB per file and otherwise reports “Google Calendar is temporarily unavailable”. Choose a shorter date range in Outlook or split the file in the ICS Editor.' },
         { q: 'Can I import my Outlook calendar into Google on my phone?', a: 'No. Google Calendar only allows importing on a computer. You can still prepare the file on your phone.' },
         { q: 'Is my Outlook file uploaded?', a: 'Not to the ICS Editor: it works entirely in your browser. Only when you import into Google Calendar does the file go to Google.' }
@@ -246,14 +259,15 @@ export const GUIDES: Record<string, GuideDef> = {
   apple: {
     type: 'howto',
     published: '2026-10-26',
-    updated: '2026-10-26',
+    updated: '2026-11-25',
+    checked: '2026-11-25',
     figures: [{ name: 'editor', de: 'Mehrere aus Apple Kalender exportierte ICS-Dateien im ICS Editor: links jeder Kalender mit Zeitraum und Größe.', en: 'Several ICS files exported from Apple Calendar in the ICS Editor: each calendar on the left with its date range and size.' }],
-    sources: ['apple', 'import', 'problems', 'create'],
+    sources: ['apple', 'icloudShare', 'subscribe', 'import', 'problems'],
     related: ['outlook', 'ics', 'importParts', 'dupes'],
     de: {
-      title: 'Apple Kalender (Mac) in Google Kalender importieren',
-      description: 'Apple-Kalender vom Mac in Google Kalender übertragen: jeden Kalender als ICS exportieren, prüfen, unter 1 MB bringen und importieren. Ohne Upload.',
-      h1: 'Apple Kalender vom Mac in Google Kalender importieren',
+      title: 'Apple Kalender in Google Kalender: Import oder Abo',
+      description: 'Apple-Kalender in Google Kalender: vom Mac als ICS exportieren und importieren – oder einen iCloud-Kalender per Link dauerhaft abonnieren.',
+      h1: 'Apple Kalender in Google Kalender importieren oder abonnieren',
       crumb: 'Apple → Google',
       teaser: 'Mac-Kalender als ICS exportieren und importieren',
       answer: '<strong>Exportiere in der App „Kalender“ auf dem Mac jeden Kalender einzeln über „Ablage“ → „Exportieren“ → „Exportieren“ als ICS-Datei und importiere sie in Google Kalender am Computer.</strong> Das „Kalender-Archiv“ (.icbu) eignet sich dafür nicht: Google importiert nur ICS- und CSV-Dateien, jede höchstens 1 MB groß.',
@@ -269,20 +283,21 @@ export const GUIDES: Record<string, GuideDef> = {
       sections: [
         { h2: 'ICS-Datei oder Kalender-Archiv?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Exportieren (.ics)</th><th>Kalender-Archiv (.icbu)</th></tr></thead><tbody><tr><td>Menü in Apple Kalender</td><td>„Ablage“ → „Exportieren“ → „Exportieren“</td><td>„Ablage“ → „Exportieren“ → „Kalender-Archiv“</td></tr><tr><td>Inhalt</td><td>ein Kalender</td><td>alle Kalender auf einmal</td></tr><tr><td>Wofür gedacht</td><td>teilen, in andere Kalender übertragen</td><td>Sicherung und Wiederherstellung am Mac</td></tr><tr><td>In Google Kalender importierbar</td><td>Ja</td><td>Nein – Google nimmt nur ICS und CSV</td></tr></tbody></table></div><p>Für den Umzug nach Google brauchst du also die einzelnen ICS-Dateien. Bei vielen Kalendern ist das etwas Klickarbeit, aber jeder Kalender landet sauber in einem eigenen Google-Kalender.</p>' },
         { h2: 'iCloud-Kalender: erst wählen, dann exportieren', html: '<p>Laut Apple liegen Kalender eines Accounts wie iCloud oder Exchange ohnehin auf dem Server des Anbieters. Für den Export spielt das keine Rolle: Auch ein iCloud-Kalender wird in der App „Kalender“ ausgewählt und über „Ablage“ → „Exportieren“ als ICS-Datei gespeichert. Der Export ist eine Kopie – spätere Änderungen in Apple Kalender kommen nicht automatisch in Google an.</p>' },
+        { h2: 'Dauerhaft verbinden statt einmal importieren', html: '<p>Nutzt du Apple Kalender weiter und willst die Termine nur zusätzlich in Google sehen, ist ein Abo besser als ein Import:</p><ol><li><strong>Kalender öffentlich machen:</strong> Laut Apple auf iCloud.com im Kalender beim gewünschten Kalender die Freigabe öffnen, „Öffentlicher Kalender“ einschalten und auf „Kopieren“ klicken.</li><li><strong>In Google abonnieren:</strong> Laut Google am Computer neben „Weitere Kalender“ auf das Plus → „Per URL“ klicken, den Link einfügen und „Kalender hinzufügen“ wählen. Google kann nur öffentliche Kalender per Link abonnieren.</li><li><strong>Ergebnis:</strong> Der Kalender erscheint in Google unter „Weitere Kalender“. Änderungen aus Apple Kalender kommen von selbst an, aber nicht sofort; bearbeiten kannst du die Termine in Google nicht.</li></ol><p>Ein öffentlicher Kalender ist für jeden lesbar, der den Link kennt. Für private oder berufliche Termine ist der einmalige Import deshalb oft die bessere Wahl.</p><div class="table-wrap"><table><thead><tr><th></th><th>Import (.ics)</th><th>Öffentlicher iCloud-Link</th></tr></thead><tbody><tr><td>Spätere Änderungen</td><td>kommen nicht an</td><td>kommen an, mit Verzögerung</td></tr><tr><td>In Google bearbeitbar</td><td>ja</td><td>nein</td></tr><tr><td>Wer kann mitlesen</td><td>nur du</td><td>jeder mit dem Link</td></tr><tr><td>Größenlimit</td><td>1 MB pro Datei</td><td>keines aus der Google-Hilfe bekannt</td></tr></tbody></table></div>' },
         { h2: 'Große Kalender und Fehler beim Import', html: '<ul><li><strong>Datei größer als 1 MB:</strong> Google meldet dann „Google Calendar is temporarily unavailable“. Im {tool|ICS Editor} teilst du sie {tooLarge|automatisch in Teile unter 1 MB}.</li><li><strong>Falsche Uhrzeiten:</strong> Google empfiehlt, die Zeitzone in Google Kalender mit der des Ursprungsprogramms abzugleichen und neu zu exportieren und zu importieren.</li><li><strong>Termine doppelt:</strong> {dupes|So findest und entfernst du Duplikate.}</li><li><strong>Import ging schief:</strong> den neuen Kalender löschen und neu beginnen – {undo|so geht das}.</li></ul>' }
       ],
       faq: [
         { q: 'Kann ich alle Apple-Kalender auf einmal in Google importieren?', a: 'Nicht über das Kalender-Archiv: Es ist eine .icbu-Datei, Google importiert aber nur ICS und CSV. Exportiere jeden Kalender einzeln als ICS-Datei – im ICS Editor kannst du alle Dateien zusammen öffnen und prüfen.' },
-        { q: 'Werden Änderungen in Apple Kalender danach automatisch übernommen?', a: 'Nein. Ein Export ist eine Kopie zum Zeitpunkt des Exports. Spätere Änderungen erscheinen nicht automatisch in Google Kalender.' },
+        { q: 'Werden Änderungen in Apple Kalender danach automatisch übernommen?', a: 'Beim Import nicht: Ein Export ist eine Kopie zum Zeitpunkt des Exports. Willst du Änderungen übernehmen, mach den iCloud-Kalender öffentlich und abonniere den Link in Google Kalender unter „Weitere Kalender“ → „Per URL“.' },
         { q: 'Geht das auch am iPhone?', a: 'Den Import in Google Kalender gibt es nur am Computer. Die Export-Schritte von Apple beschreiben die App „Kalender“ auf dem Mac.' },
         { q: 'Wird mein Kalender dabei hochgeladen?', a: 'Nicht zum ICS Editor: Er arbeitet ausschließlich in deinem Browser. Erst beim Import in Google Kalender geht die Datei an Google.' }
       ],
       cta: 'Apple-Kalender jetzt prüfen'
     },
     en: {
-      title: 'Import Apple Calendar (Mac) into Google Calendar',
-      description: 'Move Apple Calendar from your Mac to Google Calendar: export each calendar as ICS, check it, get it under 1 MB and import it. No upload.',
-      h1: 'Import Apple Calendar from your Mac into Google Calendar',
+      title: 'Apple Calendar to Google Calendar: Import or Subscribe',
+      description: 'Apple Calendar into Google Calendar: export from your Mac as ICS and import it – or subscribe to an iCloud calendar by link to stay in sync.',
+      h1: 'Import or subscribe to Apple Calendar in Google Calendar',
       crumb: 'Apple → Google',
       teaser: 'Export Mac calendars as ICS and import them',
       answer: '<strong>In the Calendar app on your Mac, export each calendar separately via “File” → “Export” → “Export” as an ICS file and import it into Google Calendar on a computer.</strong> The “Calendar Archive” (.icbu) doesn’t work for this: Google only imports ICS and CSV files, each at most 1 MB.',
@@ -298,11 +313,12 @@ export const GUIDES: Record<string, GuideDef> = {
       sections: [
         { h2: 'ICS file or Calendar Archive?', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Export (.ics)</th><th>Calendar Archive (.icbu)</th></tr></thead><tbody><tr><td>Menu in Apple Calendar</td><td>“File” → “Export” → “Export”</td><td>“File” → “Export” → “Calendar Archive”</td></tr><tr><td>Contents</td><td>one calendar</td><td>all calendars at once</td></tr><tr><td>Meant for</td><td>sharing, moving to other calendars</td><td>backup and restore on the Mac</td></tr><tr><td>Importable into Google Calendar</td><td>Yes</td><td>No – Google only accepts ICS and CSV</td></tr></tbody></table></div><p>To move to Google, you need the individual ICS files. With many calendars that’s a few extra clicks, but every calendar ends up cleanly in its own Google calendar.</p>' },
         { h2: 'iCloud calendars: select first, then export', html: '<p>According to Apple, calendars of an account such as iCloud or Exchange are stored on the provider’s servers anyway. For exporting, that makes no difference: an iCloud calendar is also selected in the Calendar app and saved as an ICS file via “File” → “Export”. The export is a copy – later changes in Apple Calendar don’t reach Google automatically.</p>' },
+        { h2: 'Stay connected instead of importing once', html: '<p>If you keep using Apple Calendar and just want to see the events in Google too, a subscription beats an import:</p><ol><li><strong>Make the calendar public:</strong> according to Apple, on iCloud.com open the sharing options of the calendar, turn on “Public Calendar” and select “Copy”.</li><li><strong>Subscribe in Google:</strong> according to Google, on a computer click the plus next to “Other calendars” → “From URL”, paste the link and select “Add calendar”. Google can only subscribe to public calendars by link.</li><li><strong>Result:</strong> the calendar appears in Google under “Other calendars”. Changes from Apple Calendar arrive by themselves, but not instantly; you can’t edit the events in Google.</li></ol><p>A public calendar can be read by anyone who has the link. For private or work events, the one-off import is often the better choice.</p><div class="table-wrap"><table><thead><tr><th></th><th>Import (.ics)</th><th>Public iCloud link</th></tr></thead><tbody><tr><td>Later changes</td><td>don’t arrive</td><td>arrive, with a delay</td></tr><tr><td>Editable in Google</td><td>yes</td><td>no</td></tr><tr><td>Who can read it</td><td>only you</td><td>anyone with the link</td></tr><tr><td>Size limit</td><td>1 MB per file</td><td>none stated in Google’s help</td></tr></tbody></table></div>' },
         { h2: 'Large calendars and import errors', html: '<ul><li><strong>File larger than 1 MB:</strong> Google then reports “Google Calendar is temporarily unavailable”. In the {tool|ICS Editor} you {tooLarge|split it into parts under 1 MB automatically}.</li><li><strong>Wrong times:</strong> Google recommends matching the time zone in Google Calendar with the one in the original app, then exporting and importing again.</li><li><strong>Duplicate events:</strong> {dupes|here’s how to find and remove duplicates}.</li><li><strong>Import went wrong:</strong> delete the new calendar and start over – {undo|here’s how}.</li></ul>' }
       ],
       faq: [
         { q: 'Can I import all Apple calendars into Google at once?', a: 'Not via the Calendar Archive: it’s an .icbu file, but Google only imports ICS and CSV. Export each calendar separately as an ICS file – in the ICS Editor you can open and check all files together.' },
-        { q: 'Are later changes in Apple Calendar synced automatically?', a: 'No. An export is a copy at the time of exporting. Later changes don’t appear in Google Calendar automatically.' },
+        { q: 'Are later changes in Apple Calendar synced automatically?', a: 'Not with an import: an export is a copy at the time of exporting. To pick up changes, make the iCloud calendar public and subscribe to its link in Google Calendar under “Other calendars” → “From URL”.' },
         { q: 'Does this work on an iPhone?', a: 'Importing into Google Calendar is only possible on a computer. Apple’s export steps describe the Calendar app on the Mac.' },
         { q: 'Is my calendar uploaded?', a: 'Not to the ICS Editor: it works entirely in your browser. Only when you import into Google Calendar does the file go to Google.' }
       ],
@@ -380,14 +396,15 @@ export const GUIDES: Record<string, GuideDef> = {
   open: {
     type: 'howto',
     published: '2026-11-05',
-    updated: '2026-11-05',
+    updated: '2026-11-25',
+    checked: '2026-11-25',
     figures: [{ name: 'editor', de: 'Eine geöffnete ICS-Datei im ICS Editor: links die Kalender, in der Mitte die Termine im Monat, rechts ein Termin mit allen Angaben.', en: 'An ICS file opened in the ICS Editor: calendars on the left, events in the month view in the middle, one event with all its details on the right.' }],
-    sources: ['rfc5545', 'apple', 'import'],
+    sources: ['rfc5545', 'windowsMail', 'outlookImport', 'apple', 'import'],
     related: ['ics', 'gexport', 'apple', 'convert'],
     de: {
-      title: 'ICS-Datei öffnen – online, ohne Outlook, auch am Handy',
-      description: 'ICS-Datei öffnen und lesen: im Browser ohne Outlook und ohne Upload, am Mac in Apple Kalender oder als Text. So siehst du alle Termine.',
-      h1: 'ICS-Datei öffnen: online, ohne Outlook und am Handy',
+      title: 'ICS-Datei öffnen: Windows, Mac, Handy – auch ohne Outlook',
+      description: 'ICS-Datei öffnen: unter Windows per Doppelklick in Outlook, am Mac in Apple Kalender oder ohne Programm im Browser – ohne Upload, auch am Handy.',
+      h1: 'ICS-Datei öffnen: unter Windows, am Mac, am Handy und online',
       crumb: 'ICS öffnen',
       teaser: 'Termine ansehen – im Browser, am Mac oder als Text',
       answer: '<strong>Eine ICS-Datei öffnest du am einfachsten im Browser mit dem ICS Editor: Datei hineinziehen, und du siehst alle Kalender und Termine – ohne Outlook, ohne Anmeldung und ohne Upload.</strong> Das klappt am Computer und am Handy. Weil ICS reiner Text ist (Standard RFC 5545), kannst du die Datei zur Not auch in jedem Texteditor lesen.',
@@ -399,11 +416,13 @@ export const GUIDES: Record<string, GuideDef> = {
         { name: 'Bei Bedarf weiterverarbeiten', text: 'Termine bearbeiten, durchsuchen oder als neue ICS- oder CSV-Datei speichern. Die Datei verlässt dein Gerät dabei nicht.' }
       ],
       sections: [
-        { h2: 'Welche Wege es gibt', html: '<div class="table-wrap"><table><thead><tr><th>Weg</th><th>Geht auf</th><th>Gut für</th></tr></thead><tbody><tr><td>{tool|ICS Editor} im Browser</td><td>PC, Mac, Android, iPhone</td><td>Alle Termine ansehen, durchsuchen, bearbeiten – ohne Installation</td></tr><tr><td>Apple Kalender („Ablage“ → „Importieren“)</td><td>Mac</td><td>Termine dauerhaft in einen Mac-Kalender übernehmen</td></tr><tr><td>Google Kalender (Import)</td><td>nur am Computer</td><td>Termine in Google übernehmen – {ics|so geht der Import}</td></tr><tr><td>Texteditor</td><td>überall</td><td>Kurzer Blick in den Rohtext</td></tr></tbody></table></div><p>Wichtig: Beim Import in einen Kalender werden die Termine dort angelegt. Willst du sie nur ansehen, ist der ICS Editor der sichere Weg – er verändert keinen Kalender.</p>' },
+        { h2: 'ICS-Datei unter Windows öffnen', html: '<p>Unter Windows öffnet ein Doppelklick auf die ICS-Datei das Programm, das für Kalenderdateien eingestellt ist – meist Outlook. Die alte App „Kalender“ aus Windows 10 und 11 hilft dabei nicht mehr: Laut Microsoft endete der Support für Mail und Kalender am 31. Dezember 2024; empfohlen wird das neue Outlook.</p><ul><li><strong>Einladung mit einem Termin:</strong> Doppelklick öffnet ihn in Outlook, dort übernimmst du ihn in deinen Kalender.</li><li><strong>Ganzer Kalender im neuen Outlook oder in Outlook.com:</strong> Laut Microsoft unter „Kalender“ → „Kalender hinzufügen“ → „Aus Datei hochladen“ die Datei wählen, den Zielkalender bestimmen und „Importieren“ klicken. Das ist eine Momentaufnahme, spätere Änderungen kommen nicht nach.</li><li><strong>Nur ansehen, ohne Outlook:</strong> Die Datei im {tool|ICS Editor} im Browser öffnen. Es wird nichts installiert und kein Kalender verändert.</li><li><strong>Öffnet sich das falsche Programm:</strong> Rechtsklick auf die Datei → „Öffnen mit“ → „Andere App auswählen“ und das gewünschte Programm wählen.</li></ul>' },
+        { h2: 'Welche Wege es gibt', html: '<div class="table-wrap"><table><thead><tr><th>Weg</th><th>Geht auf</th><th>Gut für</th></tr></thead><tbody><tr><td>{tool|ICS Editor} im Browser</td><td>PC, Mac, Android, iPhone</td><td>Alle Termine ansehen, durchsuchen, bearbeiten – ohne Installation</td></tr><tr><td>Outlook (Doppelklick oder „Kalender hinzufügen“)</td><td>Windows</td><td>Termine in den Outlook-Kalender übernehmen</td></tr><tr><td>Apple Kalender („Ablage“ → „Importieren“)</td><td>Mac</td><td>Termine dauerhaft in einen Mac-Kalender übernehmen</td></tr><tr><td>Google Kalender (Import)</td><td>nur am Computer</td><td>Termine in Google übernehmen – {ics|so geht der Import}</td></tr><tr><td>Texteditor</td><td>überall</td><td>Kurzer Blick in den Rohtext</td></tr></tbody></table></div><p>Wichtig: Beim Import in einen Kalender werden die Termine dort angelegt. Willst du sie nur ansehen, ist der ICS Editor der sichere Weg – er verändert keinen Kalender.</p>' },
         { h2: 'Was in einer ICS-Datei steht', html: '<p>Eine ICS-Datei beginnt mit <code>BEGIN:VCALENDAR</code> und enthält jeden Termin zwischen <code>BEGIN:VEVENT</code> und <code>END:VEVENT</code> – mit Titel (<code>SUMMARY</code>), Beginn (<code>DTSTART</code>), Ende und oft einer Wiederholungsregel (<code>RRULE</code>). Was jede Zeile bedeutet, erklärt das {glossary|ICS-Glossar}. Im Texteditor sind lange Dateien mit Tausenden Terminen kaum lesbar – im ICS Editor siehst du sie als Kalender.</p>' },
         { h2: 'ICS-Datei am Handy öffnen', html: '<p>Am Android-Handy oder iPhone öffnest du den ICS Editor im Browser und wählst die Datei über „Datei öffnen“ aus, etwa aus den Downloads oder der Dateien-App. So siehst du alle Termine, ohne sie in einen Kalender zu übernehmen. Willst du die Termine in Google Kalender importieren, geht das laut Google nur am Computer – {importParts|bei großen Dateien in Teilen}.</p>' }
       ],
       faq: [
+        { q: 'Mit welchem Programm öffne ich eine ICS-Datei unter Windows?', a: 'Meist mit Outlook: Ein Doppelklick öffnet die Datei im eingestellten Kalenderprogramm. Die alte Windows-App „Kalender“ wird laut Microsoft seit Ende 2024 nicht mehr unterstützt. Ohne Outlook geht es im Browser mit dem ICS Editor.' },
         { q: 'Wie öffne ich eine ICS-Datei ohne Outlook?', a: 'Im Browser mit dem ICS Editor: Datei hineinziehen, und du siehst alle Kalender und Termine. Es braucht weder Outlook noch eine Anmeldung, und die Datei wird nicht hochgeladen.' },
         { q: 'Kann ich eine ICS-Datei online öffnen, ohne sie hochzuladen?', a: 'Ja. Der ICS Editor läuft zwar im Browser, verarbeitet die Datei aber nur auf deinem Gerät. Ein automatischer Test prüft, dass beim Verarbeiten keine Netzwerkanfrage entsteht.' },
         { q: 'Warum zeigt der Texteditor nur kryptische Zeilen?', a: 'ICS ist ein Textformat für Programme: Jede Zeile ist eine Angabe wie DTSTART oder RRULE. Das ICS-Glossar erklärt die Begriffe; übersichtlicher ist die Ansicht im ICS Editor.' },
@@ -412,9 +431,9 @@ export const GUIDES: Record<string, GuideDef> = {
       cta: 'ICS-Datei jetzt öffnen'
     },
     en: {
-      title: 'Open an ICS File – Online, Without Outlook, on Your Phone',
-      description: 'Open and read an ICS file: in your browser without Outlook and without uploading, in Apple Calendar on a Mac, or as text. See every event.',
-      h1: 'Open an ICS file: online, without Outlook and on your phone',
+      title: 'Open an ICS File: Windows, Mac, Phone – Even Without Outlook',
+      description: 'Open an ICS file: on Windows by double-clicking into Outlook, on a Mac in Apple Calendar, or with no app in your browser – no upload, phones too.',
+      h1: 'Open an ICS file: on Windows, Mac, your phone and online',
       crumb: 'Open ICS',
       teaser: 'View events – in a browser, on a Mac or as text',
       answer: '<strong>The easiest way to open an ICS file is in your browser with the ICS Editor: drop the file in and you see every calendar and event – no Outlook, no sign-in and no upload.</strong> It works on computers and phones. Because ICS is plain text (standard RFC 5545), you can also read the file in any text editor if needed.',
@@ -426,11 +445,13 @@ export const GUIDES: Record<string, GuideDef> = {
         { name: 'Process further if needed', text: 'Edit or search events, or save them as a new ICS or CSV file. The file never leaves your device.' }
       ],
       sections: [
-        { h2: 'Your options', html: '<div class="table-wrap"><table><thead><tr><th>Option</th><th>Works on</th><th>Good for</th></tr></thead><tbody><tr><td>{tool|ICS Editor} in the browser</td><td>PC, Mac, Android, iPhone</td><td>Viewing, searching and editing all events – no installation</td></tr><tr><td>Apple Calendar (“File” → “Import”)</td><td>Mac</td><td>Adding the events to a Mac calendar permanently</td></tr><tr><td>Google Calendar (import)</td><td>computer only</td><td>Adding events to Google – {ics|how to import}</td></tr><tr><td>Text editor</td><td>everywhere</td><td>A quick look at the raw text</td></tr></tbody></table></div><p>Note: importing creates the events in that calendar. If you only want to look at them, the ICS Editor is the safe option – it doesn’t change any calendar.</p>' },
+        { h2: 'Open an ICS file on Windows', html: '<p>On Windows, double-clicking an ICS file opens the app set for calendar files – usually Outlook. The old Calendar app from Windows 10 and 11 no longer helps: according to Microsoft, support for Mail and Calendar ended on 31 December 2024, and new Outlook is recommended instead.</p><ul><li><strong>An invitation with one event:</strong> double-clicking opens it in Outlook, where you add it to your calendar.</li><li><strong>A whole calendar in new Outlook or Outlook.com:</strong> according to Microsoft, go to “Calendar” → “Add calendar” → “Upload from file”, choose the file and the destination calendar, and select “Import”. It’s a snapshot; later changes don’t follow.</li><li><strong>Just view it, without Outlook:</strong> open the file in the {tool|ICS Editor} in your browser. Nothing is installed and no calendar is changed.</li><li><strong>The wrong app opens:</strong> right-click the file → “Open with” → “Choose another app” and pick the one you want.</li></ul>' },
+        { h2: 'Your options', html: '<div class="table-wrap"><table><thead><tr><th>Option</th><th>Works on</th><th>Good for</th></tr></thead><tbody><tr><td>{tool|ICS Editor} in the browser</td><td>PC, Mac, Android, iPhone</td><td>Viewing, searching and editing all events – no installation</td></tr><tr><td>Outlook (double-click or “Add calendar”)</td><td>Windows</td><td>Adding events to your Outlook calendar</td></tr><tr><td>Apple Calendar (“File” → “Import”)</td><td>Mac</td><td>Adding the events to a Mac calendar permanently</td></tr><tr><td>Google Calendar (import)</td><td>computer only</td><td>Adding events to Google – {ics|how to import}</td></tr><tr><td>Text editor</td><td>everywhere</td><td>A quick look at the raw text</td></tr></tbody></table></div><p>Note: importing creates the events in that calendar. If you only want to look at them, the ICS Editor is the safe option – it doesn’t change any calendar.</p>' },
         { h2: 'What’s inside an ICS file', html: '<p>An ICS file starts with <code>BEGIN:VCALENDAR</code> and contains every event between <code>BEGIN:VEVENT</code> and <code>END:VEVENT</code> – with a title (<code>SUMMARY</code>), start (<code>DTSTART</code>), end and often a recurrence rule (<code>RRULE</code>). The {glossary|ICS glossary} explains every line. In a text editor, long files with thousands of events are hard to read – in the ICS Editor you see them as a calendar.</p>' },
         { h2: 'Open an ICS file on your phone', html: '<p>On an Android phone or iPhone, open the ICS Editor in your browser and pick the file via “Open file”, for example from Downloads or the Files app. You see all events without adding them to a calendar. Importing into Google Calendar, according to Google, only works on a computer – {importParts|large files in parts}.</p>' }
       ],
       faq: [
+        { q: 'Which app opens an ICS file on Windows?', a: 'Usually Outlook: double-clicking opens the file in the app set for calendar files. According to Microsoft, the old Windows Calendar app has been unsupported since the end of 2024. Without Outlook, use the ICS Editor in your browser.' },
         { q: 'How do I open an ICS file without Outlook?', a: 'In your browser with the ICS Editor: drop the file in and you see every calendar and event. No Outlook, no sign-in, and the file isn’t uploaded.' },
         { q: 'Can I open an ICS file online without uploading it?', a: 'Yes. The ICS Editor runs in your browser but processes the file only on your device. An automated test checks that processing causes no network request.' },
         { q: 'Why does a text editor only show cryptic lines?', a: 'ICS is a text format for programs: every line is a field such as DTSTART or RRULE. The ICS glossary explains the terms; the ICS Editor view is easier to read.' },
@@ -510,7 +531,7 @@ export const GUIDES: Record<string, GuideDef> = {
   limits: {
     type: 'article',
     published: '2026-10-08',
-    updated: '2026-11-04',
+    updated: '2026-11-25',
     figures: [{ name: 'overview', de: 'Die Datei-Info zeigt pro Kalender Termine, Zeitraum, Größe, Serien und Zeitzone – dazu die Termine pro Jahr.', en: 'File info shows events, date range, size, recurring events and time zone for each calendar – plus events per year.' }],
     sources: ['problems', 'import', 'limits', 'delete'],
     related: ['tooLarge', 'importFails', 'split', 'undo'],
@@ -547,7 +568,6 @@ export const GUIDES: Record<string, GuideDef> = {
       faq: [
         { q: 'Wie viele Termine passen in 1 MB?', a: 'Das hängt von der Länge von Titeln und Beschreibungen ab. In unserem Test mit einem echten Google-Export waren es im Schnitt etwa 350 Byte pro Termin – rund 2.500 Termine pro Datei unter 1 MB, ohne Verwaltungsdaten rund 3.000. Der ICS Editor rechnet es für deine Datei genau aus.' },
         { q: 'Was bedeutet „google calendar usage limits exceeded“?', a: 'Gemeint sind die Nutzungslimits, die Google gegen Missbrauch setzt. Für Workspace-Konten nennt Google zum Beispiel mehr als 100.000 neu angelegte Termine in kurzer Zeit; danach kann man für einige Stunden keine Termine bearbeiten.' },
-        { q: 'Wie groß darf eine ICS-Datei für Google Kalender sein?', a: 'Höchstens 1 MB – dieselbe Grenze wie für CSV-Dateien.' },
         { q: 'Warum lehnt Google meine CSV mit Semikolon ab?', a: 'Google Kalender arbeitet nur mit Komma als Trennzeichen. Dateien mit Semikolon oder Doppelpunkt funktionieren nicht.' }
       ],
       cta: 'Datei prüfen: Passt sie in Googles Grenzen?'
@@ -585,7 +605,6 @@ export const GUIDES: Record<string, GuideDef> = {
       faq: [
         { q: 'How many events fit into 1 MB?', a: 'That depends on the length of titles and descriptions. In our test with a real Google export it was about 350 bytes per event on average – roughly 2,500 events per file under 1 MB, about 3,000 without housekeeping data. The ICS Editor calculates it exactly for your file.' },
         { q: 'What does “Google Calendar usage limits exceeded” mean?', a: 'It refers to the limits Google sets against abuse. For Workspace accounts, Google mentions for example more than 100,000 events created in a short period; after that, you may not be able to edit events for a few hours.' },
-        { q: 'How large can an ICS file for Google Calendar be?', a: 'At most 1 MB – the same limit as for CSV files.' },
         { q: 'Why does Google reject my semicolon CSV?', a: 'Google Calendar only works with commas as separators. Files that use semicolons or colons don’t work.' }
       ],
       cta: 'Check your file: does it fit Google’s limits?'
@@ -1061,4 +1080,11 @@ export const GUIDES: Record<string, GuideDef> = {
       cta: 'Prepare your next import safely'
     }
   }
+};
+
+/** Jüngste inhaltliche Änderung und jüngste Quellenprüfung der ganzen Website – für llms.txt und Volltext, nie von Hand pflegen */
+const maxIso = (xs: string[]) => xs.slice().sort().at(-1)!;
+export const LATEST = {
+  updated: maxIso([...Object.values(GUIDES).map((d) => d.updated), ...Object.values(PAGE_UPDATED)]),
+  checked: maxIso(Object.values(GUIDES).map((d) => d.checked ?? (d.published > STAND.iso ? d.published : STAND.iso)))
 };
