@@ -30,6 +30,8 @@ export interface GuideDef {
   updated: string;
   /** Datum, an dem die Quellen dieser Seite zuletzt geprüft wurden – ohne Angabe gilt das spätere von STAND und published */
   checked?: string;
+  /** Eigene Prüfung: was mit welchen erfundenen Daten getestet wurde (HTML je Sprache) und die Testdateien im öffentlichen Repository */
+  tested?: { de: string; en: string; files: string[] };
   /** Bildschirmfotos aus public/img (Name ohne Sprache), mit Bildunterschrift je Sprache */
   figures: FigureDef[];
   sources: SourceKey[];
@@ -49,6 +51,7 @@ export const GUIDES: Record<string, GuideDef> = {
     published: '2026-10-08',
     updated: '2026-11-25',
     figures: [{ name: 'range', de: 'Erst verkleinern: Mit dem Zeitraum „Ab 2024“ schrumpft der Beispielkalender auf 5.806 Termine – das Fenster zeigt sofort, wie viele Dateien unter 1 MB es werden.', en: 'Shrink first: with the date range starting in 2024, the example calendar drops to 5,806 events – the window shows straight away how many files under 1 MB that makes.' }, { name: 'clean', de: 'Noch kleiner: Unter „Mehr Optionen“ lässt du technische Zusatzdaten, abgesagte Termine oder Beschreibungen weg – Größe und Dateianzahl ändern sich sofort.', en: 'Even smaller: under “More options” you leave out technical extras, cancelled events or descriptions – size and file count update instantly.' }, { name: 'export', de: 'Dann aufteilen: Jede Datei bleibt unter 1 MB und zeigt ihren Zeitraum – so weißt du beim Import, welcher Teil schon drin ist.', en: 'Then split: every file stays under 1 MB and shows its date range – so while importing you know which part is already in.' }],
+    tested: { de: '<p>Automatischer Test mit einem erfundenen Praxiskalender von über 3 MB und mehr als 20.000 Terminen: Das Werkzeug teilt ihn in Dateien unter 950 KB, jede Datei wird mit einem unabhängigen iCalendar-Leser (ical.js) gelesen, und zusammen enthalten die Teile wieder jeden Termin – keiner fehlt, keiner doppelt. Die Größe jeder Datei stimmt aufs Byte mit der Anzeige überein. Dazu kommt der oben beschriebene Praxistest mit einem echten, anonym ausgewerteten Export.</p>', en: '<p>Automated test with an invented practice calendar of over 3 MB and more than 20,000 events: the tool splits it into files under 950 KB, every file is read with an independent iCalendar reader (ical.js), and together the parts contain every event again – none missing, none twice. Each file’s size matches the display to the byte. On top of that comes the real-world test with a real, anonymously analysed export described above.</p>', files: ['tests/unit/ics.test.ts'] },
     sources: ['problems', 'import'],
     related: ['importParts', 'split', 'limits', 'undo'],
     de: {
@@ -118,6 +121,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-11-25',
     checked: '2026-11-25',
     figures: [{ name: 'dupes', de: 'Duplikate beim Export weglassen: Das Werkzeug zählt Termine mit gleichem Titel, Beginn und Ende – hier 11 in einer Beispieldatei – und behält von jedem genau einen.', en: 'Leave duplicates out on export: the tool counts events with the same title, start and end – 11 in this example file – and keeps exactly one of each.' }, { name: 'overview', de: 'Schon vor dem Export sichtbar: Die Datei-Info nennt je Kalender, wie viele Termine doppelt sind.', en: 'Visible before you export: file info shows how many events are duplicated in each calendar.' }],
+    tested: { de: '<p>Automatischer Test mit einer erfundenen Datei: zehn Termine, drei davon ein zweites Mal mit anderer Kennung (wie nach einem doppelten Import), ein ähnlicher Termin zu anderer Uhrzeit und eine Serie samt Einzeltermin zur selben Zeit. Ergebnis: Das Werkzeug zählt genau 3 Duplikate, lässt beim Export genau diese 3 weg – und behält den ähnlichen Termin, die Serie und den Einzeltermin.</p>', en: '<p>Automated test with an invented file: ten events, three of them a second time with a different ID (as after a double import), a similar event at a different time, and a series plus a single event at the same time. Result: the tool counts exactly 3 duplicates, leaves exactly those 3 out on export – and keeps the similar event, the series and the single event.</p>', files: ['tests/unit/dupes.test.ts'] },
     sources: ['problems', 'gexport', 'import', 'delete', 'subscribe'],
     related: ['undo', 'gexport', 'importParts', 'outlook'],
     de: {
@@ -189,6 +193,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-11-25',
     checked: '2026-11-25',
     figures: [{ name: 'editor', de: 'So sieht eine geöffnete Kalenderdatei im ICS Editor aus: Bevor du sie in Google importierst, prüfst du Termine, Zeitraum und Größe (Beispieldaten).', en: 'This is what an opened calendar file looks like in the ICS Editor: before importing it into Google, you check events, date range and size (example data).' }, { name: 'range', de: 'Ein großer Outlook-Kalender passt nicht in eine Datei? Ein kürzerer Zeitraum und das automatische Aufteilen bringen jeden Teil unter 1 MB.', en: 'A large Outlook calendar won’t fit in one file? A shorter date range and automatic splitting get every part under 1 MB.' }],
+    tested: { de: '<p>Ehrlich gesagt: Mit einer echten Outlook-Datei haben wir noch nicht getestet. Die Schritte in Outlook stammen aus der Microsoft-Hilfe, die wir am 25. November 2026 nachgelesen haben. Geprüft ist, was jede ICS-Datei betrifft: Das Werkzeug liest Dateien nach RFC 5545 vollständig, teilt sie verlustfrei unter 1 MB und jede geschriebene Datei wird mit einem unabhängigen iCalendar-Leser gegengelesen. Hast du eine Outlook-Datei, die nicht klappt? Schreib uns – siehe {about|Über den ICS Editor}.</p>', en: '<p>To be honest: we haven’t tested with a real Outlook file yet. The Outlook steps come from Microsoft’s help, which we read on 25 November 2026. What is tested applies to any ICS file: the tool reads files following RFC 5545 completely, splits them under 1 MB without loss, and every file it writes is read back with an independent iCalendar reader. Got an Outlook file that doesn’t work? Let us know – see {about|About the ICS Editor}.</p>', files: ['tests/unit/ics.test.ts'] },
     sources: ['outlook', 'outlookPublish', 'subscribe', 'import', 'problems'],
     related: ['ics', 'tooLarge', 'importParts', 'dupes'],
     de: {
@@ -262,6 +267,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-11-25',
     checked: '2026-11-25',
     figures: [{ name: 'editor', de: 'Alle exportierten Apple-Kalender zusammen prüfen: Links steht jeder Kalender mit seiner Terminzahl, in der Mitte der Monat (Beispieldaten).', en: 'Check all exported Apple calendars together: each calendar is listed on the left with its event count, the month in the middle (example data).' }, { name: 'overview', de: 'Vor dem Import Uhrzeiten absichern: Die Datei-Info zeigt je Kalender die Zeitzone, den Zeitraum und die Größe.', en: 'Rule out wrong times before importing: file info shows the time zone, date range and size of each calendar.' }],
+    tested: { de: '<p>Ehrlich gesagt: Mit einem echten Export aus Apple Kalender haben wir noch nicht getestet. Die Schritte am Mac und auf iCloud.com stammen aus der Apple-Hilfe, die wir am 25. November 2026 nachgelesen haben. Geprüft ist, was jede ICS-Datei betrifft: Mehrere ICS-Dateien auf einmal werden zu getrennten Kalendern, große Dateien werden verlustfrei unter 1 MB geteilt, und jede geschriebene Datei wird mit einem unabhängigen iCalendar-Leser gegengelesen.</p>', en: '<p>To be honest: we haven’t tested with a real Apple Calendar export yet. The steps on the Mac and on iCloud.com come from Apple’s help, which we read on 25 November 2026. What is tested applies to any ICS file: several ICS files at once become separate calendars, large files are split under 1 MB without loss, and every file written is read back with an independent iCalendar reader.</p>', files: ['tests/unit/ics.test.ts', 'tests/e2e/tool.spec.ts'] },
     sources: ['apple', 'icloudShare', 'subscribe', 'import', 'problems'],
     related: ['outlook', 'ics', 'importParts', 'dupes'],
     de: {
@@ -330,8 +336,9 @@ export const GUIDES: Record<string, GuideDef> = {
   gexport: {
     type: 'howto',
     published: '2026-11-05',
-    updated: '2026-11-05',
+    updated: '2026-11-25',
     figures: [{ name: 'overview', de: 'Was im Google-Export steckt: Die Datei-Info zeigt jeden Kalender aus dem ZIP mit Terminen, Zeitraum und Größe.', en: 'What’s inside the Google export: file info shows every calendar from the ZIP with events, date range and size.' }, { name: 'csv', de: 'Für Excel: Beim Export „CSV für Excel“ wählen – Spaltennamen und Trennzeichen entsprechen dem Format aus Googles Hilfe.', en: 'For Excel: choose “CSV for Excel” on export – column names and separator match the format in Google’s help.' }],
+    tested: { de: '<p>Automatischer Test: Ein erfundener Google-Export als ZIP mit mehreren Kalenderdateien wird vollständig gelesen, jeder Kalender mit seinem Namen. Ein Browser-Test spielt dasselbe mit zwei Kalendern in der Oberfläche durch. Die Google-CSV wird gegen das Format aus Googles Hilfe geprüft: englische Spaltennamen, Komma als Trennzeichen.</p>', en: '<p>Automated test: an invented Google export as a ZIP with several calendar files is read completely, each calendar with its name. A browser test runs the same with two calendars in the interface. The Google CSV is checked against the format in Google’s help: English column names, commas as separators.</p>', files: ['tests/unit/ics.test.ts', 'tests/unit/table.test.ts', 'tests/e2e/tool.spec.ts'] },
     sources: ['gexport', 'import', 'excelCsv'],
     related: ['open', 'split', 'importParts', 'move'],
     de: {
@@ -399,6 +406,7 @@ export const GUIDES: Record<string, GuideDef> = {
     updated: '2026-11-25',
     checked: '2026-11-25',
     figures: [{ name: 'start', de: 'Datei auf das Feld ziehen oder „Datei auswählen“ – die Datei wird im Browser gelesen und nicht hochgeladen.', en: 'Drop the file onto the box or click “Choose file” – the file is read in your browser and not uploaded.' }, { name: 'editor', de: 'Die geöffnete Datei: links die Kalender, in der Mitte die Termine im Monat, rechts ein Termin mit allen Angaben (Beispieldaten).', en: 'The opened file: calendars on the left, the events in the month in the middle, one event with all its details on the right (example data).' }, { name: 'mobile', de: 'Am Handy: Die Termine erscheinen als Liste mit Uhrzeit und Titel – angesehen, ohne sie in einen Kalender zu übernehmen (Beispieldaten).', en: 'On a phone: the events appear as a list with time and title – viewed without adding them to a calendar (example data).' }],
+    tested: { de: '<p>Browser-Tests prüfen bei jeder Änderung: Beim Öffnen und Verarbeiten einer Datei entsteht keine einzige Netzwerkanfrage; am Handy mit 360 Pixel Breite lassen sich Tage antippen und Termine öffnen, ohne seitliches Scrollen; nach dem ersten Besuch funktioniert das Werkzeug auch offline.</p>', en: '<p>Browser tests check on every change: opening and processing a file causes not a single network request; on a phone 360 pixels wide you can tap days and open events without sideways scrolling; after the first visit the tool also works offline.</p>', files: ['tests/e2e/tool.spec.ts'] },
     sources: ['rfc5545', 'windowsMail', 'outlookImport', 'apple', 'import'],
     related: ['ics', 'gexport', 'apple', 'convert'],
     de: {
@@ -465,8 +473,9 @@ export const GUIDES: Record<string, GuideDef> = {
   move: {
     type: 'howto',
     published: '2026-11-05',
-    updated: '2026-11-05',
+    updated: '2026-11-25',
     figures: [{ name: 'split', de: 'Ziel-Kalender anlegen: „Aufteilen“ macht aus jedem Kürzel am Titelanfang einen eigenen Kalender, dem du einen Namen gibst.', en: 'Create target calendars: “Split” turns each set of initials at the start of a title into its own calendar, which you can name.' }, { name: 'month', de: 'Vor dem Export kontrollieren: Jeder Ziel-Kalender hat eine eigene Farbe – so siehst du, welcher Termin wohin wandert.', en: 'Check before exporting: every target calendar has its own colour – so you see which event goes where.' }],
+    tested: { de: '<p>Automatischer Test: Einzelne Termine werden in einen anderen Ziel-Kalender verschoben und landen dort im Export; die Datei bleibt gültig. Ein Browser-Test hängt einen Termin über das Seitenfenster in einen anderen Kalender um und prüft das Ergebnis im Export.</p>', en: '<p>Automated test: individual events are moved to another target calendar and end up there in the export; the file stays valid. A browser test moves an event to another calendar via the side panel and checks the result in the export.</p>', files: ['tests/unit/edit.test.ts', 'tests/e2e/tool.spec.ts'] },
     sources: ['transfer', 'gexport', 'import', 'delete'],
     related: ['split', 'gexport', 'dupes', 'undo'],
     de: {
@@ -615,8 +624,9 @@ export const GUIDES: Record<string, GuideDef> = {
   importFails: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-13',
+    updated: '2026-11-25',
     figures: [{ name: 'check', de: 'Statt einer Fehlermeldung von Google: „Spalten und Probleme“ nennt jede Problemzeile mit Nummer und einem Vorschlag zur Korrektur (Beispieldaten).', en: 'Instead of an error from Google: “Columns and problems” lists every problem row with its number and a suggested fix (example data).' }, { name: 'csv', de: 'Danach als Google-CSV speichern: englische Spaltennamen und Komma als Trennzeichen, so wie Google es verlangt.', en: 'Then save as Google CSV: English column names and commas as separators, exactly as Google requires.' }],
+    tested: { de: '<p>Automatischer Test mit einer erfundenen CSV-Datei mit absichtlich fehlerhaften Zeilen. Das Werkzeug meldet jede Zeile mit Nummer: Zeile 15 „Ende liegt vor dem Beginn“, Zeile 21 „Das Datum 31.02.2019 gibt es nicht“ (Vorschlag: letzter Tag des Monats), Zeile 26 „Uhrzeit ungültig“ und „Titel fehlt“. Ein zweiter Test liest eine deutsche Semikolon-CSV im Windows-Zeichensatz mit 300 Zeilen und Umlauten fehlerfrei.</p>', en: '<p>Automated test with an invented CSV file containing deliberately broken rows. The tool reports each row by number: row 15 “end is before start”, row 21 “the date 31.02.2019 doesn’t exist” (suggestion: last day of the month), row 26 “invalid time” and “title missing”. A second test reads a German semicolon CSV in Windows encoding with 300 rows and umlauts without errors.</p>', files: ['tests/unit/table.test.ts'] },
     sources: ['import', 'problems'],
     related: ['tooLarge', 'limits', 'convert', 'excel'],
     de: {
@@ -693,8 +703,9 @@ export const GUIDES: Record<string, GuideDef> = {
   split: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-14',
+    updated: '2026-11-25',
     figures: [{ name: 'editor', de: 'Erkannte Kürzel: Links unter den Kalendern stehen die Kürzel, die das Werkzeug am Titelanfang gefunden hat, etwa RÖ, BB, NK (Beispieldaten).', en: 'Detected initials: below the calendars on the left are the initials the tool found at the start of titles, e.g. RÖ, BB, NK (example data).' }, { name: 'split', de: 'Ein Klick auf „Aufteilen“ macht aus jedem Kürzel einen eigenen Kalender – mit Namen, Farbe und Anzahl der Termine.', en: 'One click on “Split” turns each set of initials into its own calendar – with a name, a colour and its event count.' }, { name: 'month', de: 'Das Ergebnis: Jeder neue Kalender hat seine Farbe und kann einzeln exportiert und in Google importiert werden.', en: 'The result: every new calendar has its own colour and can be exported and imported into Google separately.' }],
+    tested: { de: '<p>Automatischer Test mit einem erfundenen Praxiskalender: Das Werkzeug erkennt die Mitarbeiter-Kürzel am Titelanfang, verteilt die Termine nach Regeln auf Ziel-Kalender und erzeugt je Kalender gültige Dateien – ohne dass ein Termin verloren geht. Ein Browser-Test spielt dasselbe in der Oberfläche durch: aufteilen, Teile unter 950 KB herunterladen.</p>', en: '<p>Automated test with an invented practice calendar: the tool detects staff initials at the start of titles, distributes events to target calendars by rule and writes valid files per calendar – without losing an event. A browser test runs the same steps in the interface: split, download parts under 950 KB.</p>', files: ['tests/unit/ics.test.ts', 'tests/e2e/tool.spec.ts'] },
     sources: ['import', 'create', 'limits', 'problems'],
     related: ['tooLarge', 'importParts', 'ics', 'undo'],
     de: {
@@ -759,8 +770,9 @@ export const GUIDES: Record<string, GuideDef> = {
   excel: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-13',
+    updated: '2026-11-25',
     figures: [{ name: 'birthdays', de: 'Aus einer Geburtstagsliste werden jährliche, ganztägige Termine – in der Liste mit Wiederholungs-Symbol (Beispieldaten).', en: 'A birthday list becomes yearly all-day events – shown with a repeat icon in the list (example data).' }, { name: 'privacy', de: 'Bevor etwas in Google landet: Spalten mit Telefonnummern oder Geburtsdaten lassen sich weglassen oder kürzen.', en: 'Before anything reaches Google: columns with phone numbers or dates of birth can be left out or shortened.' }],
+    tested: { de: '<p>Automatischer Test: Eine Excel-Datei mit echten Excel-Datumswerten (etwa 01.01.2025, 19:00 Uhr) wird mit Datum und Uhrzeit richtig gelesen. Aus der Geburtstagsvorlage mit sechs erfundenen Personen werden sechs jährliche, ganztägige Termine; wer am 29. Februar Geburtstag hat, erscheint 2026 und 2027 am 28. Februar und 2028 am 29. Februar.</p>', en: '<p>Automated test: an Excel file with real Excel date values (e.g. 01.01.2025, 7 pm) is read with the correct date and time. The birthday template with six invented people becomes six yearly all-day events; someone born on 29 February appears on 28 February in 2026 and 2027 and on 29 February in 2028.</p>', files: ['tests/unit/table.test.ts'] },
     sources: ['import', 'problems'],
     related: ['convert', 'importFails', 'ics', 'undo'],
     de: {
@@ -781,6 +793,7 @@ export const GUIDES: Record<string, GuideDef> = {
       sections: [
         { h2: 'Warum ICS und nicht CSV?', html: '<p>Laut Google werden Serientermine aus einer CSV-Datei zu einer Reihe einzelner Termine. Eine ICS-Datei dagegen kann eine echte Regel enthalten: „jedes Jahr am 12. März“. Deshalb erzeugt das Werkzeug für Geburtstage immer eine ICS-Datei. Mehr dazu: {convert|CSV in ICS umwandeln}.</p>' },
         { h2: 'Und wer am 29. Februar Geburtstag hat?', html: '<p>Für den 29. Februar legt das Werkzeug eine Regel an, die in Jahren ohne 29. Februar auf den 28. Februar fällt. So fehlt der Geburtstag in keinem Jahr.</p>' },
+        { h2: 'So sieht die Liste aus – und das wird daraus', html: '<div class="table-wrap"><table><thead><tr><th>In Excel</th><th>Im Kalender</th></tr></thead><tbody><tr><td>Name: Erika Mustermann · Geburtstag: 12.03.1948</td><td>„Geburtstag: Erika Mustermann (geb. 1948)“, ganztägig, jedes Jahr am 12. März</td></tr><tr><td>Geburtstag als Excel-Datum oder als Text wie 12.3.1948</td><td>beides wird erkannt</td></tr><tr><td>Geburtstag am 29.02.</td><td>in Nicht-Schaltjahren am 28. Februar</td></tr><tr><td>weitere Spalten wie Telefon</td><td>Beschreibung – oder weglassen</td></tr></tbody></table></div><p>Eine passende Vorlage gibt es im Werkzeug unter „Vorlagen“ → „Geburtstagsliste (Excel)“. Trag deine Namen ein, speichere die Datei und zieh sie in den {tool|ICS Editor}.</p>' },
         { h2: 'Andere Excel-Listen', html: '<p>Vereinstermine, Dienstpläne oder Schulungen aus Excel funktionieren genauso: Das Werkzeug ordnet die Spalten zu (Titel, Datum, Uhrzeit, Ort) und erzeugt wahlweise eine Google-CSV oder eine ICS-Datei. Telefonnummern oder Adressen in der Liste erkennt es und bietet an, sie wegzulassen.</p>' }
       ],
       faq: [
@@ -808,6 +821,7 @@ export const GUIDES: Record<string, GuideDef> = {
       sections: [
         { h2: 'Why ICS and not CSV for birthdays?', html: '<p>According to Google, recurring events from a CSV file turn into a series of one-time events. An ICS file, by contrast, can contain a real rule: “every year on 12 March”. That’s why the tool always creates an ICS file for birthdays. More: {convert|CSV to ICS converter}.</p>' },
         { h2: 'What about birthdays on 29 February?', html: '<p>For 29 February the tool creates a rule that falls on 28 February in years without a 29 February, so the birthday is never missing.</p>' },
+        { h2: 'What the list looks like – and what it becomes', html: '<div class="table-wrap"><table><thead><tr><th>In Excel</th><th>In the calendar</th></tr></thead><tbody><tr><td>Name: Erika Mustermann · Birthday: 12.03.1948</td><td>“Birthday: Erika Mustermann (born 1948)”, all-day, every year on 12 March</td></tr><tr><td>Birthday as an Excel date or as text like 12.3.1948</td><td>both are recognised</td></tr><tr><td>Birthday on 29 February</td><td>on 28 February in non-leap years</td></tr><tr><td>Other columns such as phone</td><td>description – or leave out</td></tr></tbody></table></div><p>A matching template is in the tool under “Templates” → “Birthday list (Excel)”. Enter your names, save the file and drop it into the {tool|ICS Editor}.</p>' },
         { h2: 'Other Excel lists', html: '<p>Club events, rosters or training schedules from Excel work the same way: the tool maps the columns (title, date, time, location) and creates either a Google CSV or an ICS file. It detects phone numbers or addresses in the list and offers to leave them out.</p>' }
       ],
       faq: [
@@ -823,8 +837,9 @@ export const GUIDES: Record<string, GuideDef> = {
   ics: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-13',
+    updated: '2026-11-25',
     figures: [{ name: 'editor', de: 'Vor dem Import ansehen: Kalender, Termine und das Bearbeitungsfeld für den gewählten Termin (Beispieldaten).', en: 'Look before importing: calendars, events and the editor for the selected event (example data).' }, { name: 'range', de: 'Größe prüfen: Das Exportfenster zeigt, ob alles in eine Datei unter 1 MB passt oder in wie viele Teile geteilt wird.', en: 'Check the size: the export window shows whether everything fits into one file under 1 MB or how many parts it needs.' }],
+    tested: { de: '<p>Automatischer Test mit einem erfundenen Kalender von über 3 MB und mehr als 20.000 Terminen: Das Werkzeug liest ihn vollständig, mit Zeitzone. Jede Datei, die es schreibt, wird mit einem unabhängigen iCalendar-Leser (ical.js) geprüft; keine Zeile ist länger als 75 Byte, wie RFC 5545 es verlangt. Ein Browser-Test öffnet mehrere ICS-Dateien auf einmal und prüft, dass jede ein eigener Kalender wird.</p>', en: '<p>Automated test with an invented calendar of over 3 MB and more than 20,000 events: the tool reads it completely, including the time zone. Every file it writes is checked with an independent iCalendar reader (ical.js); no line is longer than 75 bytes, as RFC 5545 requires. A browser test opens several ICS files at once and checks that each becomes its own calendar.</p>', files: ['tests/unit/ics.test.ts', 'tests/e2e/tool.spec.ts'] },
     sources: ['import', 'problems'],
     related: ['outlook', 'tooLarge', 'split', 'convert'],
     de: {
@@ -887,8 +902,9 @@ export const GUIDES: Record<string, GuideDef> = {
   importParts: {
     type: 'howto',
     published: '2026-10-14',
-    updated: '2026-10-14',
+    updated: '2026-11-25',
     figures: [{ name: 'parts', de: 'Nur der Kalender „Anna (A)“ angehakt und „Höchstens 999 Termine pro Datei“: Der ICS Editor teilt in vier Dateien und zeigt je Teil Zeitraum und Zahl der Termine (Beispieldaten).', en: 'Only the calendar “Anna (A)” ticked and “At most 999 events per file”: the ICS Editor splits into four files and lists each part’s date range and event count (example data).' }, { name: 'export', de: 'Die Dateinamen enthalten den Zeitraum – so hakst du beim Import der Reihe nach ab, welcher Teil schon in Google ist.', en: 'The file names include the date range – so you tick off one by one which part is already in Google.' }],
+    tested: { de: '<p>Automatischer Test: Mit „Höchstens 999 Termine pro Datei“ enthält jeder Teil höchstens 999 Termine und bleibt unter 1 MB; zusammen sind es wieder alle Termine. Von Hand geprüft am 14. Oktober 2026: Ein so erzeugter Teil wurde in Google Kalender importiert, Google meldete „999 von 999 Terminen importiert“.</p>', en: '<p>Automated test: with “At most 999 events per file”, every part contains at most 999 events and stays under 1 MB; together they add up to all events again. Checked by hand on 14 October 2026: a part created this way was imported into Google Calendar, and Google confirmed that 999 of 999 events were imported.</p>', files: ['tests/unit/ics.test.ts', 'tests/e2e/tool.spec.ts'] },
     sources: ['import', 'problems', 'create'],
     related: ['tooLarge', 'split', 'dupes', 'undo'],
     de: {
@@ -957,8 +973,9 @@ export const GUIDES: Record<string, GuideDef> = {
   convert: {
     type: 'howto',
     published: '2026-10-08',
-    updated: '2026-10-13',
+    updated: '2026-11-25',
     figures: [{ name: 'check', de: 'Erst prüfen: Ungültige Daten, fehlende Titel oder vertauschte Uhrzeiten zeigt das Werkzeug mit Zeilennummer und Vorschlag.', en: 'Check first: invalid dates, missing titles or swapped times are shown with row number and a suggestion.' }, { name: 'privacy', de: 'Vor dem Umwandeln lassen sich Spalten mit Namen, Telefonnummern oder Geburtsdaten weglassen oder kürzen; darunter ordnest du jede Spalte einem Google-Feld zu.', en: 'Before converting, columns with names, phone numbers or dates of birth can be left out or shortened; below that you map each column to a Google field.' }, { name: 'csv', de: 'Dann als ICS (mit Serien und Zeitzone) oder als Google-CSV speichern.', en: 'Then save as ICS (with recurrence and time zone) or as Google CSV.' }],
+    tested: { de: '<p>Automatischer Test mit einer erfundenen Terminliste: 300 Zeilen, Semikolon als Trennzeichen, Windows-Zeichensatz, deutsche Spaltennamen. Das Werkzeug erkennt Zeichensatz, Trennzeichen und Spalten, macht daraus 300 Termine, kürzt Patientennamen auf Initialen und lässt Telefonnummern weg. Jede erzeugte ICS-Datei wird mit einem unabhängigen iCalendar-Leser (ical.js) gegengelesen. Mehrdeutige Daten wie 03/04/2025 werden nicht geraten – das Werkzeug fragt nach.</p>', en: '<p>Automated test with an invented event list: 300 rows, semicolon separator, Windows encoding, German column names. The tool detects encoding, separator and columns, turns them into 300 events, shortens patient names to initials and drops phone numbers. Every ICS file produced is read back with an independent iCalendar reader (ical.js). Ambiguous dates such as 03/04/2025 aren’t guessed – the tool asks.</p>', files: ['tests/unit/table.test.ts'] },
     sources: ['import', 'rfc5545'],
     related: ['excel', 'ics', 'importFails', 'tooLarge'],
     de: {
@@ -977,6 +994,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'Wann ICS besser ist als CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google-CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Serientermine</td><td>werden zu Einzelterminen</td><td>echte Wiederholung</td></tr><tr><td>Zeitzone</td><td>keine Angabe in der Datei</td><td>wird mitgespeichert</td></tr><tr><td>Andere Programme</td><td>vor allem Google</td><td>Google, Outlook, Apple und viele mehr</td></tr><tr><td>Bearbeiten in Excel</td><td>einfach</td><td>nicht vorgesehen</td></tr></tbody></table></div><p>Für Geburtstage und andere jährliche Termine ist ICS deshalb die richtige Wahl – siehe {excel|Excel-Geburtstagsliste importieren}. Wie eine Wiederholung in der Datei steht (RRULE) und was die übrigen Zeilen bedeuten, erklärt das {glossary|ICS-Glossar}.</p>' },
+        { h2: 'Beispiel: aus deutschen Spalten werden Termine', html: '<p>So ordnet das Werkzeug die Spalten einer typischen deutschen Terminliste zu – du kannst jede Zuordnung ändern:</p><div class="table-wrap"><table><thead><tr><th>Deine Spalte</th><th>Beispielwert</th><th>Wird im Termin zu</th></tr></thead><tbody><tr><td>Datum</td><td>02.01.2010</td><td>Beginn-Datum (Start Date)</td></tr><tr><td>Beginn</td><td>13:30</td><td>Beginn-Uhrzeit (Start Time)</td></tr><tr><td>Ende</td><td>14:00</td><td>Ende-Uhrzeit (End Time)</td></tr><tr><td>Behandlung</td><td>Kastration</td><td>Titel (Subject)</td></tr><tr><td>Raum</td><td>Raum 2</td><td>Ort (Location)</td></tr><tr><td>Patient, Telefon, Geburtsdatum</td><td>–</td><td>Beschreibung – oder weglassen und kürzen</td></tr></tbody></table></div><p>Typische Stolpersteine nimmt das Werkzeug dir ab: Semikolon statt Komma, Umlaute im Windows-Zeichensatz, Datumsangaben wie 31.02. (gibt es nicht) und Angaben wie 03/04/2025, die 3. April oder 4. März sein können – hier fragt es nach, statt zu raten.</p>' },
         { h2: 'Ohne Upload umwandeln', html: '<p>Ein Konverter, der auf einem Server arbeitet, bekommt deine Datei zwangsläufig zu sehen. Bei Terminlisten mit Namen, Telefonnummern oder Patientendaten ist das heikel. Das Werkzeug arbeitet ausschließlich in deinem Browser; deine Datei wird nie übertragen – auch nicht an Google Analytics, das ohnehin nur mit deiner Einwilligung läuft. Erkannte persönliche Daten kannst du vor dem Export weglassen oder kürzen.</p>' }
       ],
       faq: [
@@ -1002,6 +1020,7 @@ export const GUIDES: Record<string, GuideDef> = {
       ],
       sections: [
         { h2: 'When ICS beats CSV', html: '<div class="table-wrap"><table><thead><tr><th></th><th>Google CSV</th><th>ICS</th></tr></thead><tbody><tr><td>Recurring events</td><td>become single events</td><td>real recurrence</td></tr><tr><td>Time zone</td><td>not stored in the file</td><td>stored</td></tr><tr><td>Other apps</td><td>mainly Google</td><td>Google, Outlook, Apple and many more</td></tr><tr><td>Editing in Excel</td><td>easy</td><td>not intended</td></tr></tbody></table></div><p>For birthdays and other yearly events, ICS is the right choice – see {excel|Excel to Google Calendar}. How a recurrence is written in the file (RRULE) and what the other lines mean is explained in the {glossary|ICS glossary}.</p>' },
+        { h2: 'Example: German columns become events', html: '<p>This is how the tool maps the columns of a typical German event list – you can change every mapping:</p><div class="table-wrap"><table><thead><tr><th>Your column</th><th>Example value</th><th>Becomes in the event</th></tr></thead><tbody><tr><td>Datum (date)</td><td>02.01.2010</td><td>Start Date</td></tr><tr><td>Beginn (start)</td><td>13:30</td><td>Start Time</td></tr><tr><td>Ende (end)</td><td>14:00</td><td>End Time</td></tr><tr><td>Behandlung (treatment)</td><td>Castration</td><td>Subject</td></tr><tr><td>Raum (room)</td><td>Room 2</td><td>Location</td></tr><tr><td>Patient, phone, date of birth</td><td>–</td><td>Description – or leave out and shorten</td></tr></tbody></table></div><p>The tool handles the usual stumbling blocks for you: semicolons instead of commas, umlauts in Windows encoding, dates such as 31.02. (which doesn’t exist) and values like 03/04/2025 that could be 3 April or 4 March – here it asks instead of guessing.</p>' },
         { h2: 'Convert without uploading', html: '<p>A converter that runs on a server inevitably gets to see your file. With event lists containing names, phone numbers or patient data, that’s risky. The tool works exclusively in your browser; your file is never sent anywhere – not even to Google Analytics, which only runs with your consent. You can leave out or shorten detected personal data before exporting.</p>' }
       ],
       faq: [

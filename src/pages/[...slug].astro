@@ -58,7 +58,7 @@ if (about) schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', n
 const hub = isHub ? HUB[lang] : null;
 /** Sprungmarken für Überschriften: stabil, ohne Umlaute, für „Springe zu“-Links in der Suche und für Zitate */
 const anchor = (t: string) => t.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/<[^>]+>/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
-const toc = g ? [{ id: 'schritte', label: g.stepsTitle }, ...g.sections.map((s) => ({ id: anchor(s.h2), label: s.h2 })), { id: 'faq', label: lang === 'de' ? 'Häufige Fragen' : 'Frequently asked questions' }] : [];
+const toc = g ? [{ id: 'schritte', label: g.stepsTitle }, ...g.sections.map((s) => ({ id: anchor(s.h2), label: s.h2 })), ...(def?.tested ? [{ id: 'geprueft', label: lang === 'de' ? 'So haben wir das geprüft' : 'How we checked this' }] : []), { id: 'faq', label: lang === 'de' ? 'Häufige Fragen' : 'Frequently asked questions' }] : [];
 if (hub) {
   const all = hub.groups.flatMap((gr) => gr.keys);
   schema = [
@@ -173,6 +173,13 @@ if (gl) {
             {i === 1 && def.figures[2] && <Figure name={def.figures[2].name} lang={lang} caption={def.figures[2][lang]} />}
           </>
         ))}
+        {def.tested && (
+          <section class="tested" aria-labelledby="geprueft">
+            <h2 id="geprueft">{lang === 'de' ? 'So haben wir das geprüft' : 'How we checked this'}</h2>
+            <Fragment set:html={linkify(def.tested[lang], lang)} />
+            <p class="muted small">{lang === 'de' ? 'Alle Tests nutzen erfundene Beispieldaten und laufen bei jeder Änderung automatisch. Nachlesen auf GitHub: ' : 'All tests use invented example data and run automatically on every change. Read them on GitHub: '}{def.tested.files.map((f, i) => <>{i > 0 && ', '}<a href={`${OWNER.repo}/blob/main/${f}`} rel="noopener"><code>{f.split('/').pop()}</code></a></>)}</p>
+          </section>
+        )}
         <section class="faq" aria-labelledby="faq">
           <h2 id="faq">{lang === 'de' ? 'Häufige Fragen' : 'Frequently asked questions'}</h2>
           {g.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
