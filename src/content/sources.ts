@@ -1,8 +1,6 @@
 // Belegte Quellen. Google-Quellen zuletzt live geprüft am 4.11.2026 – nur diese Fakten werden auf der Website behauptet.
 /** Datum, an dem die Google-Quellen geprüft wurden */
 export const STAND = { de: '4. November 2026', en: '4 November 2026', iso: '2026-11-04' };
-/** Datum der letzten inhaltlichen Aktualisierung der Seiten */
-export const UPDATED = { de: '4. November 2026', en: '4 November 2026', iso: '2026-11-04' }; // jüngste Änderung der Website (für llms.txt)
 
 /** Eigener Test mit einem echten, anonymen Google-Kalender-Export (nur lokal ausgewertet, ohne Namen) */
 export const OWN_TEST = { date: { de: 'Oktober 2026', en: 'October 2026' } };
@@ -18,6 +16,11 @@ export const SRC = {
   gexport: { url: 'https://support.google.com/calendar/answer/37111', de: 'Google Kalender-Hilfe: Termine aus Google Kalender exportieren', en: 'Google Calendar Help: Export events from Google Calendar' },
   transfer: { url: 'https://support.google.com/calendar/answer/78739', de: 'Google Kalender-Hilfe: Kalender oder Termine übertragen', en: 'Google Calendar Help: Transfer calendars or events' },
   excelCsv: { url: 'https://support.microsoft.com/de-de/excel/import-data-from-a-csv-html-or-text-file', de: 'Microsoft Support: Daten aus einer CSV-, HTML- oder Textdatei importieren', en: 'Microsoft Support: Import data from a CSV, HTML or text file' },
+  outlookPublish: { url: 'https://support.microsoft.com/en-us/outlook/share-your-calendar-in-outlook-on-the-web', de: 'Microsoft Support: Kalender in Outlook im Web freigeben und veröffentlichen', en: 'Microsoft Support: Share your calendar in Outlook on the web' },
+  outlookImport: { url: 'https://support.microsoft.com/en-us/outlook/import-or-subscribe-to-a-calendar-in-outlook-com-or-outlook-on-the-web', de: 'Microsoft Support: Kalender in Outlook.com importieren oder abonnieren', en: 'Microsoft Support: Import or subscribe to a calendar in Outlook.com or Outlook on the web' },
+  windowsMail: { url: 'https://support.microsoft.com/en-us/outlook/outlook-for-windows-the-future-of-mail-calendar-and-people-on-windows-11', de: 'Microsoft Support: Outlook für Windows ersetzt Mail und Kalender', en: 'Microsoft Support: Outlook for Windows – the future of Mail, Calendar and People' },
+  subscribe: { url: 'https://support.google.com/calendar/answer/37100', de: 'Google Kalender-Hilfe: Kalender anderer abonnieren', en: 'Google Calendar Help: Subscribe to someone else’s calendar' },
+  icloudShare: { url: 'https://support.apple.com/guide/icloud/share-a-calendar-mm6b1a9479/icloud', de: 'Apple Support: Kalender auf iCloud.com teilen', en: 'Apple Support: Share a calendar on iCloud.com' },
   rfc5545: { url: 'https://www.rfc-editor.org/rfc/rfc5545', de: 'RFC 5545: iCalendar-Format', en: 'RFC 5545: Internet Calendaring and Scheduling (iCalendar)' }
 } as const;
 
@@ -35,4 +38,4 @@ export function day(iso: string, lang: 'de' | 'en'): string {
   return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 /** Letzte inhaltliche Änderung von Startseite und Über-Seite */
-export const PAGE_UPDATED = { home: '2026-11-05', about: '2026-11-05', guides: '2026-11-05', glossary: '2026-10-26' };
+export const PAGE_UPDATED = { home: '2026-11-05', about: '2026-11-25', guides: '2026-11-25', glossary: '2026-10-26' };
