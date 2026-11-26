@@ -5,6 +5,7 @@ import '@fontsource/geist-sans/latin-600.css';
 import '@fontsource/geist-mono/latin-400.css';
 import '../styles/site.css';
 import font400 from '@fontsource/geist-sans/files/geist-sans-latin-400-normal.woff2?url';
+import font500 from '@fontsource/geist-sans/files/geist-sans-latin-500-normal.woff2?url';
 import font600 from '@fontsource/geist-sans/files/geist-sans-latin-600-normal.woff2?url';
 import { ROUTES, GUIDES, path, url, asset, type Lang, type PageKey } from '../i18n/routes';
 import { tr } from '../i18n/ui';
@@ -12,6 +13,7 @@ import { GUIDES as CONTENT } from '../content/guides';
 import { LEGAL } from '../config/legal';
 import { GA4_ID } from '../config/analytics.mjs';
 import Consent from '../components/Consent.astro';
+import { PERSON, WEBSITE } from '../config/schema';
 
 interface Props {
   lang: Lang;
@@ -31,14 +33,7 @@ const canonical = url(page, lang);
 const og = asset(`og/${page}-${lang}.png`);
 const t = (k: Parameters<typeof tr>[1]) => tr(lang, k);
 const footerGuides = GUIDES.map((k) => ({ href: path(k, lang), label: CONTENT[k][lang].crumb }));
-const site = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'ICS Editor',
-  url: url('home', lang),
-  inLanguage: lang,
-  publisher: { '@type': 'Person', name: LEGAL.operator, url: url('about', lang) }
-};
+const site = [PERSON, WEBSITE(lang)];
 ---
 <!doctype html>
 <html lang={lang}>
@@ -47,6 +42,7 @@ const site = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={font500} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={font600} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
     <meta name="google-site-verification" content="6pYvtFCnU7UFcQFajtMSkQ7tYMy3Z_Bt7teKiT5yKNg" />
@@ -76,7 +72,7 @@ const site = {
     <meta property="og:locale" content={lang === 'de' ? 'de_DE' : 'en_US'} />
     <meta property="og:locale:alternate" content={lang === 'de' ? 'en_US' : 'de_DE'} />
     <meta name="twitter:card" content="summary_large_image" />
-    {[site, ...schema].map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    {[...site, ...schema].map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>
   <body>
     <a class="skip" href="#inhalt">{lang === 'de' ? 'Zum Inhalt springen' : 'Skip to content'}</a>

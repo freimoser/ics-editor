@@ -9,6 +9,8 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
     h1: 'Über den ICS Editor',
     html: `
 <p class="answer">Der ICS Editor ist ein kostenloses Werkzeug von ${LEGAL.operator} aus München. Er entstand, weil große oder deutsche Kalenderdateien immer wieder am Import in Google Kalender scheitern – und weil Praxen, Vereine und kleine Firmen ihre gemeinsamen Kalender beim Umzug auf eigene Konten aufteilen müssen.</p>
+<h2>Wer dahintersteht</h2>
+<p>${LEGAL.operator} arbeitet beruflich mit Daten und Automatisierung und baut daneben eigene Werkzeuge und Ratgeber, die ohne Konto und ohne Server auskommen. Der ICS Editor ist eines davon; die anderen stehen auf <a href="${LEGAL.website}" rel="noopener">freimoser.de</a>. Der Quellcode ist öffentlich auf <a href="${LEGAL.repo}" rel="noopener">GitHub</a> – dort lässt sich jede Änderung und jeder automatische Test nachlesen.</p>
 <h2>Was das Werkzeug kann – und was nicht</h2>
 <p>Der ICS Editor liest ICS-Dateien, den ZIP-Export von Google Kalender sowie CSV- und Excel-Tabellen, zeigt alle Kalender und Termine, lässt sie bearbeiten, filtern und aufteilen und schreibt Dateien, die Google Kalender annimmt. Er bearbeitet <strong>nicht</strong> deinen Google Kalender direkt: Er verbindet sich nicht mit deinem Google-Konto. Importieren musst du die Dateien selbst, am Computer.</p>
 <h2>Wie getestet wird</h2>
@@ -30,6 +32,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 </ul>
 <h2>Zuletzt geändert</h2>
 <ul>
+<li><strong>25. November 2026:</strong> neue und überarbeitete Bilder mit Beschreibung; jeder Ratgeber zeigt jetzt, wie wir ihn geprüft haben, mit Link zu den Tests. {outlook|Outlook} und {apple|Apple Kalender} erklären jetzt auch das dauerhafte Abo per Link statt eines einmaligen Imports; {dupes|doppelte Termine} beginnt mit der Ursachensuche; {open|ICS-Datei öffnen} hat einen Abschnitt zu Windows. Microsoft- und Apple-Quellen dafür neu geprüft.</li>
 <li><strong>5. November 2026:</strong> neue Ratgeber {gexport|Google Kalender exportieren} (auch als Excel/CSV), {open|ICS-Datei öffnen} und {move|mehrere Termine verschieben} – ausgewählt nach dem, wonach Menschen tatsächlich suchen.</li>
 <li><strong>4. November 2026:</strong> alle Google-Quellen erneut geprüft. Google nennt beim Workspace-Limit von 100.000 neuen Terminen jetzt eine Erholungszeit von möglicherweise mehreren Monaten – in {limits|Grenzen}, {tooLarge|Datei zu groß} ergänzt; der Löschweg in {undo|Import rückgängig} heißt jetzt „Kalender entfernen“ → „Löschen“.</li>
 <li><strong>26. Oktober 2026:</strong> neue Ratgeber zu {outlook|Outlook}, {apple|Apple Kalender} und {dupes|doppelten Terminen}, das {glossary|ICS-Glossar}, eine {guides|Ratgeber-Übersicht} und eine Faustregel in den {limits|Grenzen} (Termine pro 1 MB).</li>
@@ -47,6 +50,8 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
     h1: 'About the ICS Editor',
     html: `
 <p class="answer">The ICS Editor is a free tool by ${LEGAL.operator} from Munich, Germany. It exists because large or non-English calendar files keep failing to import into Google Calendar – and because practices, clubs and small businesses need to split shared calendars when moving to individual accounts.</p>
+<h2>Who is behind it</h2>
+<p>${LEGAL.operator} works with data and automation for a living and also builds tools and guides that need no account and no server. The ICS Editor is one of them; the others are listed on <a href="${LEGAL.website}" rel="noopener">freimoser.de</a>. The source code is public on <a href="${LEGAL.repo}" rel="noopener">GitHub</a> – every change and every automated test can be read there.</p>
 <h2>What the tool does – and what it doesn’t</h2>
 <p>The ICS Editor reads ICS files, Google Calendar’s ZIP export and CSV or Excel spreadsheets, shows every calendar and event, lets you edit, filter and split them and writes files that Google Calendar accepts. It does <strong>not</strong> edit your Google Calendar directly: it never connects to your Google account. You import the files yourself, on a computer.</p>
 <h2>How it’s tested</h2>
@@ -68,6 +73,7 @@ export const ABOUT: Record<Lang, { title: string; description: string; h1: strin
 </ul>
 <h2>Recent changes</h2>
 <ul>
+<li><strong>25 November 2026:</strong> new and revised screenshots with descriptions; every guide now shows how we checked it, with a link to the tests. {outlook|Outlook} and {apple|Apple Calendar} now also explain subscribing by link instead of a one-off import; {dupes|duplicate events} starts with finding the cause; {open|open an ICS file} has a Windows section. Microsoft and Apple sources checked again for this.</li>
 <li><strong>5 November 2026:</strong> new guides {gexport|export Google Calendar} (including Excel/CSV), {open|open an ICS file} and {move|move multiple events} – chosen by what people actually search for.</li>
 <li><strong>4 November 2026:</strong> all Google sources checked again. For the Workspace limit of 100,000 new events, Google now states a recovery time of possibly several months – added to {limits|limits} and {tooLarge|file too large}; the delete path in {undo|undo an import} is now “Remove calendar” → “Delete”.</li>
 <li><strong>26 October 2026:</strong> new guides on {outlook|Outlook}, {apple|Apple Calendar} and {dupes|duplicate events}, the {glossary|ICS glossary}, a {guides|guides overview} and a rule of thumb in the {limits|limits} (events per 1 MB).</li>

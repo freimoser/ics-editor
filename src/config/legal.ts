@@ -11,9 +11,9 @@ export const LEGAL = {
   countryEn: 'Germany',
   /** gegen einfache Spam-Sammler nicht als Link */
   emailDisplay: '91Serdar [at] gmail.com',
-  linkedin: 'https://linkedin.com/in/freimoser',
+  linkedin: 'https://www.linkedin.com/in/freimoser',
   responsible: 'Thomas Freimoser',
-  website: 'https://freimoser.github.io/freimoser.de/',
+  website: 'https://freimoser.de/',
   repo: 'https://github.com/freimoser/ics-editor'
 } as const;
 

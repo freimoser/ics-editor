@@ -401,3 +401,18 @@ test('Englische Oberfläche: Dateinamen auf Englisch', async ({ page }) => {
   await expect(ex.locator('.files')).toContainText('part-1-of-');
   await expect(ex.locator('.files')).not.toContainText('teil-');
 });
+
+test('Ratgeber: Datei in der Ablagefläche wählen öffnet sie im Werkzeug, ohne Anfrage nach außen', async ({ page }) => {
+  await page.goto('ics-datei-oeffnen/');
+  const requests: Request[] = [];
+  page.on('request', (r) => requests.push(r));
+  await page.locator('.guide-drop input[type=file]').setInputFiles({ name: 'praxis.ics', mimeType: 'text/calendar', buffer: Buffer.from(samplePracticeIcs({ perYear: 120 })) });
+  await page.waitForURL(/#(datei|werkzeug)$/);
+  await loaded(page);
+  await expect(page).toHaveURL(/#werkzeug$/);
+  const external = requests.filter((r) => r.url().startsWith('http') && !r.url().startsWith(new URL(test.info().project.use.baseURL ?? '').origin + '/'));
+  expect(external.map((r) => r.url())).toEqual([]);
+  // Zwischenspeicher ist nach dem Öffnen leer
+  const left = await page.evaluate(() => new Promise<number>((res) => { const r = indexedDB.open('ics-editor-handoff', 1); r.onsuccess = () => { const c = r.result.transaction('files').objectStore('files').count(); c.onsuccess = () => res(c.result); }; }));
+  expect(left).toBe(0);
+});
