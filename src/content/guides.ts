@@ -542,6 +542,7 @@ export const GUIDES: Record<string, GuideDef> = {
     published: '2026-10-08',
     updated: '2026-11-25',
     figures: [{ name: 'overview', de: 'Alle Kennzahlen zu einer Datei: Termine, Zeitraum, Größe, Serien und Zeitzone je Kalender – dazu die Termine pro Jahr.', en: 'All key figures for a file: events, date range, size, recurring events and time zone per calendar – plus events per year.' }, { name: 'parts', de: 'Zwei Grenzen auf einmal: höchstens 1 MB und auf Wunsch höchstens 999 Termine pro Datei – das Werkzeug zeigt Zeitraum und Terminzahl jedes Teils.', en: 'Two limits at once: at most 1 MB and, if you want, at most 999 events per file – the tool shows each part’s date range and event count.' }],
+    tested: { de: '<p>Automatischer Test: Das Werkzeug misst die Größe jeder Datei aufs Byte genau und hält jeden Teil unter 950.000 Byte – sicher unter 1 MB, egal ob 1.000.000 oder 1.048.576 Byte gemeint sind. Mit „Höchstens 999 Termine pro Datei“ enthält zusätzlich kein Teil mehr als 999 Termine. Die Faustregel von rund 350 Byte pro Termin stammt aus dem Praxistest mit einem echten, nur lokal und anonym ausgewerteten Export (Oktober 2026).</p>', en: '<p>Automated test: the tool measures each file’s size to the byte and keeps every part under 950,000 bytes – safely under 1 MB whether 1,000,000 or 1,048,576 bytes are meant. With “At most 999 events per file”, no part contains more than 999 events either. The rule of thumb of about 350 bytes per event comes from the real-world test with a real export analysed only locally and anonymously (October 2026).</p>', files: ['tests/unit/ics.test.ts'] },
     sources: ['problems', 'import', 'limits', 'delete'],
     related: ['tooLarge', 'importFails', 'split', 'undo'],
     de: {
@@ -1038,6 +1039,7 @@ export const GUIDES: Record<string, GuideDef> = {
     published: '2026-10-08',
     updated: '2026-11-04',
     figures: [{ name: 'parts', de: 'Beim nächsten Versuch: Große Dateien in Teilen importieren, jeden Teil mit Zeitraum – so lässt sich ein Fehler leichter eingrenzen.', en: 'On your next attempt: import large files in parts, each with its date range – that makes an error easier to narrow down.' }],
+    tested: { de: '<p>Von Hand geprüft am 14. Oktober 2026: Ein eigens angelegter, importierter Kalender ließ sich in Google Kalender wieder löschen – nicht immer beim ersten Versuch. Automatischer Test: Mit „Neue Termin-Kennungen vergeben“ bekommt jeder Termin eine neue Kennung, alle Termine einer Serie behalten dabei eine gemeinsame. So lassen sich dieselben Termine nach einem gelöschten Import erneut importieren.</p>', en: '<p>Checked by hand on 14 October 2026: a calendar created for the import could be deleted again in Google Calendar – not always on the first attempt. Automated test: with “Assign new event IDs”, every event gets a new ID, while all events of a series keep a shared one. That way the same events can be imported again after a deleted import.</p>', files: ['tests/unit/ics.test.ts'] },
     sources: ['delete', 'create', 'problems'],
     related: ['dupes', 'importParts', 'ics', 'tooLarge'],
     de: {
