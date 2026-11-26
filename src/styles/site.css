@@ -485,3 +485,9 @@ h2[id] { scroll-margin-top: calc(var(--hh, 56px) + 16px); }
 /* Hochformat-Bildschirmfotos (Handy): nicht über die volle Spaltenbreite ziehen */
 .shot.portrait img { max-width: 320px; margin-inline: auto; display: block; }
 .shot.portrait figcaption { text-align: center; }
+
+/* Ablagefläche in den Ratgebern */
+.guide-drop { border-style: dashed; border-width: 1.5px; border-color: var(--line2); transition: background .15s, border-color .15s; }
+.guide-drop.on { border-color: var(--accent); background: var(--accent-soft); }
+.guide-drop label.btn { cursor: pointer; }
+.guide-drop label.btn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }

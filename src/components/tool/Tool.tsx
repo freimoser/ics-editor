@@ -80,6 +80,8 @@ function App({ h1, lead, links }: { h1: string; lead: string; links: Links }) {
   const studio = screen === 'studio' && !!loaded;
 
   useEffect(() => { try { if (localStorage.getItem('ics-editor-hints') === 'off') setHints(false); } catch { /* ohne Speicher: Hinweise zeigen */ } }, []);
+  // Datei von einer Ratgeber-Seite übernommen (#datei): direkt öffnen
+  useEffect(() => { if (location.hash !== '#datei') return; void import('../../lib/handoff').then(({ takeHandoff }) => takeHandoff()).then((files) => { history.replaceState(null, '', location.pathname + '#werkzeug'); if (files.length) void openFiles(files); }); }, []);
   useEffect(() => {
     if (!help) return;
     const close = (e: Event) => { if (e instanceof KeyboardEvent ? e.key === 'Escape' : !(e.target as HTMLElement).closest('.hint-iw')) setHelp(false); };

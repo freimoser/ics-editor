@@ -1,0 +1,35 @@
+---
+// Ablagefläche in den Ratgebern: Datei hier wählen, das Werkzeug auf der Startseite öffnet sie sofort.
+// Die Datei wird nur im Browser zwischengespeichert (IndexedDB) und beim Öffnen gelöscht – kein Upload.
+import { path, type Lang } from '../i18n/routes';
+interface Props { lang: Lang; title: string }
+const { lang, title } = Astro.props;
+const de = lang === 'de';
+const target = path('home', lang) + '#datei';
+---
+<div class="cta guide-drop" data-target={target} data-fallback={path('home', lang) + '#werkzeug'}>
+  <div class="cta-text">
+    <div class="cta-title">{title}</div>
+    <div>{de ? 'Datei hierher ziehen oder auswählen – sie öffnet sich direkt im ICS Editor. Läuft in deinem Browser, nichts wird hochgeladen.' : 'Drop your file here or choose it – it opens straight in the ICS Editor. Runs in your browser, nothing is uploaded.'}</div>
+  </div>
+  <label class="btn btn-primary btn-xl">
+    {de ? 'Datei auswählen' : 'Choose file'}
+    <input type="file" multiple class="sr-only" accept=".ics,.ical,.ifb,.zip,.csv,.txt,.tsv,.xlsx,.xlsm,.xls,.ods,text/calendar,text/csv" />
+  </label>
+</div>
+
+<script>
+  import { putHandoff } from '../lib/handoff';
+  for (const box of document.querySelectorAll<HTMLElement>('.guide-drop')) {
+    const go = async (list: FileList | null | undefined) => {
+      const files = list ? [...list] : [];
+      if (!files.length) return;
+      const ok = await putHandoff(files);
+      location.href = ok ? box.dataset.target! : box.dataset.fallback!;
+    };
+    box.querySelector('input')!.addEventListener('change', (e) => go((e.target as HTMLInputElement).files));
+    box.addEventListener('dragover', (e) => { e.preventDefault(); box.classList.add('on'); });
+    box.addEventListener('dragleave', () => box.classList.remove('on'));
+    box.addEventListener('drop', (e) => { e.preventDefault(); box.classList.remove('on'); void go(e.dataTransfer?.files); });
+  }
+</script>

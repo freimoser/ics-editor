@@ -11,6 +11,7 @@ import { linkify, strip } from '../content/links';
 import { LEGAL as OWNER } from '../config/legal';
 import { IDS, PERSON_REF } from '../config/schema';
 import Figure from '../components/Figure.astro';
+import GuideDrop from '../components/GuideDrop.astro';
 import IMG from '../content/images.json';
 import { IMG_ALT } from '../content/image-alt';
 
@@ -147,13 +148,7 @@ if (gl) {
         <p class="answer" set:html={g.answer} />
         <p class="source">{sourceLabel} <a href={SRC[def.sources[0]].url} rel="noopener">{SRC[def.sources[0]][lang]}</a></p>
         <p class="byline">{lang === 'de' ? 'Von ' : 'By '}<a href={path('about', lang)} rel="author">{OWNER.operator}</a> · {lang === 'de' ? `aktualisiert am ${day(def.updated, 'de')} · Quellen geprüft am ${day(checked, 'de')}` : `updated ${day(def.updated, 'en')} · sources checked ${day(checked, 'en')}`}</p>
-        <div class="cta">
-          <div class="cta-text">
-            <div class="cta-title">{g.cta}</div>
-            <div>{lang === 'de' ? 'Läuft in deinem Browser. Nichts wird hochgeladen.' : 'Runs in your browser. Nothing is uploaded.'}</div>
-          </div>
-          <a class="btn btn-primary btn-xl" href={path('home', lang) + '#werkzeug'}>{lang === 'de' ? 'ICS Editor öffnen' : 'Open the ICS Editor'}</a>
-        </div>
+        <GuideDrop lang={lang} title={g.cta} />
         {toc.length >= 4 && (
           <nav class="toc" aria-label={lang === 'de' ? 'Inhalt' : 'Contents'}>
             <strong>{lang === 'de' ? 'Inhalt' : 'Contents'}</strong>
